@@ -1,0 +1,26 @@
+{
+  "name": "clients",
+  "version": "1.0.0",
+  "description": "node interfaces for various clients",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tentkeep/clients.git"
+  },
+  "keywords": [
+    "clients"
+  ],
+  "author": "Tentkeep",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tentkeep/clients/issues"
+  },
+  "homepage": "https://github.com/tentkeep/clients#readme",
+  "dependencies": {
+    "node-fetch": "^2.6.0",
+    "xml2js": "^0.4.23"
+  }
+}

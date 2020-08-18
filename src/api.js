@@ -9,16 +9,22 @@ const sanitizeOptions = options => {
   }
 }
 
+class ApiStatusError extends Error {
+  constructor (status, bodyText) {
+    super(bodyText)
+    this.status = status
+    this.bodyText = bodyText
+  }
+}
+
 const statusChecker = async result => {
-    if (result.status >= 400) {
-      const message = await result.text()
-      const error = new Error(message)
-      error.status = result.status
-      throw error
-    } else {
-      return result
-    }
-  } 
+  if (result.status >= 400) {
+    const bodyText = await result.text()
+    throw new ApiStatusError(result.status, bodyText)
+  } else {
+    return result
+  }
+}
 
 const parseContent = async result => {
   const contentType = result.headers.get('Content-Type')
@@ -31,9 +37,12 @@ const parseContent = async result => {
   return result
 }
 
-module.exports = (url, options) => {
-  sanitizeOptions(options) 
-  return fetch(url, options)
-    .then(statusChecker)
-    .then(parseContent)
+module.exports = {
+  api: (url, options) => {
+    sanitizeOptions(options)
+    return fetch(url, options)
+      .then(statusChecker)
+      .then(parseContent)
+  },
+  ApiStatusError
 }

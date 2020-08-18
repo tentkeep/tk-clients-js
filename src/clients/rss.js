@@ -1,4 +1,4 @@
-const api = require('../api')
+const { api } = require('../api')
 const { forKey } = require('../shareable/common')
 
 const flatten = (obj, keepAsArray, keyPath = '') => {

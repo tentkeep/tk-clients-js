@@ -1,4 +1,4 @@
-const api = require('../api')
+const { api } = require('../api')
 const host = 'https://itunes.apple.com'
 
 module.exports = {

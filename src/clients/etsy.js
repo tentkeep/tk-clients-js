@@ -1,4 +1,4 @@
-const api = require('../api')
+const { api } = require('../api')
 const host = 'https://openapi.etsy.com'
 const apiKey = process.env.CLIENTS_ETSY_API_KEY
 

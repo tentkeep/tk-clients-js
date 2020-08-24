@@ -1,15 +1,21 @@
 const { api } = require('../api')
 const host = 'https://openapi.etsy.com'
-const apiKey = process.env.CLIENTS_ETSY_API_KEY
 
 module.exports = {
-  favorites: (userId) => api(
-    `${host}/v2/users/${userId}/favorites/listings?api_key=${apiKey}`
+  favorites: (userId) => etsy(
+    `${host}/v2/users/${userId}/favorites/listings`
   ),
-  listing: (listingId) => api(
-    `${host}/v2/listings/${listingId}?api_key=${apiKey}`
+  listing: (listingId) => etsy(
+    `${host}/v2/listings/${listingId}`
   ),
-  listingImages: (listingId) => api(
-    `${host}/v2/listings/${listingId}/images?api_key=${apiKey}`
-  ),
+  listingImages: (listingId) => etsy(
+    `${host}/v2/listings/${listingId}/images`
+  )
+}
+
+const etsy = (url, options) => {
+  const apiKey = process.env.CLIENTS_ETSY_API_KEY
+  const _url = url instanceof URL ? url : new URL(url)
+  _url.searchParams.append('api_key', apiKey)
+  return api(_url, options)
 }

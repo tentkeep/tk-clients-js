@@ -1,5 +1,5 @@
 {
-  "name": "clients",
+  "name": "tk-clients",
   "version": "1.0.0",
   "description": "node interfaces for various clients",
   "main": "src/index.js",

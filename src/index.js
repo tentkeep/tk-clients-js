@@ -1,13 +1,16 @@
-const fs = require('fs')
-const { default: fetch } = require('node-fetch')
+const clientsFiles = [
+  'etsy',
+  'itunes',
+  'rss',
+  'spotify',
+  'wordpress',
+  'youtube'
+]
 
-const extractName = file => file.match(/(.*)\./)[1]
-
-const clientsFiles = fs.readdirSync('./src/clients')
 const clients = clientsFiles.reduce((agg, file) => {
   Object.defineProperty(
     agg,
-    extractName(file),
+    file,
     { get: () => require(`./clients/${file}`) }
   )
   return agg

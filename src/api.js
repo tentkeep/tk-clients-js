@@ -1,4 +1,4 @@
-const fetch = { ...window }.fetch || require('node-fetch')
+const fetch = require('node-fetch')
 const xml2js = require('xml2js')
 
 const sanitizeOptions = options => {

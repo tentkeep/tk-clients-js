@@ -11,7 +11,7 @@ const clients = clientsFiles.reduce((agg, file) => {
   Object.defineProperty(
     agg,
     file,
-    { get: () => require(`./clients/${file}`) }
+    { get: () => require(`./src/clients/${file}`) }
   )
   return agg
 }, {})

@@ -42,6 +42,7 @@ module.exports = {
         .sort(pubDateComparator)
         .slice(0, 10)
       return {
+        feedUrl,
         title,
         description,
         image: image.url,

@@ -47,6 +47,7 @@ module.exports = {
     }
     const listings = await allShopListings(shopId)
     return {
+      shopId,
       title: shop.shop_name,
       description: shop.title,
       shopUrl: shop.url,

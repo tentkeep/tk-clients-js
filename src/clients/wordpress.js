@@ -42,6 +42,7 @@ module.exports = {
         tagRefs.push(...p.tags)
       })
       const authorsPromise = resourceMethods(_host).users({ per_page: 100, include: authorRefs.join(',') })
+        .catch(_ => [])
       const categoriesPromise = resourceMethods(_host).categories({ per_page: 100, include: categoryRefs.join(',') })
       const tagsPromise = resourceMethods(_host).tags({ per_page: 100, include: tagRefs.join(',') })
       const [authors, categories, tags] = await Promise.all([authorsPromise, categoriesPromise, tagsPromise])

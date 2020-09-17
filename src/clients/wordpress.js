@@ -34,7 +34,7 @@ module.exports = {
   host: (_host) => ({
     ...resourceMethods(_host),
     async summary () {
-      const posts = await api(`https://${_host}/wp-json/wp/v2/posts?per_page=1`)
+      const posts = await api(`https://${_host}/wp-json/wp/v2/posts?per_page=100`)
       const authorRefs = []; const categoryRefs = []; const tagRefs = []
       posts.forEach(p => {
         authorRefs.push(p.author)

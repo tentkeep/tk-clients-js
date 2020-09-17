@@ -38,8 +38,8 @@ module.exports = {
       const authorRefs = []; const categoryRefs = []; const tagRefs = []
       posts.forEach(p => {
         authorRefs.push(p.author)
-        categoryRefs.push(...p.categories)
-        tagRefs.push(...p.tags)
+        categoryRefs.push(...(p.categories || []))
+        tagRefs.push(...(p.tags || []))
       })
       const authorsPromise = resourceMethods(_host).users({ per_page: 100, include: authorRefs.join(',') })
         .catch(_ => [])
@@ -56,8 +56,8 @@ module.exports = {
           url: p.link,
           image: (p.content.rendered.match(/img src="(.+?)"/) || [])[1],
           author: (authors.find(a => a.id === p.author) || {}).name,
-          categories: p.categories.map(c => (categories.find(cat => cat.id === c) || {}).name),
-          tags: p.tags.map(t => (tags.find(tag => tag.id === t) || {}).name)
+          categories: (p.categories || []).map(c => (categories.find(cat => cat.id === c) || {}).name),
+          tags: (p.tags || []).map(t => (tags.find(tag => tag.id === t) || {}).name)
         }))
       }
     }

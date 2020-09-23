@@ -1,6 +1,7 @@
 const clientsFiles = [
   'etsy',
   'itunes',
+  'musickit',
   'rss',
   'spotify',
   'wordpress',

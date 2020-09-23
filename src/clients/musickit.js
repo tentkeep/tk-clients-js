@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 const getArtistAlbums = artistId => music(`/v1/catalog/us/artists/${artistId}/albums?include=tracks`)
 
 module.exports = {
-  searchArtists: term => music(`/v1/catalog/us/search?term=${term}&limit=25&types=artists`),
+  searchArtists: term => music(`/v1/catalog/us/search?term=${term}&limit=25&types=artists&include=albums`),
   getArtist: artistId => music(`/v1/catalog/us/artists/${artistId}?include=albums,songs`),
   getArtistAlbums,
   getAlbum: albumId => music(`/v1/catalog/us/albums/${albumId}`),

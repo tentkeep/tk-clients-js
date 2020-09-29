@@ -40,14 +40,15 @@ module.exports = {
       const pubDateComparator = (a, b) => { return new Date(b.pubDate) - new Date(a.pubDate) }
       const recentItems = item
         .sort(pubDateComparator)
-        // .slice(0, 10)
       console.log('Podcast with episode count:', recentItems.length)
+
       return {
         feedUrl,
         title,
         description,
         image: image.url,
         items: recentItems.map(i => ({
+          id: Buffer.from(i.enclosure.$url).toString('base64'),
           title: i.title,
           description: i.description,
           pubDate: i.pubDate,

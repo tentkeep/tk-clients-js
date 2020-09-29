@@ -34,7 +34,8 @@ module.exports = {
   host: (_host) => ({
     ...resourceMethods(_host),
     async summary () {
-      const posts = await api(`https://${_host}/wp-json/wp/v2/posts?per_page=100`)
+      const postsBaseUrl = `https://${_host}/wp-json/wp/v2/posts`
+      const posts = await api(`${postsBaseUrl}?per_page=100`)
       const authorRefs = []; const categoryRefs = []; const tagRefs = []
       posts.forEach(p => {
         authorRefs.push(p.author)
@@ -50,6 +51,8 @@ module.exports = {
       return {
         title: _host,
         items: posts.map(p => ({
+          id: Buffer.from(`${postsBaseUrl}/${p.id}-`).toString('base64'),
+          postId: p.id,
           title: p.title.rendered,
           description: p.excerpt.rendered,
           date: p.date,

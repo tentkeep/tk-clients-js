@@ -49,8 +49,13 @@ const allVideosForPlaylist = async (playlistId) => {
 
 module.exports = {
   ...resourcesApi,
-  channelSummary: async username => {
-    const channelResponse = await channelForUser(username) // 1
+  channelSummary: async ({ username, channelId }) => {
+    let channelResponse
+    if (username) {
+      channelResponse = await channelForUser(username)
+    } else {
+      channelResponse = await resourcesApi.channels({ id: channelId, part: 'snippet,contentDetails' })
+    }
     if (!channelResponse.items || channelResponse.items.length !== 1) {
       throw new Error('404')
     }

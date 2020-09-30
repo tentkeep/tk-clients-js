@@ -72,8 +72,8 @@ module.exports = {
         title: i.snippet.title,
         description: i.snippet.description,
         image: i.snippet.thumbnails.high.url,
-        videoId: i.contentDetails.videoId,
-        publishedAt: i.contentDetails.videoPublishedAt
+        date: new Date(i.contentDetails.videoPublishedAt).toISOString(),
+        videoId: i.contentDetails.videoId
         // kind: i.kind,
         // channelId: i.snippet.channelId,
         // channelTitle: i.snippet.channelTitle,

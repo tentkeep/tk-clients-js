@@ -17,6 +17,7 @@ module.exports = {
       sourceId: a.id,
       title: a.attributes.name,
       image: a.attributes.artwork.url.replace(/{w}|{h}/g, 600),
+      date: new Date(a.attributes.releaseDate).toISOString(),
       releaseDate: a.attributes.releaseDate,
       recordLabel: a.attributes.recordLabel,
       copyright: a.attributes.copyright,

@@ -58,8 +58,9 @@ module.exports = {
           description: p.excerpt.rendered,
           image: (p.content.rendered.match(/img src="(.+?)"/) || [])[1],
           url: p.link,
+          date: new Date(p.date).toISOString(),
           postId: p.id,
-          date: p.date,
+          postDate: p.date,
           author: (authors.find(a => a.id === p.author) || {}).name,
           categories: (p.categories || []).map(c => (categories.find(cat => cat.id === c) || {}).name),
           tags: (p.tags || []).map(t => (tags.find(tag => tag.id === t) || {}).name)

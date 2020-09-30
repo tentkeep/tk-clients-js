@@ -48,6 +48,11 @@ module.exports = {
       throw new Error('Shop not found')
     }
     const listings = await allShopListings(shopId)
+    const fromEpoch = epochSeconds => {
+      var d = new Date(0)
+      d.setUTCSeconds(epochSeconds)
+      return d.toISOString()
+    }
     return {
       sourceId: shopId,
       title: shop.shop_name,
@@ -61,6 +66,7 @@ module.exports = {
         description: l.description,
         image: tryGet(() => l.Images[0].url_570xN),
         url: l.url,
+        date: fromEpoch(l.last_modified_tsz),
         price: l.price,
         currency: l.currency_code,
         tags: (l.tags || []).join('||'),

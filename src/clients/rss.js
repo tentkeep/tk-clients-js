@@ -53,6 +53,7 @@ module.exports = {
           title: i.title,
           description: i.description,
           url: i.enclosure.$url,
+          date: new Date(i.pubDate).toISOString(),
           pubDate: i.pubDate,
           author: i['itunes:author'],
           duration: i['itunes:duration'],

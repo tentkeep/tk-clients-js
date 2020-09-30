@@ -1,4 +1,5 @@
 const { api } = require('../api')
+const { tryGet } = require('../shareable/common')
 const host = 'https://api.music.apple.com'
 const jwt = require('jsonwebtoken')
 
@@ -13,17 +14,17 @@ module.exports = {
   artistSummary: async artistId => {
     const artistAlbums = await getArtistAlbums(artistId)
     const albums = artistAlbums.data.map(a => ({
-      id: a.id,
+      sourceId: a.id,
       title: a.attributes.name,
       image: a.attributes.artwork.url.replace(/{w}|{h}/g, 600),
       releaseDate: a.attributes.releaseDate,
       recordLabel: a.attributes.recordLabel,
       copyright: a.attributes.copyright,
       isSingle: a.attributes.isSingle,
-      tracks: (((a.relationships || {}).tracks || {}).data || []).map(t => ({
-        id: t.id,
+      tracks: tryGet(a.relationships.tracks.data, []).map(t => ({
+        sourceId: t.id,
         title: t.attributes.name,
-        preview: t.attributes.previews[0].url,
+        preview: tryGet(t.attributes.previews[0].url),
         trackNumber: t.attributes.trackNumber,
         duration: t.attributes.durationInMillis,
         isrc: t.attributes.isrc,
@@ -36,10 +37,10 @@ module.exports = {
       }
     }))
     return {
-      id: artistId,
+      sourceId: artistId,
       title: artistAlbums.data[0].attributes.artistName,
       image: artistAlbums.data[0].attributes.artwork.url.replace(/{w}|{h}/g, 600),
-      albums
+      items: albums
     }
   }
 }

@@ -43,22 +43,21 @@ module.exports = {
       console.log('Podcast with episode count:', recentItems.length)
 
       return {
-        feedUrl,
+        sourceId: Buffer.from(feedUrl).toString('base64'),
         title,
         description,
         image: image.url,
+        url: feedUrl,
         items: recentItems.map(i => ({
-          id: Buffer.from(i.enclosure.$url).toString('base64'),
+          sourceId: Buffer.from(i.enclosure.$url).toString('base64'),
           title: i.title,
           description: i.description,
+          url: i.enclosure.$url,
           pubDate: i.pubDate,
           author: i['itunes:author'],
           duration: i['itunes:duration'],
-          link: {
-            url: i.enclosure.$url,
-            length: i.enclosure.$length,
-            type: i.enclosure.$type
-          }
+          length: i.enclosure.$length,
+          type: i.enclosure.$type
         }))
       }
     })

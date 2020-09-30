@@ -1,4 +1,6 @@
 const { api } = require('../api')
+const { tryGet } = require('../shareable/common')
+
 const host = 'https://openapi.etsy.com'
 
 const getShop = shopId => etsy(
@@ -47,20 +49,21 @@ module.exports = {
     }
     const listings = await allShopListings(shopId)
     return {
-      shopId,
+      sourceId: shopId,
       title: shop.shop_name,
       description: shop.title,
-      shopUrl: shop.url,
-      shopImage: shop.icon_url_fullxfull,
+      image: shop.icon_url_fullxfull,
+      url: shop.url,
       userId: shop.user_id,
-      listings: listings.results.map(l => ({
-        id: l.listing_id,
+      items: listings.results.map(l => ({
+        sourceId: l.listing_id,
         title: l.title,
         description: l.description,
+        image: tryGet(() => l.Images[0].url_570xN),
+        url: l.url,
         price: l.price,
         currency: l.currency_code,
         tags: (l.tags || []).join('||'),
-        url: l.url,
         views: l.views,
         customizable: l.is_customizable,
         digital: l.is_digital,

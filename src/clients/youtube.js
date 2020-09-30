@@ -62,36 +62,34 @@ module.exports = {
     ])
 
     return {
-      id: channel.id,
+      sourceId: channel.id,
       title: channel.snippet.title,
+      image: channel.snippet.thumbnails.default,
       publishedAt: channel.snippet.publishedAt,
-      thumbnail: channel.snippet.thumbnails.default,
-      uploads: {
-        id: uploadsPlaylistId,
-        items: uploadedVideos.map(i => ({
-          id: i.id,
-          videoId: i.contentDetails.videoId,
-          publishedAt: i.contentDetails.videoPublishedAt,
-          title: i.snippet.title,
-          description: i.snippet.description,
-          thumbnail: i.snippet.thumbnails.high.url
-          // kind: i.kind,
-          // channelId: i.snippet.channelId,
-          // channelTitle: i.snippet.channelTitle,
-          // duration: i.contentDetails.duration, // requires video fetch
-          // definition: i.contentDetails.definition, // requires video fetch
-          // tags: (i.snippet.tags || []).join('||'), // requires video fetch
-          // views: i.statistics.viewCount, // requires video fetch
-          // likes: i.statistics.likeCount, // requires video fetch
-          // dislikes: i.statistics.dislikeCount // requires video fetch
-        }))
-      },
+      uploadsPlaylistId,
+      items: uploadedVideos.map(i => ({
+        sourceId: i.id,
+        title: i.snippet.title,
+        description: i.snippet.description,
+        image: i.snippet.thumbnails.high.url,
+        videoId: i.contentDetails.videoId,
+        publishedAt: i.contentDetails.videoPublishedAt
+        // kind: i.kind,
+        // channelId: i.snippet.channelId,
+        // channelTitle: i.snippet.channelTitle,
+        // duration: i.contentDetails.duration, // requires video fetch
+        // definition: i.contentDetails.definition, // requires video fetch
+        // tags: (i.snippet.tags || []).join('||'), // requires video fetch
+        // views: i.statistics.viewCount, // requires video fetch
+        // likes: i.statistics.likeCount, // requires video fetch
+        // dislikes: i.statistics.dislikeCount // requires video fetch
+      })),
       playlists: playlists.items.map(p => ({
-        id: p.id,
-        publishedAt: p.snippet.publishedAt,
+        sourceId: p.id,
         title: p.snippet.title,
         description: p.snippet.description,
-        thumbnail: p.snippet.thumbnails.high.url,
+        image: p.snippet.thumbnails.high.url,
+        publishedAt: p.snippet.publishedAt,
         itemCount: p.contentDetails.itemCount
       }))
     }

@@ -49,15 +49,17 @@ module.exports = {
       const [authors, categories, tags] = await Promise.all([authorsPromise, categoriesPromise, tagsPromise])
 
       return {
+        sourceId: Buffer.from(_host).toString('base64'),
         title: _host,
+        url: _host,
         items: posts.map(p => ({
-          id: Buffer.from(`${postsBaseUrl}/${p.id}-`).toString('base64'),
-          postId: p.id,
+          sourceId: Buffer.from(`${postsBaseUrl}/${p.id}-`).toString('base64'),
           title: p.title.rendered,
           description: p.excerpt.rendered,
-          date: p.date,
-          url: p.link,
           image: (p.content.rendered.match(/img src="(.+?)"/) || [])[1],
+          url: p.link,
+          postId: p.id,
+          date: p.date,
           author: (authors.find(a => a.id === p.author) || {}).name,
           categories: (p.categories || []).map(c => (categories.find(cat => cat.id === c) || {}).name),
           tags: (p.tags || []).map(t => (tags.find(tag => tag.id === t) || {}).name)

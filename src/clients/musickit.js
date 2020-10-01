@@ -22,10 +22,10 @@ module.exports = {
       recordLabel: a.attributes.recordLabel,
       copyright: a.attributes.copyright,
       isSingle: a.attributes.isSingle,
-      tracks: tryGet(a.relationships.tracks.data, []).map(t => ({
+      tracks: tryGet(() => a.relationships.tracks.data, []).map(t => ({
         sourceId: t.id,
         title: t.attributes.name,
-        preview: tryGet(t.attributes.previews[0].url),
+        preview: tryGet(() => t.attributes.previews[0].url),
         trackNumber: t.attributes.trackNumber,
         duration: t.attributes.durationInMillis,
         isrc: t.attributes.isrc,

@@ -65,11 +65,12 @@ module.exports = {
       allVideosForPlaylist(uploadsPlaylistId),
       playlistsForChannel(channel.id)
     ])
+    const img = channel.snippet.thumbnails.default
 
     return {
       sourceId: channel.id,
       title: channel.snippet.title,
-      image: channel.snippet.thumbnails.default,
+      image: img.url,
       publishedAt: channel.snippet.publishedAt,
       uploadsPlaylistId,
       items: uploadedVideos.map(i => ({
@@ -89,6 +90,8 @@ module.exports = {
         // likes: i.statistics.likeCount, // requires video fetch
         // dislikes: i.statistics.dislikeCount // requires video fetch
       })),
+      imageWidth: img.width,
+      imageHeight: img.height,
       playlists: playlists.items.map(p => ({
         sourceId: p.id,
         title: p.snippet.title,

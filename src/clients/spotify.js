@@ -1,22 +1,14 @@
 const { api } = require('../api')
 const host = 'https://api.spotify.com'
 
-module.exports = {
-  searchArtists: (query) => spotify(
-    `${host}/v1/search?q=${query}&type=artist`
-  ),
-  searchPlaylists: (query) => spotify(
-    `${host}/v1/search?q=${query}&type=playlist`
-  ),
-  userPlaylists: (userId) => spotify(
-    `${host}/v1/users/${userId}/playlists`
-  ),
-  playlist: (playlistId) => spotify(
-    `${host}/v1/playlists/${playlistId}`
-  ),
-  playlistTracks: (playlistId) => spotify(
-    `${host}/v1/playlists/${playlistId}/tracks`
-  )
+export default {
+  searchArtists: (query) => spotify(`${host}/v1/search?q=${query}&type=artist`),
+  searchPlaylists: (query) =>
+    spotify(`${host}/v1/search?q=${query}&type=playlist`),
+  userPlaylists: (userId) => spotify(`${host}/v1/users/${userId}/playlists`),
+  playlist: (playlistId) => spotify(`${host}/v1/playlists/${playlistId}`),
+  playlistTracks: (playlistId) =>
+    spotify(`${host}/v1/playlists/${playlistId}/tracks`),
 }
 
 var cachedToken = null
@@ -27,17 +19,19 @@ const spotify = async (url, options) => {
   }
 
   const _options = { ...options }
-  _options.headers = { ..._options.headers, Authorization: `Bearer ${cachedToken}` }
+  _options.headers = {
+    ..._options.headers,
+    Authorization: `Bearer ${cachedToken}`,
+  }
 
-  return api(url, _options)
-    .catch(async e => {
-      if (e.status === 401) {
-        cachedToken = await token()
-        return spotify(url, _options)
-      } else {
-        throw e
-      }
-    })
+  return api(url, _options).catch(async (e) => {
+    if (e.status === 401) {
+      cachedToken = await token()
+      return spotify(url, _options)
+    } else {
+      throw e
+    }
+  })
 }
 
 const authHeader = () => {
@@ -46,15 +40,12 @@ const authHeader = () => {
   return Buffer.from(`${id}:${secret}`).toString('base64')
 }
 
-const token = () => api(
-  'https://accounts.spotify.com/api/token',
-  {
+const token = () =>
+  api('https://accounts.spotify.com/api/token', {
     method: 'post',
     headers: {
       Authorization: `Basic ${authHeader()}`,
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Content-Type': 'application/x-www-form-urlencoded',
     },
-    body: 'grant_type=client_credentials'
-  }
-)
-  .then(tokenPayload => tokenPayload.access_token)
+    body: 'grant_type=client_credentials',
+  }).then((tokenPayload) => tokenPayload.access_token)

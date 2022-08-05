@@ -8,11 +8,11 @@ const clientsFiles = [
   'youtube'
 ]
 
-const clients = clientsFiles.reduce((agg, file) => {
+const clients = clientsFiles.reduce((agg, clientName) => {
   Object.defineProperty(
     agg,
-    file,
-    { get: () => require(`./src/clients/${file}`) }
+    clientName,
+    { get: () => require(`./src/clients/${clientName}`) }
   )
   return agg
 }, {})

@@ -2,9 +2,11 @@
   "name": "tk-clients",
   "version": "1.0.0",
   "description": "node interfaces for various clients",
-  "main": "src/index.js",
+  "type": "module",
+  "exports": "./index.ts",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "repository": {
     "type": "git",
@@ -25,6 +27,7 @@
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
-    "standard": "^14.3.4"
+    "eslint": "^8.21.0",
+    "prettier": "^2.7.1"
   }
 }

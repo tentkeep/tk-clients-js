@@ -10,7 +10,7 @@ const tryGet = (accessor, fallback) => {
   }
 }
 
-module.exports = {
+export default {
   forKey,
-  tryGet
+  tryGet,
 }

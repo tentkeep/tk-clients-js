@@ -26,7 +26,7 @@ const allShopListings = async shopId => {
 
 const listingImages = listingId => etsy(`${host}/v2/listings/${listingId}/images`)
 
-module.exports = {
+export default {
   favorites: (userId) => etsy(
     `${host}/v2/users/${userId}/favorites/listings`
   ),

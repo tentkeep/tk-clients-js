@@ -3,32 +3,52 @@ const { forKey } = require('../shareable/common')
 const host = 'https://www.googleapis.com/youtube/v3'
 
 const resources = [
-  'activities', 'channels', 'comments', 'playlists', 'playlistItems', 'search', 'videos', 'videoCategories'
+  'activities',
+  'channels',
+  'comments',
+  'playlists',
+  'playlistItems',
+  'search',
+  'videos',
+  'videoCategories',
 ]
 
 const resourcesApi = resources.reduce((yt, resource) => {
   yt[resource] = (params = {}) => {
     const url = new URL(`${host}/${resource}`)
-    forKey(params, k => url.searchParams.append(k, params[k]))
+    forKey(params, (k) => url.searchParams.append(k, params[k]))
     return youtube(url)
   }
   return yt
 }, {})
 
 const playlist = (playlistId, opts = {}) =>
-  resourcesApi.playlistItems(
-    { playlistId, part: 'snippet,contentDetails', maxResults: 50, ...opts }
-  )
+  resourcesApi.playlistItems({
+    playlistId,
+    part: 'snippet,contentDetails',
+    maxResults: 50,
+    ...opts,
+  })
 const channelForUser = (username) =>
-  youtube(`${host}/channels?forUsername=${username}&part=snippet,contentDetails`)
+  youtube(
+    `${host}/channels?forUsername=${username}&part=snippet,contentDetails`,
+  )
 const playlistsForChannel = (channelId) =>
-  youtube(`${host}/playlists?channelId=${channelId}&part=snippet,contentDetails,player&maxResults=50`)
+  youtube(
+    `${host}/playlists?channelId=${channelId}&part=snippet,contentDetails,player&maxResults=50`,
+  )
 
 const videosForPlaylist = (playlistId, opts = {}) => {
   return playlist(playlistId, opts) // 1 x #pages
-    .then(pl => ({ nextPageToken: pl.nextPageToken, videoIds: pl.items.map(i => i.snippet.resourceId.videoId) }))
+    .then((pl) => ({
+      nextPageToken: pl.nextPageToken,
+      videoIds: pl.items.map((i) => i.snippet.resourceId.videoId),
+    }))
     .then(async ({ nextPageToken, videoIds }) => {
-      const videos = await resourcesApi.videos({ id: videoIds.join(','), part: 'snippet,contentDetails,player,statistics,topicDetails' })
+      const videos = await resourcesApi.videos({
+        id: videoIds.join(','),
+        part: 'snippet,contentDetails,player,statistics,topicDetails',
+      })
       return { videos, nextPageToken }
     }) // 1 x #pages
 }
@@ -47,14 +67,17 @@ const allVideosForPlaylist = async (playlistId) => {
   return videos
 }
 
-module.exports = {
+export default {
   ...resourcesApi,
   channelSummary: async ({ username, channelId }) => {
     let channelResponse
     if (username) {
       channelResponse = await channelForUser(username)
     } else {
-      channelResponse = await resourcesApi.channels({ id: channelId, part: 'snippet,contentDetails' })
+      channelResponse = await resourcesApi.channels({
+        id: channelId,
+        part: 'snippet,contentDetails',
+      })
     }
     if (!channelResponse.items || channelResponse.items.length !== 1) {
       throw new Error('404')
@@ -63,7 +86,7 @@ module.exports = {
     const uploadsPlaylistId = channel.contentDetails.relatedPlaylists.uploads
     const [uploadedVideos, playlists] = await Promise.all([
       allVideosForPlaylist(uploadsPlaylistId),
-      playlistsForChannel(channel.id)
+      playlistsForChannel(channel.id),
     ])
     const img = channel.snippet.thumbnails.default
 
@@ -73,13 +96,13 @@ module.exports = {
       image: img.url,
       publishedAt: channel.snippet.publishedAt,
       uploadsPlaylistId,
-      items: uploadedVideos.map(i => ({
+      items: uploadedVideos.map((i) => ({
         sourceId: i.id,
         title: i.snippet.title,
         description: i.snippet.description,
         image: i.snippet.thumbnails.high.url,
         date: new Date(i.contentDetails.videoPublishedAt).toISOString(),
-        videoId: i.contentDetails.videoId
+        videoId: i.contentDetails.videoId,
         // kind: i.kind,
         // channelId: i.snippet.channelId,
         // channelTitle: i.snippet.channelTitle,
@@ -92,20 +115,20 @@ module.exports = {
       })),
       imageWidth: img.width,
       imageHeight: img.height,
-      playlists: playlists.items.map(p => ({
+      playlists: playlists.items.map((p) => ({
         sourceId: p.id,
         title: p.snippet.title,
         description: p.snippet.description,
         image: p.snippet.thumbnails.high.url,
         publishedAt: p.snippet.publishedAt,
-        itemCount: p.contentDetails.itemCount
-      }))
+        itemCount: p.contentDetails.itemCount,
+      })),
     }
   },
   channelForUser,
   playlistsForChannel,
   playlist,
-  videosForPlaylist
+  videosForPlaylist,
 }
 
 const youtube = (url, options) => {

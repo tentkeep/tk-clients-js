@@ -1,3 +1,11 @@
 {
-  "standard.autoFixOnSave": true
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#062415",
+    "statusBar.foreground": "#acdec0",
+    "titleBar.activeBackground": "#062415",
+    "titleBar.activeForeground": "#acdec0",
+    "activityBar.background": "#062415",
+    "activityBar.foreground": "#acdec0",
+    "activityBar.border": "#acdec0"
+  }
 }

@@ -2,6 +2,7 @@ import etsy from './src/clients/etsy.js'
 import google from './src/clients/google.js'
 import itunes from './src/clients/itunes.js'
 import musickit from './src/clients/musickit.js'
+import page from './src/clients/page.js'
 import rss from './src/clients/rss.js'
 import spotify from './src/clients/spotify.js'
 import wordpress from './src/clients/wordpress.js'
@@ -12,6 +13,7 @@ export const clients = {
   google,
   itunes,
   musickit,
+  page,
   rss,
   spotify,
   wordpress,

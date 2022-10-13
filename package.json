@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "node interfaces for various clients",
   "type": "module",
-  "exports": "./dist/index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "rm -rf dist && npm i && tsc --project tsconfig.json && npm prune --omit=dev && npm run copy-dist-files",
     "copy-dist-files": "cp -rL node_modules dist/",

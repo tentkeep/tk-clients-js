@@ -1,4 +1,4 @@
-const { api } = require('../api')
+import { api } from '../api.js'
 const host = 'https://api.spotify.com'
 
 export default {

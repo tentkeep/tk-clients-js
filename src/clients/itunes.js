@@ -1,4 +1,4 @@
-const { api } = require('../api')
+import { api } from '../api.js'
 const host = 'https://itunes.apple.com'
 
 export default {

@@ -1,13 +1,15 @@
-import etsy from './src/clients/etsy'
-import itunes from './src/clients/itunes'
-import musickit from './src/clients/musickit'
-import rss from './src/clients/rss'
-import spotify from './src/clients/spotify'
-import wordpress from './src/clients/wordpress'
-import youtube from './src/clients/youtube'
+import etsy from './src/clients/etsy.js'
+import google from './src/clients/google.js'
+import itunes from './src/clients/itunes.js'
+import musickit from './src/clients/musickit.js'
+import rss from './src/clients/rss.js'
+import spotify from './src/clients/spotify.js'
+import wordpress from './src/clients/wordpress.js'
+import youtube from './src/clients/youtube.js'
 
 export const clients = {
   etsy,
+  google,
   itunes,
   musickit,
   rss,

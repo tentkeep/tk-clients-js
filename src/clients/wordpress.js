@@ -1,5 +1,5 @@
-const { api } = require('../api')
-const { forKey } = require('../shareable/common')
+import { api } from '../api.js'
+import { forKey } from '../shareable/common.js'
 
 const resources = [
   'block-types',

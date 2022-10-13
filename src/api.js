@@ -1,4 +1,4 @@
-const fetch = require('node-fetch')
+import fetch from 'node-fetch'
 
 const sanitizeOptions = (options) => {
   if (options) {
@@ -8,7 +8,7 @@ const sanitizeOptions = (options) => {
   }
 }
 
-class ApiStatusError extends Error {
+export class ApiStatusError extends Error {
   constructor(status, bodyText) {
     super(bodyText)
     this.status = status
@@ -30,17 +30,16 @@ const parseContent = async (result) => {
   if (contentType.includes('application/json')) {
     return result.json()
   } else if (contentType.includes('xml')) {
-    const xml2js = require('xml2js')
+    const xml2js = await import('xml2js')
     const text = await result.text()
     return xml2js.parseStringPromise(text)
   }
   return result
 }
 
-export default {
-  api: (url, options) => {
-    sanitizeOptions(options)
-    return fetch(url, options).then(statusChecker).then(parseContent)
-  },
-  ApiStatusError,
+export const api = (url, options) => {
+  sanitizeOptions(options)
+  return fetch(url, options).then(statusChecker).then(parseContent)
 }
+
+export default api

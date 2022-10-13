@@ -1,7 +1,7 @@
-const { api } = require('../api')
-const { tryGet } = require('../shareable/common')
+import { api } from '../api.js'
+import { tryGet } from '../shareable/common.js'
 const host = 'https://api.music.apple.com'
-const jwt = require('jsonwebtoken')
+import jwt from 'jsonwebtoken'
 
 const getArtistAlbums = (artistId) =>
   music(`/v1/catalog/us/artists/${artistId}/albums?include=tracks`)
@@ -63,22 +63,25 @@ const music = (path) => {
   const _url = `${host}${path}`
   const options = {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token()}`,
     },
   }
   return api(_url, options)
 }
 
-const privateKey = Buffer.from(
-  process.env.CLIENTS_APPLE_MUSIC_KIT_PRIVATE_KEY,
-  'base64',
-).toString('utf-8')
-const token = jwt.sign({}, privateKey, {
-  algorithm: 'ES256',
-  expiresIn: '180d',
-  issuer: process.env.CLIENTS_APPLE_MUSIC_KIT_TEAM_ID,
-  header: {
-    alg: 'ES256',
-    kid: process.env.CLIENTS_APPLE_MUSIC_KIT_KEY_ID,
-  },
-})
+const privateKey = () =>
+  Buffer.from(
+    process.env.CLIENTS_APPLE_MUSIC_KIT_PRIVATE_KEY,
+    'base64',
+  ).toString('utf-8')
+
+const token = () =>
+  jwt.sign({}, privateKey(), {
+    algorithm: 'ES256',
+    expiresIn: '180d',
+    issuer: process.env.CLIENTS_APPLE_MUSIC_KIT_TEAM_ID,
+    header: {
+      alg: 'ES256',
+      kid: process.env.CLIENTS_APPLE_MUSIC_KIT_KEY_ID,
+    },
+  })

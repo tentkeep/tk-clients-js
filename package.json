@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "node interfaces for various clients",
   "type": "module",
-  "exports": "./index.ts",
+  "exports": "./dist/index.js",
   "scripts": {
+    "build": "rm -rf dist && npm i && tsc --project tsconfig.json && npm prune --omit=dev && npm run copy-dist-files",
+    "copy-dist-files": "cp -rL node_modules dist/",
     "test": "test",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
@@ -27,7 +29,9 @@
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
+    "@types/node": "^18.8.4",
     "eslint": "^8.21.0",
-    "prettier": "^2.7.1"
+    "prettier": "^2.7.1",
+    "typescript": "^4.8.4"
   }
 }

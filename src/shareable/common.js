@@ -1,8 +1,8 @@
-const forKey = (obj, callback) => {
+export const forKey = (obj, callback) => {
   Object.keys(obj).forEach(callback)
 }
 
-const tryGet = (accessor, fallback) => {
+export const tryGet = (accessor, fallback) => {
   try {
     return accessor()
   } catch {

@@ -7,5 +7,12 @@
     "activityBar.background": "#062415",
     "activityBar.foreground": "#acdec0",
     "activityBar.border": "#acdec0"
-  }
+  },
+  "cSpell.words": [
+    "findplacefromtext",
+    "fullxfull",
+    "inputtype",
+    "musickit",
+    "textquery"
+  ]
 }

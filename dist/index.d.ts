@@ -42,7 +42,12 @@ export declare const clients: {
         }>;
     };
     page: {
-        summary: (url: string) => any;
+        summary: (url: string) => Promise<{
+            url: string;
+            meta: unknown[] | undefined;
+            links: unknown[] | undefined;
+            title: unknown[] | undefined;
+        }>;
     };
     rss: {
         feed: (feedUrl: any) => any;

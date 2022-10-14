@@ -7,7 +7,8 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "rm -rf dist && npm i && tsc --project tsconfig.json && npm prune --omit=dev && npm run copy-dist-files",
-    "copy-dist-files": "cp -rL node_modules dist/",
+    "copy-dist-files": "cp -rL node_modules phantomjs page-phantomjs-meta-grabber.js dist/",
+    "debug": "ts-node --esm --project tsconfig.json ./src/clients/page.ts",
     "test": "test",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
@@ -25,14 +26,18 @@
   },
   "homepage": "https://github.com/tentkeep/clients#readme",
   "dependencies": {
+    "jsdom": "^20.0.1",
     "jsonwebtoken": "^8.5.1",
     "node-fetch": "^2.6.0",
+    "x2js": "^3.4.3",
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
     "@types/node": "^18.8.4",
     "eslint": "^8.21.0",
+    "phantomjs-prebuilt": "^2.1.16",
     "prettier": "^2.7.1",
+    "ts-node": "^10.9.1",
     "typescript": "^4.8.4"
   }
 }

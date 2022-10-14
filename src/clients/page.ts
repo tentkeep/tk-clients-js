@@ -1,13 +1,5 @@
-// import api from '../api.js'
-// import jsdom from 'jsdom'
-// const { JSDOM } = jsdom
-import path from 'path'
 import childProcess from 'child_process'
 import X2JS from 'x2js'
-import { fileURLToPath } from 'url'
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-console.log('dirname', __dirname)
 
 const summary = async (url: string) => {
   let _url = url
@@ -15,28 +7,24 @@ const summary = async (url: string) => {
     _url = `https://${_url}`
   }
 
-  var childArgs = [
-    '--ssl-protocol=any',
-    '--ignore-ssl-errors=true',
-    '"./node_modules/tk-clients/dist/page-phantomjs-meta-grabber.js"',
-    `"${_url}"`,
-  ]
-  console.log(childArgs)
   return new Promise((resolve, reject) => {
-    childProcess.execFile(
-      'phantomjs',
-      childArgs,
-      function (err, stdout: string, stderr: string) {
-        if (err) {
-          return reject(err)
-        }
-        if (stderr.length) {
-          return reject(stderr)
-        }
-        resolve(stdout)
-      },
-    )
+    const command = `phantomjs --ssl-protocol=any --ignore-ssl-errors=true ./node_modules/tk-clients/dist/page-phantomjs-meta-grabber.js ${_url}`
+    console.log('[page cmd]', command)
+    childProcess.exec(command, (err, stdout: string, stderr: string) => {
+      if (err) {
+        console.log('[page err]', err)
+        return reject(err)
+      }
+      if (stderr.length) {
+        console.log('[page stderr]', stderr)
+        return reject(stderr)
+      }
+      resolve(stdout)
+    })
   }).then((page: string) => {
+    if (page.length < 100) {
+      console.log('Unexpectedly short page', page)
+    }
     const x2js = new X2JS()
     const meta = page.match(/<meta[^>]+>/g)
     const links = page.match(/<link[^>]+>/g)
@@ -48,36 +36,6 @@ const summary = async (url: string) => {
       title: title?.map((i) => x2js.xml2js(i)),
     }
   })
-
-  // return api(_url)
-  //   .then((p) => p.text())
-  //   .then((page) => {
-  //     const dom = new JSDOM(page, {
-  //       url: _url,
-  //       referrer: '*',
-  //       resources: 'usable',
-  //       runScripts: 'dangerously',
-  //       pretendToBeVisual: true,
-  //     })
-  //     dom.window.document.onload = function () {
-  //       console.log(
-  //         Array.from(dom.window.document.querySelectorAll('meta')).map(
-  //           (i: any) => i.content,
-  //         ),
-  //       )
-  //     }
-
-  //     const meta = page.match(/<meta[^>]+>/g)
-  //     const links = page.match(/<link[^>]+>/g)
-  //     const title = page.match(/<title.*<\/title>/g)
-  //     return {
-  //       url: _url,
-  //       meta,
-  //       links,
-  //       title,
-  //       query: dom.window.document,
-  //     }
-  //   })
 }
 
 // summary('azurestandard.com')

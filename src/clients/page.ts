@@ -16,13 +16,13 @@ const summary = async (url: string) => {
   }
 
   var childArgs = [
-    './node_modules/tk-clients/dist/page-phantomjs-meta-grabber.js',
-    _url,
+    '"./node_modules/tk-clients/dist/page-phantomjs-meta-grabber.js"',
+    `"${_url}"`,
   ]
   console.log(childArgs)
   return new Promise((resolve, reject) => {
     childProcess.execFile(
-      './node_modules/tk-clients/dist/phantomjs',
+      'phantomjs',
       childArgs,
       function (err, stdout: string, stderr: string) {
         if (err) {

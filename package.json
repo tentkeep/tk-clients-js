@@ -7,7 +7,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "rm -rf dist && npm i && tsc --project tsconfig.json && npm prune --omit=dev && npm run copy-dist-files",
-    "copy-dist-files": "cp -rL node_modules phantomjs page-phantomjs-meta-grabber.js dist/",
+    "copy-dist-files": "cp -rL node_modules page-phantomjs-meta-grabber.js dist/",
     "debug": "ts-node --esm --project tsconfig.json ./src/clients/page.ts",
     "test": "test",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"

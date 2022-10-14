@@ -11,12 +11,12 @@ const summary = async (url) => {
         _url = `https://${_url}`;
     }
     var childArgs = [
-        './node_modules/tk-clients/dist/page-phantomjs-meta-grabber.js',
-        _url,
+        '"./node_modules/tk-clients/dist/page-phantomjs-meta-grabber.js"',
+        `"${_url}"`,
     ];
     console.log(childArgs);
     return new Promise((resolve, reject) => {
-        childProcess.execFile('./node_modules/tk-clients/dist/phantomjs', childArgs, function (err, stdout, stderr) {
+        childProcess.execFile('phantomjs', childArgs, function (err, stdout, stderr) {
             if (err) {
                 return reject(err);
             }

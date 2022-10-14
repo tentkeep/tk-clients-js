@@ -16,6 +16,8 @@ const summary = async (url: string) => {
   }
 
   var childArgs = [
+    '--ssl-protocol=any',
+    '--ignore-ssl-errors=true',
     '"./node_modules/tk-clients/dist/page-phantomjs-meta-grabber.js"',
     `"${_url}"`,
   ]

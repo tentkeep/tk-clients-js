@@ -1,12 +1,9 @@
 import path from 'path';
 import childProcess from 'child_process';
-import phantomjs from 'phantomjs-prebuilt';
 import X2JS from 'x2js';
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const binPath = phantomjs.path;
-console.log('BIN PATH', binPath);
 console.log('dirname', __dirname);
 const summary = async (url) => {
     let _url = url;

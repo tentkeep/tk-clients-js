@@ -37,12 +37,12 @@ const summary = async (url: string) => {
     return {
       url: _url,
       title:
-        meta?.find((m) => m.property === 'og:site_name').content ??
+        meta?.find((m) => m.property === 'og:site_name')?.content ??
         title?.[title.length - 1]['__text'],
       description: findDescription(meta),
       image: findImage(meta),
       icon: findIcon(links, _url),
-      twitter: meta?.find((m) => m.property === 'twitter:site').content,
+      twitter: meta?.find((m) => m.property === 'twitter:site')?.content,
       elements: {
         meta,
         links,
@@ -69,14 +69,14 @@ function scriptPath(): string {
 
 function findDescription(meta: any[] | undefined): string | undefined {
   return (
-    meta?.find((m) => m.name === 'description').content ??
-    meta?.find((m) => m.property === 'og:description').content
+    meta?.find((m) => m.name === 'description')?.content ??
+    meta?.find((m) => m.property === 'og:description')?.content
   )
 }
 function findImage(meta: any[] | undefined): string | undefined {
   return (
-    meta?.find((m) => m.property === 'og:image').content ??
-    meta?.find((m) => m.property === 'twitter:image').content
+    meta?.find((m) => m.property === 'og:image')?.content ??
+    meta?.find((m) => m.property === 'twitter:image')?.content
   )
 }
 function findIcon(
@@ -84,13 +84,16 @@ function findIcon(
   webAddress: string,
 ): string | undefined {
   const icon =
-    links?.find((l) => l.rel === 'apple-touch-icon').href ??
-    links?.find((l) => l.rel === 'icon').href
+    links?.find((l) => l.rel === 'apple-touch-icon')?.href ??
+    links?.find((l) => l.rel === 'icon')?.href
   return formatUrl(icon, webAddress)
 }
 
-function formatUrl(url: string, webAddress: string): string {
-  if (url.startsWith('/')) {
+function formatUrl(
+  url: string | undefined,
+  webAddress: string,
+): string | undefined {
+  if (url?.startsWith('/')) {
     return `${webAddress}${url}`
   }
   return url

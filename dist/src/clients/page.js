@@ -33,12 +33,12 @@ const summary = async (url) => {
         const title = page.match(/<title.*<\/title>/g)?.map(xmlParser);
         return {
             url: _url,
-            title: meta?.find((m) => m.property === 'og:site_name').content ??
+            title: meta?.find((m) => m.property === 'og:site_name')?.content ??
                 title?.[title.length - 1]['__text'],
             description: findDescription(meta),
             image: findImage(meta),
             icon: findIcon(links, _url),
-            twitter: meta?.find((m) => m.property === 'twitter:site').content,
+            twitter: meta?.find((m) => m.property === 'twitter:site')?.content,
             elements: {
                 meta,
                 links,
@@ -58,20 +58,20 @@ function scriptPath() {
         './node_modules/tk-clients/dist/page-phantomjs-meta-grabber.js');
 }
 function findDescription(meta) {
-    return (meta?.find((m) => m.name === 'description').content ??
-        meta?.find((m) => m.property === 'og:description').content);
+    return (meta?.find((m) => m.name === 'description')?.content ??
+        meta?.find((m) => m.property === 'og:description')?.content);
 }
 function findImage(meta) {
-    return (meta?.find((m) => m.property === 'og:image').content ??
-        meta?.find((m) => m.property === 'twitter:image').content);
+    return (meta?.find((m) => m.property === 'og:image')?.content ??
+        meta?.find((m) => m.property === 'twitter:image')?.content);
 }
 function findIcon(links, webAddress) {
-    const icon = links?.find((l) => l.rel === 'apple-touch-icon').href ??
-        links?.find((l) => l.rel === 'icon').href;
+    const icon = links?.find((l) => l.rel === 'apple-touch-icon')?.href ??
+        links?.find((l) => l.rel === 'icon')?.href;
     return formatUrl(icon, webAddress);
 }
 function formatUrl(url, webAddress) {
-    if (url.startsWith('/')) {
+    if (url?.startsWith('/')) {
         return `${webAddress}${url}`;
     }
     return url;

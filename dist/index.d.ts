@@ -44,9 +44,16 @@ export declare const clients: {
     page: {
         summary: (url: string) => Promise<{
             url: string;
-            meta: unknown[] | undefined;
-            links: unknown[] | undefined;
-            title: unknown[] | undefined;
+            title: any;
+            description: string | undefined;
+            image: string | undefined;
+            icon: string | undefined;
+            twitter: any;
+            elements: {
+                meta: any[] | undefined;
+                links: any[] | undefined;
+                title: any[] | undefined;
+            };
         }>;
     };
     rss: {

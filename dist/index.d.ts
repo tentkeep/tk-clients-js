@@ -1,3 +1,4 @@
+/// <reference types="google.maps" />
 export declare const clients: {
     etsy: {
         favorites: (userId: any) => any;
@@ -21,8 +22,12 @@ export declare const clients: {
     };
     google: {
         places: {
-            search: (query: string) => any;
-            details: (placeId: string) => any;
+            search: (query: string) => Promise<{
+                candidates: google.maps.places.PlaceResult[];
+            }>;
+            details: (placeId: string) => Promise<{
+                result: google.maps.places.PlaceResult;
+            }>;
         };
     };
     itunes: {

@@ -36,7 +36,7 @@ const summary = async (url) => {
             title: meta?.find((m) => m.property === 'og:site_name')?.content ??
                 title?.[title.length - 1]['__text'],
             description: findDescription(meta),
-            image: findImage(meta),
+            image: findImage(meta, _url),
             icon: findIcon(links, _url),
             twitter: meta?.find((m) => m.property === 'twitter:site')?.content,
             elements: {
@@ -61,13 +61,17 @@ function findDescription(meta) {
     return (meta?.find((m) => m.name === 'description')?.content ??
         meta?.find((m) => m.property === 'og:description')?.content);
 }
-function findImage(meta) {
+function findImage(meta, webAddress) {
     return (meta?.find((m) => m.property === 'og:image')?.content ??
-        meta?.find((m) => m.property === 'twitter:image')?.content);
+        meta?.find((m) => m.property === 'twitter:image')?.content ??
+        `https://www.google.com/s2/favicons?sz=128&domain_url=${webAddress}`);
 }
 function findIcon(links, webAddress) {
     const icon = links?.find((l) => l.rel === 'apple-touch-icon')?.href ??
         links?.find((l) => l.rel === 'icon')?.href;
+    if (!icon) {
+        return `https://www.google.com/s2/favicons?sz=64&domain_url=${webAddress}`;
+    }
     return formatUrl(icon, webAddress);
 }
 function formatUrl(url, webAddress) {

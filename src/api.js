@@ -27,7 +27,7 @@ const statusChecker = async (result) => {
 
 const parseContent = async (result) => {
   const contentType = result.headers.get('Content-Type')
-  if (contentType.includes('application/json')) {
+  if (contentType.includes('json')) {
     return result.json()
   } else if (contentType.includes('xml')) {
     const xml2js = await import('xml2js')

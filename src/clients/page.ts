@@ -40,7 +40,7 @@ const summary = async (url: string) => {
         meta?.find((m) => m.property === 'og:site_name')?.content ??
         title?.[title.length - 1]['__text'],
       description: findDescription(meta),
-      image: findImage(meta),
+      image: findImage(meta, _url),
       icon: findIcon(links, _url),
       twitter: meta?.find((m) => m.property === 'twitter:site')?.content,
       elements: {
@@ -73,10 +73,14 @@ function findDescription(meta: any[] | undefined): string | undefined {
     meta?.find((m) => m.property === 'og:description')?.content
   )
 }
-function findImage(meta: any[] | undefined): string | undefined {
+function findImage(
+  meta: any[] | undefined,
+  webAddress: string,
+): string | undefined {
   return (
     meta?.find((m) => m.property === 'og:image')?.content ??
-    meta?.find((m) => m.property === 'twitter:image')?.content
+    meta?.find((m) => m.property === 'twitter:image')?.content ??
+    `https://www.google.com/s2/favicons?sz=128&domain_url=${webAddress}`
   )
 }
 function findIcon(
@@ -86,6 +90,9 @@ function findIcon(
   const icon =
     links?.find((l) => l.rel === 'apple-touch-icon')?.href ??
     links?.find((l) => l.rel === 'icon')?.href
+  if (!icon) {
+    return `https://www.google.com/s2/favicons?sz=64&domain_url=${webAddress}`
+  }
   return formatUrl(icon, webAddress)
 }
 

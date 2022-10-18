@@ -1,16 +1,17 @@
 declare const _default: {
-    summary: (url: string) => Promise<{
-        url: string;
-        title: any;
-        description: string | undefined;
-        image: string | undefined;
-        icon: string | undefined;
-        twitter: any;
-        elements: {
-            meta: any[] | undefined;
-            links: any[] | undefined;
-            title: any[] | undefined;
-        };
-    }>;
+    summary: (url: string) => Promise<PageSummary>;
 };
 export default _default;
+export declare type PageSummary = {
+    url: string;
+    title: string;
+    description?: string;
+    image?: string;
+    icon?: string;
+    twitter?: string;
+    elements?: {
+        meta: any;
+        links: any;
+        title: any;
+    };
+};

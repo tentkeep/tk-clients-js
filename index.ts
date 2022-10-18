@@ -1,8 +1,8 @@
 import etsy from './src/clients/etsy.js'
-import google, { Place as PlaceType } from './src/clients/google.js'
+import google, { Place as _Place } from './src/clients/google.js'
 import itunes from './src/clients/itunes.js'
 import musickit from './src/clients/musickit.js'
-import page from './src/clients/page.js'
+import page, { PageSummary as _PageSummary } from './src/clients/page.js'
 import rss from './src/clients/rss.js'
 import spotify from './src/clients/spotify.js'
 import wordpress from './src/clients/wordpress.js'
@@ -36,4 +36,5 @@ export type Summary = Item & {
   items: Item[]
 }
 
-export type Place = PlaceType
+export type Place = _Place
+export type PageSummary = _PageSummary

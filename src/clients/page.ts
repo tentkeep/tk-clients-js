@@ -48,12 +48,22 @@ const summary = async (url: string) => {
         links,
         title,
       },
-    }
+    } as PageSummary
   })
 }
 
 export default {
   summary,
+}
+
+export type PageSummary = {
+  url: string
+  title: string
+  description?: string
+  image?: string
+  icon?: string
+  twitter?: string
+  elements?: { meta; links; title }
 }
 
 function phantomjs(): string {

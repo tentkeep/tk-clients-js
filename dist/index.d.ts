@@ -1,5 +1,6 @@
 /// <reference types="google.maps" />
-import { Place as PlaceType } from './src/clients/google.js';
+import { Place as _Place } from './src/clients/google.js';
+import { PageSummary as _PageSummary } from './src/clients/page.js';
 export declare const clients: {
     etsy: {
         favorites: (userId: any) => Promise<any>;
@@ -32,8 +33,8 @@ export declare const clients: {
                 }>;
             };
         };
-        searchPlaces: (query: string) => Promise<PlaceType[]>;
-        placeDetails: (placeId: string) => Promise<PlaceType>;
+        searchPlaces: (query: string) => Promise<_Place[]>;
+        placeDetails: (placeId: string) => Promise<_Place>;
     };
     itunes: {
         podcasts: (query: any) => Promise<any>;
@@ -52,19 +53,7 @@ export declare const clients: {
         }>;
     };
     page: {
-        summary: (url: string) => Promise<{
-            url: string;
-            title: any;
-            description: string | undefined;
-            image: string | undefined;
-            icon: string | undefined;
-            twitter: any;
-            elements: {
-                meta: any[] | undefined;
-                links: any[] | undefined;
-                title: any[] | undefined;
-            };
-        }>;
+        summary: (url: string) => Promise<_PageSummary>;
     };
     rss: {
         feed: (feedUrl: any) => Promise<any>;
@@ -128,4 +117,5 @@ export declare type Summary = Item & {
     userId?: string;
     items: Item[];
 };
-export declare type Place = PlaceType;
+export declare type Place = _Place;
+export declare type PageSummary = _PageSummary;

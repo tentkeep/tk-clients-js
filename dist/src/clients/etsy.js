@@ -62,10 +62,12 @@ export default {
         };
     },
 };
-const etsy = (url, options) => {
+const etsy = (url, options = null) => {
     const apiKey = process.env.CLIENTS_ETSY_API_KEY;
     const _url = url instanceof URL ? url : new URL(url);
-    _url.searchParams.append('api_key', apiKey);
+    if (apiKey) {
+        _url.searchParams.append('api_key', apiKey);
+    }
     return api(_url, options);
 };
 //# sourceMappingURL=etsy.js.map

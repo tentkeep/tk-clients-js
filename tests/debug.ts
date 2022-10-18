@@ -6,12 +6,12 @@ const [_entryPoint, _file, arg] = process.argv
 //   console.log(JSON.stringify(summary, null, 2))
 // })
 
-clients.google.places.search(arg as string).then((result) => {
+clients.google.searchPlaces(arg as string).then((result) => {
   console.log(JSON.stringify(result, null, 2))
-  if (result.candidates.length === 1) {
+  if (result.length === 1) {
     console.log('Fetching Details...')
-    clients.google.places
-      .details(result.candidates[0].place_id)
+    clients.google
+      .placeDetails(result[0]?.sourceId ?? '')
       .then((details) => [console.log(JSON.stringify(details, null, 2))])
   }
 })

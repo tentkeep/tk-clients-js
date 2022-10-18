@@ -1,16 +1,26 @@
 /// <reference types="google.maps" />
+import { Item } from 'index.js';
+declare function searchPlaces(query: string): Promise<Place[]>;
+declare function placeDetails(placeId: string): Promise<Place>;
+export declare type Place = Item & {
+    address?: string;
+    phone?: string;
+    latitude?: number;
+    longitude?: number;
+};
 declare const _default: {
-    places: {
-        search: typeof searchPlaces;
-        details: typeof placeDetails;
+    raw: {
+        places: {
+            search: (query: string) => Promise<PlaceCandidates>;
+            details: (placeId: string) => Promise<{
+                result: google.maps.places.PlaceResult;
+            }>;
+        };
     };
+    searchPlaces: typeof searchPlaces;
+    placeDetails: typeof placeDetails;
 };
 export default _default;
 declare type PlaceCandidates = {
     candidates: google.maps.places.PlaceResult[];
 };
-declare type PlaceDetail = {
-    result: google.maps.places.PlaceResult;
-};
-declare function searchPlaces(query: string): Promise<PlaceCandidates>;
-declare function placeDetails(placeId: string): Promise<PlaceDetail>;

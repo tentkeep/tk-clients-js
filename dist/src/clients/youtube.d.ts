@@ -19,7 +19,7 @@ declare namespace _default {
     export { videosForPlaylist };
 }
 export default _default;
-declare function channelForUser(username: any): any;
-declare function playlistsForChannel(channelId: any): any;
+declare function channelForUser(username: any): Promise<any>;
+declare function playlistsForChannel(channelId: any): Promise<any>;
 declare function playlist(playlistId: any, opts?: {}): any;
 declare function videosForPlaylist(playlistId: any, opts?: {}): any;

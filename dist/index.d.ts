@@ -1,14 +1,15 @@
 /// <reference types="google.maps" />
+import { Place as PlaceType } from './src/clients/google.js';
 export declare const clients: {
     etsy: {
-        favorites: (userId: any) => any;
-        listing: (listingId: any) => any;
-        listingImages: (listingId: any) => any;
-        userShops: (userId: any) => any;
-        searchShops: (name: any) => any;
-        getShop: (shopId: any) => any;
-        getShopWithListings: (shopId: any) => any;
-        shopListings: (shopId: any, page?: number) => any;
+        favorites: (userId: any) => Promise<any>;
+        listing: (listingId: any) => Promise<any>;
+        listingImages: (listingId: any) => Promise<any>;
+        userShops: (userId: any) => Promise<any>;
+        searchShops: (name: any) => Promise<any>;
+        getShop: (shopId: any) => Promise<any>;
+        getShopWithListings: (shopId: any) => Promise<any>;
+        shopListings: (shopId: any, page?: number) => Promise<any>;
         allShopListings: (shopId: any) => Promise<any>;
         shopSummary: (shopId: any) => Promise<{
             sourceId: any;
@@ -21,24 +22,28 @@ export declare const clients: {
         }>;
     };
     google: {
-        places: {
-            search: (query: string) => Promise<{
-                candidates: google.maps.places.PlaceResult[];
-            }>;
-            details: (placeId: string) => Promise<{
-                result: google.maps.places.PlaceResult;
-            }>;
+        raw: {
+            places: {
+                search: (query: string) => Promise<{
+                    candidates: google.maps.places.PlaceResult[];
+                }>;
+                details: (placeId: string) => Promise<{
+                    result: google.maps.places.PlaceResult;
+                }>;
+            };
         };
+        searchPlaces: (query: string) => Promise<PlaceType[]>;
+        placeDetails: (placeId: string) => Promise<PlaceType>;
     };
     itunes: {
-        podcasts: (query: any) => any;
+        podcasts: (query: any) => Promise<any>;
     };
     musickit: {
-        searchArtists: (term: any) => any;
-        getArtist: (artistId: any) => any;
-        getArtistAlbums: (artistId: any) => any;
-        getAlbum: (albumId: any) => any;
-        getAlbums: (albumIds: any) => any;
+        searchArtists: (term: any) => Promise<any>;
+        getArtist: (artistId: any) => Promise<any>;
+        getArtistAlbums: (artistId: any) => Promise<any>;
+        getAlbum: (albumId: any) => Promise<any>;
+        getAlbums: (albumIds: any) => Promise<any>;
         artistSummary: (artistId: any) => Promise<{
             sourceId: any;
             title: any;
@@ -62,15 +67,22 @@ export declare const clients: {
         }>;
     };
     rss: {
-        feed: (feedUrl: any) => any;
-        podcastSummary: (feedUrl: any) => any;
+        feed: (feedUrl: any) => Promise<any>;
+        podcastSummary: (feedUrl: any) => Promise<{
+            sourceId: string;
+            title: any;
+            description: any;
+            image: any;
+            url: any;
+            items: any;
+        }>;
     };
     spotify: {
-        searchArtists: (query: any) => Promise<any>;
-        searchPlaylists: (query: any) => Promise<any>;
-        userPlaylists: (userId: any) => Promise<any>;
-        playlist: (playlistId: any) => Promise<any>;
-        playlistTracks: (playlistId: any) => Promise<any>;
+        searchArtists: (query: any) => any;
+        searchPlaylists: (query: any) => any;
+        userPlaylists: (userId: any) => any;
+        playlist: (playlistId: any) => any;
+        playlistTracks: (playlistId: any) => any;
     };
     wordpress: {
         host: (_host: any) => {
@@ -97,8 +109,8 @@ export declare const clients: {
             imageHeight: any;
             playlists: any;
         }>;
-        channelForUser: (username: any) => any;
-        playlistsForChannel: (channelId: any) => any;
+        channelForUser: (username: any) => Promise<any>;
+        playlistsForChannel: (channelId: any) => Promise<any>;
         playlist: (playlistId: any, opts?: {}) => any;
         videosForPlaylist: (playlistId: any, opts?: {}) => any;
     };
@@ -109,9 +121,11 @@ export declare type Item = {
     title: string;
     description?: string;
     image?: string;
-    url: string;
+    url?: string;
+    date?: Date;
 };
 export declare type Summary = Item & {
     userId?: string;
     items: Item[];
 };
+export declare type Place = PlaceType;

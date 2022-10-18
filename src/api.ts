@@ -1,14 +1,19 @@
 import fetch from 'node-fetch'
 
-const sanitizeOptions = (options) => {
-  if (options) {
-    if (typeof options.body === 'object') {
-      options.body = JSON.stringify(options.body)
-    }
+const sanitizeOptions = (options: any | null) => {
+  const _options = options ?? {}
+  _options.headers = _options.headers ?? {}
+  _options.headers.key = new Date().toISOString().substring(0, 10)
+  if (typeof _options.body === 'object') {
+    _options.body = JSON.stringify(_options.body)
   }
+  return _options
 }
 
 export class ApiStatusError extends Error {
+  status: number
+  bodyText: string
+
   constructor(status, bodyText) {
     super(bodyText)
     this.status = status
@@ -37,9 +42,12 @@ const parseContent = async (result) => {
   return result
 }
 
-export const api = (url, options) => {
-  sanitizeOptions(options)
-  return fetch(url, options).then(statusChecker).then(parseContent)
+export type API = (url: string | URL, options?: any | null) => Promise<any>
+
+export const api: API = (url: string | URL, options: any | null = null) => {
+  return fetch(url, sanitizeOptions(options))
+    .then(statusChecker)
+    .then(parseContent)
 }
 
 export default api

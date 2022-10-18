@@ -1,14 +1,14 @@
-declare namespace _default {
-    export function favorites(userId: any): any;
-    export function listing(listingId: any): any;
-    export { listingImages };
-    export function userShops(userId: any): any;
-    export function searchShops(name: any): any;
-    export { getShop };
-    export { getShopWithListings };
-    export { shopListings };
-    export { allShopListings };
-    export function shopSummary(shopId: any): Promise<{
+declare const _default: {
+    favorites: (userId: any) => Promise<any>;
+    listing: (listingId: any) => Promise<any>;
+    listingImages: (listingId: any) => Promise<any>;
+    userShops: (userId: any) => Promise<any>;
+    searchShops: (name: any) => Promise<any>;
+    getShop: (shopId: any) => Promise<any>;
+    getShopWithListings: (shopId: any) => Promise<any>;
+    shopListings: (shopId: any, page?: number) => Promise<any>;
+    allShopListings: (shopId: any) => Promise<any>;
+    shopSummary: (shopId: any) => Promise<{
         sourceId: any;
         title: any;
         description: any;
@@ -17,10 +17,5 @@ declare namespace _default {
         userId: any;
         items: any;
     }>;
-}
+};
 export default _default;
-declare function listingImages(listingId: any): any;
-declare function getShop(shopId: any): any;
-declare function getShopWithListings(shopId: any): any;
-declare function shopListings(shopId: any, page?: number): any;
-declare function allShopListings(shopId: any): Promise<any>;

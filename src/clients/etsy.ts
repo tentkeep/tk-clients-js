@@ -1,4 +1,4 @@
-import { api } from '../api.js'
+import { API, api } from '../api.js'
 import { tryGet } from '../shareable/common.js'
 
 const host = 'https://openapi.etsy.com'
@@ -74,9 +74,11 @@ export default {
   },
 }
 
-const etsy = (url, options) => {
+const etsy: API = (url, options = null) => {
   const apiKey = process.env.CLIENTS_ETSY_API_KEY
   const _url = url instanceof URL ? url : new URL(url)
-  _url.searchParams.append('api_key', apiKey)
+  if (apiKey) {
+    _url.searchParams.append('api_key', apiKey)
+  }
   return api(_url, options)
 }

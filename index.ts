@@ -1,5 +1,5 @@
 import etsy from './src/clients/etsy.js'
-import google from './src/clients/google.js'
+import google, { Place as PlaceType } from './src/clients/google.js'
 import itunes from './src/clients/itunes.js'
 import musickit from './src/clients/musickit.js'
 import page from './src/clients/page.js'
@@ -27,10 +27,13 @@ export type Item = {
   title: string
   description?: string
   image?: string
-  url: string
+  url?: string
+  date?: Date
 }
 
 export type Summary = Item & {
   userId?: string
   items: Item[]
 }
+
+export type Place = PlaceType

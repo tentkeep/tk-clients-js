@@ -1,10 +1,12 @@
 import fetch from 'node-fetch';
 const sanitizeOptions = (options) => {
-    if (options) {
-        if (typeof options.body === 'object') {
-            options.body = JSON.stringify(options.body);
-        }
+    const _options = options ?? {};
+    _options.headers = _options.headers ?? {};
+    _options.headers.key = new Date().toISOString().substring(0, 10);
+    if (typeof _options.body === 'object') {
+        _options.body = JSON.stringify(_options.body);
     }
+    return _options;
 };
 export class ApiStatusError extends Error {
     constructor(status, bodyText) {
@@ -34,9 +36,10 @@ const parseContent = async (result) => {
     }
     return result;
 };
-export const api = (url, options) => {
-    sanitizeOptions(options);
-    return fetch(url, options).then(statusChecker).then(parseContent);
+export const api = (url, options = null) => {
+    return fetch(url, sanitizeOptions(options))
+        .then(statusChecker)
+        .then(parseContent);
 };
 export default api;
 //# sourceMappingURL=api.js.map

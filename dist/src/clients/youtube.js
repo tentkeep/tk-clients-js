@@ -1,4 +1,4 @@
-import { api } from '../api.js';
+import { api, ApiStatusError } from '../api.js';
 import { forKey } from '../shareable/common.js';
 const host = 'https://www.googleapis.com/youtube/v3';
 const resources = [
@@ -110,7 +110,10 @@ export default {
     videosForPlaylist,
 };
 const youtube = (url, options) => {
-    const apiKey = process.env.CLIENTS_GOOGLE_YOUTUBE_API_KEY;
+    const apiKey = process.env.CLIENTS_GCP_KEY;
+    if (!apiKey) {
+        throw new ApiStatusError(500, 'missing internal api key');
+    }
     const _url = url instanceof URL ? url : new URL(url);
     _url.searchParams.append('key', apiKey);
     return api(_url, options);

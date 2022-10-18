@@ -1,4 +1,4 @@
-import { api } from '../api.js'
+import { API, api, ApiStatusError } from '../api.js'
 import { forKey } from '../shareable/common.js'
 const host = 'https://www.googleapis.com/youtube/v3'
 
@@ -13,14 +13,28 @@ const resources = [
   'videoCategories',
 ]
 
-const resourcesApi = resources.reduce((yt, resource) => {
+export type YoutubeResourceParams = any & { part: string; maxResults: number }
+export type YoutubeResourceAPI = (params: YoutubeResourceParams) => Promise<any>
+
+export interface YoutubeResources {
+  activities: YoutubeResourceAPI
+  channels: YoutubeResourceAPI
+  comments: YoutubeResourceAPI
+  playlists: YoutubeResourceAPI
+  playlistItems: YoutubeResourceAPI
+  search: YoutubeResourceAPI
+  videos: YoutubeResourceAPI
+  videoCategories: YoutubeResourceAPI
+}
+
+const resourcesApi: YoutubeResources = resources.reduce((yt, resource) => {
   yt[resource] = (params = {}) => {
     const url = new URL(`${host}/${resource}`)
     forKey(params, (k) => url.searchParams.append(k, params[k]))
     return youtube(url)
   }
   return yt
-}, {})
+}, {} as YoutubeResources)
 
 const playlist = (playlistId, opts = {}) =>
   resourcesApi.playlistItems({
@@ -131,8 +145,11 @@ export default {
   videosForPlaylist,
 }
 
-const youtube = (url, options) => {
-  const apiKey = process.env.CLIENTS_GOOGLE_YOUTUBE_API_KEY
+const youtube: API = (url, options) => {
+  const apiKey = process.env.CLIENTS_GCP_KEY
+  if (!apiKey) {
+    throw new ApiStatusError(500, 'missing internal api key')
+  }
   const _url = url instanceof URL ? url : new URL(url)
   _url.searchParams.append('key', apiKey)
   return api(_url, options)

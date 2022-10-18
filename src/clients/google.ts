@@ -43,7 +43,7 @@ type PlaceCandidates = { candidates: google.maps.places.PlaceResult[] }
 
 function google(path: string) {
   const url = new URL(`https://maps.googleapis.com/maps/api/place${path}`)
-  url.searchParams.append('key', process.env.GCP_KEY ?? '')
+  url.searchParams.append('key', process.env.CLIENTS_GCP_KEY ?? '')
   return api(url)
 }
 
@@ -56,7 +56,7 @@ function mapPlace(place: google.maps.places.PlaceResult): Place {
     title: place.name!,
     url: place.website,
     address: place.formatted_address,
-    phone: place.formatted_phone_number,
+    phone: place.international_phone_number,
     latitude: place.geometry?.location?.lat as unknown as number,
     longitude: place.geometry?.location?.lng as unknown as number,
   }

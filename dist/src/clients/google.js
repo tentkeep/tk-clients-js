@@ -20,7 +20,7 @@ export default {
 const searchFields = 'place_id,formatted_address,name,rating,opening_hours,geometry,types';
 function google(path) {
     const url = new URL(`https://maps.googleapis.com/maps/api/place${path}`);
-    url.searchParams.append('key', process.env.GCP_KEY ?? '');
+    url.searchParams.append('key', process.env.CLIENTS_GCP_KEY ?? '');
     return api(url);
 }
 function mapPlace(place) {
@@ -32,7 +32,7 @@ function mapPlace(place) {
         title: place.name,
         url: place.website,
         address: place.formatted_address,
-        phone: place.formatted_phone_number,
+        phone: place.international_phone_number,
         latitude: place.geometry?.location?.lat,
         longitude: place.geometry?.location?.lng,
     };

@@ -100,8 +100,19 @@ export declare const clients: {
         }>;
         channelForUser: (username: any) => Promise<any>;
         playlistsForChannel: (channelId: any) => Promise<any>;
-        playlist: (playlistId: any, opts?: {}) => any;
-        videosForPlaylist: (playlistId: any, opts?: {}) => any;
+        playlist: (playlistId: any, opts?: {}) => Promise<any>;
+        videosForPlaylist: (playlistId: any, opts?: {}) => Promise<{
+            videos: any;
+            nextPageToken: any;
+        }>;
+        activities: import("./src/clients/youtube.js").YoutubeResourceAPI;
+        channels: import("./src/clients/youtube.js").YoutubeResourceAPI;
+        comments: import("./src/clients/youtube.js").YoutubeResourceAPI;
+        playlists: import("./src/clients/youtube.js").YoutubeResourceAPI;
+        playlistItems: import("./src/clients/youtube.js").YoutubeResourceAPI;
+        search: import("./src/clients/youtube.js").YoutubeResourceAPI;
+        videos: import("./src/clients/youtube.js").YoutubeResourceAPI;
+        videoCategories: import("./src/clients/youtube.js").YoutubeResourceAPI;
     };
 };
 export default clients;

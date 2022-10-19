@@ -1,4 +1,7 @@
 /// <reference types="google.maps" />
+/// <reference types="node" resolution-mode="require"/>
+/// <reference types="node/http.js" />
+/// <reference types="node_modules/got/dist/source/core/timed-out.js" />
 import { Place as _Place } from './src/clients/google.js';
 import { PageSummary as _PageSummary } from './src/clients/page.js';
 export declare const clients: {
@@ -53,6 +56,11 @@ export declare const clients: {
         }>;
     };
     page: {
+        info: (url: string) => Promise<{
+            allowsIFrame: boolean;
+            headers: import("http").IncomingHttpHeaders;
+            features: string[];
+        }>;
         summary: (url: string) => Promise<_PageSummary>;
     };
     rss: {

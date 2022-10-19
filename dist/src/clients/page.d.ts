@@ -1,4 +1,12 @@
+/// <reference types="node" resolution-mode="require"/>
+/// <reference types="node/http.js" />
+/// <reference types="node_modules/got/dist/source/core/timed-out.js" />
 declare const _default: {
+    info: (url: string) => Promise<{
+        allowsIFrame: boolean;
+        headers: import("http").IncomingHttpHeaders;
+        features: string[];
+    }>;
     summary: (url: string) => Promise<PageSummary>;
 };
 export default _default;

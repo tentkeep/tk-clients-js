@@ -1,35 +1,53 @@
 import clients from '../index.js'
 
 const [_entryPoint, _file, arg] = process.argv
+console.info(
+  'OPTIONS',
+  youtubeChannelSearch,
+  pageSummary,
+  pageInfo,
+  googlePlaces,
+  shopifyProductSummary,
+)
 console.log('ARG', arg)
 
-// // PAGE SUMMARY
-// clients.page.summary(arg).then((summary) => {
-//   console.log(JSON.stringify(summary, null, 2))
-// })
-// // PAGE INFO
-clients.page.info(arg as string).then((info) => {
-  console.log(JSON.stringify(info, null, 2))
-})
+shopifyProductSummary()
 
-// // PLACES
-// clients.google.searchPlaces(arg as string).then((result) => {
-//   console.log(JSON.stringify(result, null, 2))
-//   if (result.length === 1) {
-//     console.log('Fetching Details...')
-//     clients.google
-//       .placeDetails(result[0]?.sourceId ?? '')
-//       .then((details) => [console.log(JSON.stringify(details, null, 2))])
-//   }
-// })
+// OPTIONS BELOW
 
-// clients.youtube
-//   .search({
-//     part: 'snippet,contentOwnerDetails',
-//     maxResults: 3,
-//     q: arg,
-//     type: 'channel',
-//   })
-//   .then((result) => {
-//     console.log(JSON.stringify(result, null, 2))
-//   })
+function pageSummary() {
+  clients.page.summary(arg as string).then(print)
+}
+
+function pageInfo() {
+  clients.page.info(arg as string).then(print)
+}
+
+function googlePlaces() {
+  clients.google.searchPlaces(arg as string).then((result) => {
+    print(result)
+    if (result.length === 1) {
+      console.log('Fetching Details...')
+      clients.google.placeDetails(result[0]?.sourceId ?? '').then(print)
+    }
+  })
+}
+
+function shopifyProductSummary() {
+  clients.shopify.productsSummary(arg as string, 5).then(print)
+}
+
+function youtubeChannelSearch() {
+  clients.youtube
+    .search({
+      part: 'snippet,contentOwnerDetails',
+      maxResults: 3,
+      q: arg,
+      type: 'channel',
+    })
+    .then(print)
+}
+
+function print(result: any) {
+  console.log(JSON.stringify(result, null, 2))
+}

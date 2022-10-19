@@ -1,7 +1,9 @@
-export function forKey(obj: any, callback: any): void;
-export function tryGet(accessor: any, fallback: any): any;
-declare namespace _default {
-    export { forKey };
-    export { tryGet };
-}
+export declare const forKey: (obj: any, callback: any) => void;
+export declare const tryGet: (accessor: any, fallback?: undefined) => any;
+export declare const sanitizeUrl: (url: string) => string;
+declare const _default: {
+    forKey: (obj: any, callback: any) => void;
+    sanitizeUrl: (url: string) => string;
+    tryGet: (accessor: any, fallback?: undefined) => any;
+};
 export default _default;

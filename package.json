@@ -6,8 +6,8 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "rm -rf dist && npm i && tsc --project tsconfig.json && npm prune --omit=dev && npm run copy-dist-files",
-    "copy-dist-files": "cp -rL node_modules page-phantomjs-meta-grabber.js dist/",
+    "build": "rm -rf dist && npm i && tsc --project tsconfig.json && npm run copy-dist-files && node scripts/cleanup-dist.js",
+    "copy-dist-files": "cp -rL page-phantomjs-meta-grabber.js dist/",
     "debug": ". config/local.sh && ts-node --esm --project tsconfig.json ./tests/debug.ts",
     "test": "test",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
@@ -26,14 +26,13 @@
   },
   "homepage": "https://github.com/tentkeep/clients#readme",
   "dependencies": {
-    "got": "^12.5.2",
+    "got": "^12.4.1",
     "jsonwebtoken": "^8.5.1",
     "node-fetch": "^2.6.0",
     "x2js": "^3.4.3",
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
-    "@types/google.maps": "^3.50.4",
     "@types/node": "^18.8.4",
     "eslint": "^8.21.0",
     "prettier": "^2.7.1",

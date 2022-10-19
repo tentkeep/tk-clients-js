@@ -1,4 +1,4 @@
-import { Item } from 'index.js'
+import { Item } from '../../index.js'
 import { URL } from 'url'
 import api, { ApiStatusError } from '../api.js'
 
@@ -8,9 +8,7 @@ const raw = {
       google(
         `/findplacefromtext/json?fields=${searchFields}&input=${query}&inputtype=textquery`,
       ),
-    details: (
-      placeId: string,
-    ): Promise<{ result: google.maps.places.PlaceResult }> =>
+    details: (placeId: string): Promise<{ result: GooglePlace }> =>
       google(`/details/json?place_id=${placeId}`),
   },
 }
@@ -39,7 +37,20 @@ export default {
 const searchFields =
   'place_id,formatted_address,name,rating,opening_hours,geometry,types'
 
-type PlaceCandidates = { candidates: google.maps.places.PlaceResult[] }
+type PlaceCandidates = { candidates: GooglePlace[] }
+export type GooglePlace = {
+  place_id: string
+  name: string
+  website?: string
+  formatted_address: string
+  international_phone_number?: string
+  geometry?: {
+    location?: {
+      lat: number
+      lng: number
+    }
+  }
+}
 
 function google(path: string) {
   const url = new URL(`https://maps.googleapis.com/maps/api/place${path}`)
@@ -47,7 +58,7 @@ function google(path: string) {
   return api(url)
 }
 
-function mapPlace(place: google.maps.places.PlaceResult): Place {
+function mapPlace(place: any): Place {
   if (!place.place_id || !place.name) {
     throw new ApiStatusError(412, 'Missing sourceId or title')
   }

@@ -9,6 +9,8 @@ const sanitizeOptions = (options) => {
     return _options;
 };
 export class ApiStatusError extends Error {
+    status;
+    bodyText;
     constructor(status, bodyText) {
         super(bodyText);
         this.status = status;

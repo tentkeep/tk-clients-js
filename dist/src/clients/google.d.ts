@@ -1,5 +1,4 @@
-/// <reference types="google.maps" />
-import { Item } from 'index.js';
+import { Item } from '../../index.js';
 declare function searchPlaces(query: string): Promise<Place[]>;
 declare function placeDetails(placeId: string): Promise<Place>;
 export declare type Place = Item & {
@@ -13,7 +12,7 @@ declare const _default: {
         places: {
             search: (query: string) => Promise<PlaceCandidates>;
             details: (placeId: string) => Promise<{
-                result: google.maps.places.PlaceResult;
+                result: GooglePlace;
             }>;
         };
     };
@@ -22,5 +21,18 @@ declare const _default: {
 };
 export default _default;
 declare type PlaceCandidates = {
-    candidates: google.maps.places.PlaceResult[];
+    candidates: GooglePlace[];
+};
+export declare type GooglePlace = {
+    place_id: string;
+    name: string;
+    website?: string;
+    formatted_address: string;
+    international_phone_number?: string;
+    geometry?: {
+        location?: {
+            lat: number;
+            lng: number;
+        };
+    };
 };

@@ -1,7 +1,7 @@
 export const forKey = (obj, callback) => {
     Object.keys(obj).forEach(callback);
 };
-export const tryGet = (accessor, fallback) => {
+export const tryGet = (accessor, fallback = undefined) => {
     try {
         return accessor();
     }
@@ -9,8 +9,19 @@ export const tryGet = (accessor, fallback) => {
         return fallback;
     }
 };
+export const sanitizeUrl = (url) => {
+    let _url = url;
+    if (!_url.includes('://')) {
+        _url = `https://${_url}`;
+    }
+    if (_url.endsWith('/')) {
+        _url = _url.slice(0, -1);
+    }
+    return _url;
+};
 export default {
     forKey,
+    sanitizeUrl,
     tryGet,
 };
 //# sourceMappingURL=common.js.map

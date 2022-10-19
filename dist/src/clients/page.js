@@ -1,6 +1,7 @@
 import childProcess from 'child_process';
 import X2JS from 'x2js';
 import got from 'got';
+import { sanitizeUrl } from '../shareable/common.js';
 const summary = async (url) => {
     let _url = sanitizeUrl(url);
     const page = await captureUrl(_url);
@@ -44,16 +45,6 @@ export default {
     info,
     summary,
 };
-function sanitizeUrl(url) {
-    let _url = url;
-    if (!_url.includes('://')) {
-        _url = `https://${_url}`;
-    }
-    if (_url.endsWith('/')) {
-        _url = _url.slice(0, -1);
-    }
-    return _url;
-}
 function phantomjs() {
     return process.env.PHANTOMJS_PATH ?? 'phantomjs';
 }

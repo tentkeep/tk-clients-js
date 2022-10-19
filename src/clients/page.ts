@@ -1,6 +1,7 @@
 import childProcess from 'child_process'
 import X2JS from 'x2js'
 import got from 'got'
+import { sanitizeUrl } from '../shareable/common.js'
 
 const summary = async (url: string): Promise<PageSummary> => {
   let _url = sanitizeUrl(url)
@@ -63,17 +64,6 @@ export type PageSummary = {
   icon?: string
   twitter?: string
   elements?: { meta; links; title }
-}
-
-function sanitizeUrl(url: string) {
-  let _url = url
-  if (!_url.includes('://')) {
-    _url = `https://${_url}`
-  }
-  if (_url.endsWith('/')) {
-    _url = _url.slice(0, -1)
-  }
-  return _url
 }
 
 function phantomjs(): string {

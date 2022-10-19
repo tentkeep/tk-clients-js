@@ -1,9 +1,9 @@
-/// <reference types="google.maps" />
 /// <reference types="node" resolution-mode="require"/>
 /// <reference types="node/http.js" />
-/// <reference types="node_modules/got/dist/source/core/timed-out.js" />
+
 import { Place as _Place } from './src/clients/google.js';
 import { PageSummary as _PageSummary } from './src/clients/page.js';
+import { ProductItem as _ProductItem } from './src/clients/shopify.js';
 export declare const clients: {
     etsy: {
         favorites: (userId: any) => Promise<any>;
@@ -29,10 +29,10 @@ export declare const clients: {
         raw: {
             places: {
                 search: (query: string) => Promise<{
-                    candidates: google.maps.places.PlaceResult[];
+                    candidates: import("./src/clients/google.js").GooglePlace[];
                 }>;
                 details: (placeId: string) => Promise<{
-                    result: google.maps.places.PlaceResult;
+                    result: import("./src/clients/google.js").GooglePlace;
                 }>;
             };
         };
@@ -73,6 +73,16 @@ export declare const clients: {
             url: any;
             items: any;
         }>;
+    };
+    shopify: {
+        raw: {
+            products: (url: string, limit?: number) => Promise<{
+                products: import("./src/clients/shopify.js").ShopifyProduct[];
+            }>;
+            collections: (url: string) => Promise<any>;
+            collectionProducts: (url: string, collectionHandle: string) => Promise<any>;
+        };
+        productsSummary: (url: string, limit?: number) => Promise<_ProductItem[]>;
     };
     spotify: {
         searchArtists: (query: any) => any;
@@ -138,3 +148,4 @@ export declare type Summary = Item & {
 };
 export declare type Place = _Place;
 export declare type PageSummary = _PageSummary;
+export declare type ProductItem = _ProductItem;

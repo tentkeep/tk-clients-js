@@ -6,6 +6,7 @@ import page from './src/clients/page.js';
 import rss from './src/clients/rss.js';
 import shopify from './src/clients/shopify.js';
 import spotify from './src/clients/spotify.js';
+import tentkeep from './src/clients/tentkeep.js';
 import wordpress from './src/clients/wordpress.js';
 import youtube from './src/clients/youtube.js';
 export const clients = {
@@ -17,6 +18,7 @@ export const clients = {
     rss,
     shopify,
     spotify,
+    tentkeep,
     wordpress,
     youtube,
 };

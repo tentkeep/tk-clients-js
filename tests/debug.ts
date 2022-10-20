@@ -1,27 +1,22 @@
-import clients from '../index.js'
+import clients, { TKDataDomain } from '../index.js'
 
 const [_entryPoint, _file, arg] = process.argv
 console.info(
   'OPTIONS',
-  youtubeChannelSearch,
+  googlePlaces,
   pageSummary,
   pageInfo,
-  googlePlaces,
+  podcastSummary,
   shopifyProductSummary,
+  spotify,
+  tentkeep,
+  youtubeChannelSearch,
 )
 console.log('ARG', arg)
 
-shopifyProductSummary()
+tentkeep()
 
 // OPTIONS BELOW
-
-function pageSummary() {
-  clients.page.summary(arg as string).then(print)
-}
-
-function pageInfo() {
-  clients.page.info(arg as string).then(print)
-}
 
 function googlePlaces() {
   clients.google.searchPlaces(arg as string).then((result) => {
@@ -33,8 +28,28 @@ function googlePlaces() {
   })
 }
 
+function pageSummary() {
+  clients.page.summary(arg as string).then(print)
+}
+
+function pageInfo() {
+  clients.page.info(arg as string).then(print)
+}
+
+function podcastSummary() {
+  clients.itunes.podcasts(arg as string).then(print)
+}
+
 function shopifyProductSummary() {
   clients.shopify.productsSummary(arg as string, 5).then(print)
+}
+
+function spotify() {
+  clients.spotify.searchPodcasts(arg).then(print)
+}
+
+function tentkeep() {
+  clients.tentkeep(TKDataDomain.Christian).getGalleries().then(print)
 }
 
 function youtubeChannelSearch() {

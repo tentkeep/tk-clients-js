@@ -4,6 +4,7 @@
 import { Place as _Place } from './src/clients/google.js';
 import { PageSummary as _PageSummary } from './src/clients/page.js';
 import { ProductItem as _ProductItem } from './src/clients/shopify.js';
+import { DataDomain, Gallery as _Gallery, GalleryEntry as _GalleryEntry, GalleryEntryItem as _GalleryEntryItem, GalleryEntrySeed as _GalleryEntrySeed } from './src/clients/tentkeep.js';
 export declare const clients: {
     etsy: {
         favorites: (userId: any) => Promise<any>;
@@ -87,9 +88,27 @@ export declare const clients: {
     spotify: {
         searchArtists: (query: any) => any;
         searchPlaylists: (query: any) => any;
+        searchPodcasts: (query: any) => any;
         userPlaylists: (userId: any) => any;
         playlist: (playlistId: any) => any;
         playlistTracks: (playlistId: any) => any;
+    };
+    tentkeep: (dataDomain: DataDomain) => {
+        exchangeAccessCode: (code: any) => Promise<any>;
+        getPodcastSummary: (feedUrl: string) => Promise<any>;
+        getGalleries: () => Promise<_Gallery[]>;
+        getGallery: (galleryId: number) => Promise<_Gallery>;
+        getRecentlyAddedGalleryEntryItems: () => Promise<any>;
+        getGalleriesForUser: (token: string) => Promise<any>;
+        getGalleryImageUrl: (galleryId: number) => string;
+        getGalleryEntries: (galleryId: number) => Promise<any>;
+        getGalleryUserRole: (token: string, galleryId: number) => Promise<any>;
+        saveGallery: (token: string, gallery: _Gallery) => Promise<any>;
+        saveGalleryImage: (token: string, galleryId: number, image: any) => Promise<any>;
+        saveGalleryEntry: (token: string, galleryId: number, seed: _GalleryEntrySeed) => Promise<any>;
+        saveUserItemActivity: (token: string, itemActivity: any) => Promise<any>;
+        searchEtsyShops: (query: string) => Promise<any>;
+        searchMusicArtists: (query: string) => Promise<any>;
     };
     wordpress: {
         host: (_host: any) => {
@@ -149,3 +168,8 @@ export declare type Summary = Item & {
 export declare type Place = _Place;
 export declare type PageSummary = _PageSummary;
 export declare type ProductItem = _ProductItem;
+export declare type TKDataDomain = DataDomain;
+export declare type Gallery = _Gallery;
+export declare type GalleryEntry = _GalleryEntry;
+export declare type GalleryEntryItem = _GalleryEntryItem;
+export declare type GalleryEntrySeed = _GalleryEntrySeed;

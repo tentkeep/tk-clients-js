@@ -1,9 +1,7 @@
 import fetch from 'node-fetch'
 
-const sanitizeOptions = (options: any | null) => {
+export const sanitizeOptions = (options: any | null) => {
   const _options = options ?? {}
-  _options.headers = _options.headers ?? {}
-  _options.headers.key = new Date().toISOString().substring(0, 10)
   if (typeof _options.body === 'object') {
     _options.body = JSON.stringify(_options.body)
   }

@@ -5,6 +5,8 @@ export default {
   searchArtists: (query) => spotify(`${host}/v1/search?q=${query}&type=artist`),
   searchPlaylists: (query) =>
     spotify(`${host}/v1/search?q=${query}&type=playlist`),
+  searchPodcasts: (query) =>
+    spotify(`${host}/v1/search?q=${query}&type=show&market=US&limit=3`),
   userPlaylists: (userId) => spotify(`${host}/v1/users/${userId}/playlists`),
   playlist: (playlistId) => spotify(`${host}/v1/playlists/${playlistId}`),
   playlistTracks: (playlistId) =>

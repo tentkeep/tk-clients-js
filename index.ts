@@ -6,6 +6,13 @@ import page, { PageSummary as _PageSummary } from './src/clients/page.js'
 import rss from './src/clients/rss.js'
 import shopify, { ProductItem as _ProductItem } from './src/clients/shopify.js'
 import spotify from './src/clients/spotify.js'
+import tentkeep, {
+  DataDomain,
+  Gallery as _Gallery,
+  GalleryEntry as _GalleryEntry,
+  GalleryEntryItem as _GalleryEntryItem,
+  GalleryEntrySeed as _GalleryEntrySeed,
+} from './src/clients/tentkeep.js'
 import wordpress from './src/clients/wordpress.js'
 import youtube from './src/clients/youtube.js'
 
@@ -18,6 +25,7 @@ export const clients = {
   rss,
   shopify,
   spotify,
+  tentkeep,
   wordpress,
   youtube,
 }
@@ -41,3 +49,10 @@ export type Summary = Item & {
 export type Place = _Place
 export type PageSummary = _PageSummary
 export type ProductItem = _ProductItem
+
+// MARK: TENTKEEP
+export type TKDataDomain = DataDomain
+export type Gallery = _Gallery
+export type GalleryEntry = _GalleryEntry
+export type GalleryEntryItem = _GalleryEntryItem
+export type GalleryEntrySeed = _GalleryEntrySeed

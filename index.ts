@@ -8,6 +8,7 @@ import shopify, { ProductItem as _ProductItem } from './src/clients/shopify.js'
 import spotify from './src/clients/spotify.js'
 import tentkeep, {
   DataDomain,
+  GalleryEntryTypes,
   Gallery as _Gallery,
   GalleryEntry as _GalleryEntry,
   GalleryEntryItem as _GalleryEntryItem,
@@ -51,7 +52,8 @@ export type PageSummary = _PageSummary
 export type ProductItem = _ProductItem
 
 // MARK: TENTKEEP
-export type TKDataDomain = DataDomain
+export { DataDomain as TKDataDomain }
+export { GalleryEntryTypes }
 export type Gallery = _Gallery
 export type GalleryEntry = _GalleryEntry
 export type GalleryEntryItem = _GalleryEntryItem

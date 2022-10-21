@@ -5,6 +5,15 @@ export var DataDomain;
     DataDomain[DataDomain["Christian"] = 1] = "Christian";
     DataDomain[DataDomain["Bootroots"] = 2] = "Bootroots";
 })(DataDomain = DataDomain || (DataDomain = {}));
+export var GalleryEntryTypes;
+(function (GalleryEntryTypes) {
+    GalleryEntryTypes["Etsy"] = "etsy";
+    GalleryEntryTypes["GooglePlace"] = "google.place";
+    GalleryEntryTypes["Music"] = "music";
+    GalleryEntryTypes["Podcast"] = "podcast";
+    GalleryEntryTypes["Wordpress"] = "wordpress";
+    GalleryEntryTypes["YouTube"] = "youtube";
+})(GalleryEntryTypes = GalleryEntryTypes || (GalleryEntryTypes = {}));
 export default (dataDomain) => {
     const tentkeep = (path, options) => {
         const _options = sanitizeOptions(options);

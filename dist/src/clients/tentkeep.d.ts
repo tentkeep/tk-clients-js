@@ -82,6 +82,14 @@ export declare enum DataDomain {
     Christian = 1,
     Bootroots = 2
 }
+export declare enum GalleryEntryTypes {
+    Etsy = "etsy",
+    GooglePlace = "google.place",
+    Music = "music",
+    Podcast = "podcast",
+    Wordpress = "wordpress",
+    YouTube = "youtube"
+}
 declare const _default: (dataDomain: DataDomain) => {
     exchangeAccessCode: (code: any) => Promise<any>;
     getPageInfo: (url: string) => Promise<any>;

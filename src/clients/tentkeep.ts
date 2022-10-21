@@ -81,6 +81,14 @@ export enum DataDomain {
   Christian = 1,
   Bootroots = 2,
 }
+export enum GalleryEntryTypes {
+  Etsy = 'etsy',
+  GooglePlace = 'google.place',
+  Music = 'music',
+  Podcast = 'podcast',
+  Wordpress = 'wordpress',
+  YouTube = 'youtube',
+}
 
 export default (dataDomain: DataDomain) => {
   const tentkeep: API = (path: string, options) => {

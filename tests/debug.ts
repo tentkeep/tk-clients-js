@@ -4,6 +4,7 @@ const [_entryPoint, _file, arg] = process.argv
 console.info(
   'OPTIONS',
   googlePlaces,
+  musickit,
   pageSummary,
   pageInfo,
   podcastSummary,
@@ -14,7 +15,7 @@ console.info(
 )
 console.log('ARG', arg)
 
-podcastSummary()
+pageInfo()
 
 // OPTIONS BELOW
 
@@ -26,6 +27,10 @@ function googlePlaces() {
       clients.google.placeDetails(result[0]?.sourceId ?? '').then(print)
     }
   })
+}
+
+function musickit() {
+  clients.musickit.searchArtists('True Words').then(print)
 }
 
 function pageSummary() {

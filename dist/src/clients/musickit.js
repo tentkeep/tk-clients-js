@@ -1,7 +1,6 @@
 import { api } from '../api.js';
 import { tryGet } from '../shareable/common.js';
 const host = 'https://api.music.apple.com';
-import jwt from 'jsonwebtoken';
 const getArtistAlbums = (artistId) => music(`/v1/catalog/us/artists/${artistId}/albums?include=tracks`);
 export default {
     searchArtists: (term) => music(`/v1/catalog/us/search?term=${term}&limit=25&types=artists&include=albums`),
@@ -47,23 +46,28 @@ export default {
         };
     },
 };
-const music = (path) => {
+const music = async (path) => {
     const _url = `${host}${path}`;
     const options = {
-        headers: {
-            Authorization: `Bearer ${token()}`,
-        },
+        headers: {},
     };
+    if (window === undefined) {
+        const musickitToken = await token();
+        options.headers.Authorization = `Bearer ${musickitToken}`;
+    }
     return api(_url, options);
 };
 const privateKey = () => Buffer.from(process.env.CLIENTS_APPLE_MUSIC_KIT_PRIVATE_KEY, 'base64').toString('utf-8');
-const token = () => jwt.sign({}, privateKey(), {
-    algorithm: 'ES256',
-    expiresIn: '180d',
-    issuer: process.env.CLIENTS_APPLE_MUSIC_KIT_TEAM_ID,
-    header: {
-        alg: 'ES256',
-        kid: process.env.CLIENTS_APPLE_MUSIC_KIT_KEY_ID,
-    },
-});
+const token = async () => {
+    const jwt = (await import('jsonwebtoken')).default;
+    return jwt.sign({}, privateKey(), {
+        algorithm: 'ES256',
+        expiresIn: '180d',
+        issuer: process.env.CLIENTS_APPLE_MUSIC_KIT_TEAM_ID,
+        header: {
+            alg: 'ES256',
+            kid: process.env.CLIENTS_APPLE_MUSIC_KIT_KEY_ID,
+        },
+    });
+};
 //# sourceMappingURL=musickit.js.map

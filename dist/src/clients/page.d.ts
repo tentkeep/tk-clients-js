@@ -1,10 +1,7 @@
-/// <reference types="node" resolution-mode="require"/>
-/// <reference types="node/http.js" />
-
 declare const _default: {
     info: (url: string) => Promise<{
         allowsIFrame: boolean;
-        headers: import("http").IncomingHttpHeaders;
+        headers: any;
         features: string[];
     }>;
     summary: (url: string) => Promise<PageSummary>;

@@ -1,6 +1,3 @@
-/// <reference types="node" resolution-mode="require"/>
-/// <reference types="node/http.js" />
-
 import { Place as _Place } from './src/clients/google.js';
 import { PageSummary as _PageSummary } from './src/clients/page.js';
 import { ProductItem as _ProductItem } from './src/clients/shopify.js';
@@ -59,7 +56,7 @@ export declare const clients: {
     page: {
         info: (url: string) => Promise<{
             allowsIFrame: boolean;
-            headers: import("http").IncomingHttpHeaders;
+            headers: any;
             features: string[];
         }>;
         summary: (url: string) => Promise<_PageSummary>;
@@ -101,6 +98,7 @@ export declare const clients: {
         getPlaceDetail: (sourceId: string) => Promise<_Place>;
         getPodcastSummary: (feedUrl: string) => Promise<any>;
         getShopifyProductsSummary: (url: string, limit?: number) => Promise<_ProductItem[]>;
+        searchYoutubeChannels: (query: string) => Promise<any>;
         getGalleries: () => Promise<_Gallery[]>;
         getGallery: (galleryId: number) => Promise<_Gallery>;
         getRecentlyAddedGalleryEntryItems: () => Promise<any>;

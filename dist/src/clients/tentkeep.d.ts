@@ -77,6 +77,7 @@ declare const _default: (dataDomain: DataDomain) => {
     getPlaceDetail: (sourceId: string) => Promise<Place>;
     getPodcastSummary: (feedUrl: string) => Promise<any>;
     getShopifyProductsSummary: (url: string, limit?: number) => Promise<ProductItem[]>;
+    searchYoutubeChannels: (query: string) => Promise<any>;
     getGalleries: () => Promise<Gallery[]>;
     getGallery: (galleryId: number) => Promise<Gallery>;
     getRecentlyAddedGalleryEntryItems: () => Promise<any>;

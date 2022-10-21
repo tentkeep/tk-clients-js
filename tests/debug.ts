@@ -1,4 +1,4 @@
-import clients, { TKDataDomain } from '../index.js'
+import clients from '../index.js'
 
 const [_entryPoint, _file, arg] = process.argv
 console.info(
@@ -49,7 +49,11 @@ function spotify() {
 }
 
 function tentkeep() {
-  clients.tentkeep(TKDataDomain.Christian).getGalleries().then(print)
+  clients
+    .tentkeep(2)
+    .getPageInfo(arg as string)
+    .then(print)
+  // clients.tentkeep(2).getGalleries().then(print)
 }
 
 function youtubeChannelSearch() {

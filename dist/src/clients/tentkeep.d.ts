@@ -1,3 +1,4 @@
+import { Place, ProductItem } from '../../index.js';
 export declare type Gallery = {
     id?: number;
     title: string;
@@ -70,7 +71,12 @@ export declare enum DataDomain {
 }
 declare const _default: (dataDomain: DataDomain) => {
     exchangeAccessCode: (code: any) => Promise<any>;
+    getPageInfo: (url: string) => Promise<any>;
+    getPageSummary: (url: string) => Promise<any>;
+    getPlaces: (query: string) => Promise<Place[]>;
+    getPlaceDetail: (sourceId: string) => Promise<Place>;
     getPodcastSummary: (feedUrl: string) => Promise<any>;
+    getShopifyProductsSummary: (url: string, limit?: number) => Promise<ProductItem[]>;
     getGalleries: () => Promise<Gallery[]>;
     getGallery: (galleryId: number) => Promise<Gallery>;
     getRecentlyAddedGalleryEntryItems: () => Promise<any>;

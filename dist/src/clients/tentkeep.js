@@ -28,7 +28,12 @@ export default (dataDomain) => {
             };
             return tentkeep(`/auth/token`, options);
         },
+        getPageInfo: (url) => tentkeep(`/proxy/page/info?url=${url}`),
+        getPageSummary: (url) => tentkeep(`/proxy/page/summary?url=${url}`),
+        getPlaces: (query) => tentkeep(`/proxy/places?q=${query}`),
+        getPlaceDetail: (sourceId) => tentkeep(`/proxy/places/detail?id=${sourceId}`),
         getPodcastSummary: (feedUrl) => tentkeep(`/proxy/rss/podcast-summary?feed=${feedUrl}`),
+        getShopifyProductsSummary: (url, limit = 15) => tentkeep(`/proxy/shopify/products/summary?url=${url}&limit=${limit}`),
         getGalleries: () => tentkeep(`/galleries`),
         getGallery: (galleryId) => tentkeep(`/galleries/${galleryId}`),
         getRecentlyAddedGalleryEntryItems: () => tentkeep(`/gallery-entry-items/recent`),

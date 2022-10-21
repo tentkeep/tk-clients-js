@@ -2,6 +2,7 @@ import childProcess from 'child_process';
 import X2JS from 'x2js';
 import got from 'got';
 import { sanitizeUrl } from '../shareable/common.js';
+import { ApiStatusError } from '../api.js';
 const summary = async (url) => {
     let _url = sanitizeUrl(url);
     const page = await captureUrl(_url);
@@ -34,6 +35,9 @@ const summary = async (url) => {
 const info = async (url) => {
     let _url = sanitizeUrl(url);
     const site = await got(_url);
+    if (!site.ok) {
+        throw new ApiStatusError(404, 'Site not found');
+    }
     const hasShopify = (await got(`${_url}/products.json?limit=1`)).headers['content-type']?.includes('json');
     return {
         allowsIFrame: !site.headers['x-frame-options'],

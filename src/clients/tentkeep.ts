@@ -1,3 +1,4 @@
+import { Place, ProductItem } from '../../index.js'
 import api, { API, sanitizeOptions } from '../api.js'
 
 const TENTKEEP_HOST = 'https://api.tentkeep.com/v1'
@@ -94,8 +95,19 @@ export default (dataDomain: DataDomain) => {
       }
       return tentkeep(`/auth/token`, options)
     },
+    getPageInfo: (url: string) => tentkeep(`/proxy/page/info?url=${url}`),
+    getPageSummary: (url: string) => tentkeep(`/proxy/page/summary?url=${url}`),
+    getPlaces: (query: string): Promise<Place[]> =>
+      tentkeep(`/proxy/places?q=${query}`),
+    getPlaceDetail: (sourceId: string): Promise<Place> =>
+      tentkeep(`/proxy/places/detail?id=${sourceId}`),
     getPodcastSummary: (feedUrl: string) =>
       tentkeep(`/proxy/rss/podcast-summary?feed=${feedUrl}`),
+    getShopifyProductsSummary: (
+      url: string,
+      limit: number = 15,
+    ): Promise<ProductItem[]> =>
+      tentkeep(`/proxy/shopify/products/summary?url=${url}&limit=${limit}`),
 
     // GALLERIES
     getGalleries: (): Promise<Gallery[]> => tentkeep(`/galleries`),

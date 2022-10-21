@@ -95,7 +95,12 @@ export declare const clients: {
     };
     tentkeep: (dataDomain: DataDomain) => {
         exchangeAccessCode: (code: any) => Promise<any>;
+        getPageInfo: (url: string) => Promise<any>;
+        getPageSummary: (url: string) => Promise<any>;
+        getPlaces: (query: string) => Promise<_Place[]>;
+        getPlaceDetail: (sourceId: string) => Promise<_Place>;
         getPodcastSummary: (feedUrl: string) => Promise<any>;
+        getShopifyProductsSummary: (url: string, limit?: number) => Promise<_ProductItem[]>;
         getGalleries: () => Promise<_Gallery[]>;
         getGallery: (galleryId: number) => Promise<_Gallery>;
         getRecentlyAddedGalleryEntryItems: () => Promise<any>;

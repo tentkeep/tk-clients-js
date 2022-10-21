@@ -6,6 +6,7 @@ const TENTKEEP_HOST = 'https://api.tentkeep.com/v1'
 export type Gallery = {
   id?: number
   title: string
+  description?: string
   created_by?: number
   tiny_image?: string
 }
@@ -40,26 +41,37 @@ export type GalleryEntryItem = {
 
 export type GalleryEntrySeedEtsy = {
   entryType: 'etsy'
-  details: { shopId }
+  entry?: GalleryEntry
+  details?: { shopId }
+}
+export type GalleryEntrySeedGooglePlace = {
+  entryType: 'google.place'
+  entry?: GalleryEntry
+  details?: { placeId: string }
 }
 export type GalleryEntrySeedMusic = {
   entryType: 'music'
+  entry?: GalleryEntry
   details: { artistId: string }
 }
 export type GalleryEntrySeedPodcast = {
   entryType: 'podcast'
+  entry?: GalleryEntry
   details: { feedUrl: string }
 }
 export type GalleryEntrySeedWordpress = {
   entryType: 'wordpress'
+  entry?: GalleryEntry
   details: { url: string }
 }
 export type GalleryEntrySeedYoutube = {
   entryType: 'youtube'
+  entry?: GalleryEntry
   details: { username?: string; channelId?: string }
 }
 export type GalleryEntrySeed =
   | GalleryEntrySeedEtsy
+  | GalleryEntrySeedGooglePlace
   | GalleryEntrySeedMusic
   | GalleryEntrySeedPodcast
   | GalleryEntrySeedWordpress

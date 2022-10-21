@@ -2,6 +2,7 @@ import { Place, ProductItem } from '../../index.js';
 export declare type Gallery = {
     id?: number;
     title: string;
+    description?: string;
     created_by?: number;
     tiny_image?: string;
 };
@@ -35,36 +36,48 @@ export declare type GalleryEntryItem = {
 };
 export declare type GalleryEntrySeedEtsy = {
     entryType: 'etsy';
-    details: {
+    entry?: GalleryEntry;
+    details?: {
         shopId: any;
+    };
+};
+export declare type GalleryEntrySeedGooglePlace = {
+    entryType: 'google.place';
+    entry?: GalleryEntry;
+    details?: {
+        placeId: string;
     };
 };
 export declare type GalleryEntrySeedMusic = {
     entryType: 'music';
+    entry?: GalleryEntry;
     details: {
         artistId: string;
     };
 };
 export declare type GalleryEntrySeedPodcast = {
     entryType: 'podcast';
+    entry?: GalleryEntry;
     details: {
         feedUrl: string;
     };
 };
 export declare type GalleryEntrySeedWordpress = {
     entryType: 'wordpress';
+    entry?: GalleryEntry;
     details: {
         url: string;
     };
 };
 export declare type GalleryEntrySeedYoutube = {
     entryType: 'youtube';
+    entry?: GalleryEntry;
     details: {
         username?: string;
         channelId?: string;
     };
 };
-export declare type GalleryEntrySeed = GalleryEntrySeedEtsy | GalleryEntrySeedMusic | GalleryEntrySeedPodcast | GalleryEntrySeedWordpress | GalleryEntrySeedYoutube;
+export declare type GalleryEntrySeed = GalleryEntrySeedEtsy | GalleryEntrySeedGooglePlace | GalleryEntrySeedMusic | GalleryEntrySeedPodcast | GalleryEntrySeedWordpress | GalleryEntrySeedYoutube;
 export declare enum DataDomain {
     Christian = 1,
     Bootroots = 2

@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+import got from 'got';
 export const sanitizeOptions = (options) => {
     const _options = options ?? {};
     if (typeof _options.body === 'object') {
@@ -15,29 +15,27 @@ export class ApiStatusError extends Error {
         this.bodyText = bodyText;
     }
 }
-const statusChecker = async (result) => {
-    if (result.status >= 400) {
-        const bodyText = await result.text();
-        throw new ApiStatusError(result.status, bodyText);
+const statusChecker = async (response) => {
+    if (!response.ok) {
+        throw new ApiStatusError(response.statusCode, response.body);
     }
     else {
-        return result;
+        return response;
     }
 };
-const parseContent = async (result) => {
-    const contentType = result.headers.get('Content-Type');
-    if (contentType.includes('json')) {
-        return result.json();
+const parseContent = async (response) => {
+    const contentType = response.headers['Content-Type'];
+    if (contentType?.includes('json')) {
+        return JSON.parse(response.body);
     }
-    else if (contentType.includes('xml')) {
+    else if (contentType?.includes('xml')) {
         const xml2js = await import('xml2js');
-        const text = await result.text();
-        return xml2js.parseStringPromise(text);
+        return xml2js.parseStringPromise(response.body);
     }
-    return result;
+    return response;
 };
 export const api = (url, options = null) => {
-    return fetch(url, sanitizeOptions(options))
+    return got(url, sanitizeOptions(options))
         .then(statusChecker)
         .then(parseContent);
 };

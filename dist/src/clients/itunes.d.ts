@@ -1,4 +1,4 @@
-declare namespace _default {
-    function podcasts(query: any): Promise<any>;
-}
+declare const _default: {
+    podcasts: (query: any) => Promise<any>;
+};
 export default _default;

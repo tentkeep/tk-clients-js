@@ -1,4 +1,4 @@
-import fetch from 'node-fetch'
+import got, { Response } from 'got'
 
 export const sanitizeOptions = (options: any | null) => {
   const _options = options ?? {}
@@ -19,31 +19,29 @@ export class ApiStatusError extends Error {
   }
 }
 
-const statusChecker = async (result) => {
-  if (result.status >= 400) {
-    const bodyText = await result.text()
-    throw new ApiStatusError(result.status, bodyText)
+const statusChecker = async (response: Response<string>) => {
+  if (!response.ok) {
+    throw new ApiStatusError(response.statusCode, response.body)
   } else {
-    return result
+    return response
   }
 }
 
-const parseContent = async (result) => {
-  const contentType = result.headers.get('Content-Type')
-  if (contentType.includes('json')) {
-    return result.json()
-  } else if (contentType.includes('xml')) {
+const parseContent = async (response: Response<string>) => {
+  const contentType = response.headers['Content-Type']
+  if (contentType?.includes('json')) {
+    return JSON.parse(response.body)
+  } else if (contentType?.includes('xml')) {
     const xml2js = await import('xml2js')
-    const text = await result.text()
-    return xml2js.parseStringPromise(text)
+    return xml2js.parseStringPromise(response.body)
   }
-  return result
+  return response
 }
 
 export type API = (url: string | URL, options?: any | null) => Promise<any>
 
 export const api: API = (url: string | URL, options: any | null = null) => {
-  return fetch(url, sanitizeOptions(options))
+  return got(url, sanitizeOptions(options))
     .then(statusChecker)
     .then(parseContent)
 }

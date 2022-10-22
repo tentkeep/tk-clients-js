@@ -1,31 +1,35 @@
 import { Place, ProductItem } from '../../index.js';
 export declare type Gallery = {
     id?: number;
-    title: string;
+    title?: string;
     description?: string;
-    created_by?: number;
-    tiny_image?: string;
+    createdBy?: number;
+    tinyImage?: string;
+    createdAt?: Date;
+    modifiedAt?: Date;
 };
 export declare type GalleryEntry = {
     id?: number;
-    gallery_id: number;
-    created_by?: number;
-    entry_type: 'etsy' | 'music' | 'podcast' | 'wordpress' | 'youtube';
-    generic_type: 'shop' | 'music' | 'podcast' | 'page' | 'video';
-    source_id: string;
-    title: string;
+    galleryId?: number;
+    createdBy?: number;
+    entryType?: GalleryEntryTypes;
+    genericType?: 'shop' | 'music' | 'podcast' | 'page' | 'video';
+    sourceId?: string;
+    title?: string;
     description?: string;
     image?: string;
-    url: string;
+    url?: string;
     detail?: any;
+    createdAt?: Date;
+    modifiedAt?: Date;
 };
 export declare type GalleryEntryItem = {
     id?: number;
-    gallery_entry_id: number;
-    created_by?: number;
-    entry_type: 'etsy' | 'music' | 'podcast' | 'wordpress' | 'youtube';
-    generic_type: 'shop' | 'music' | 'podcast' | 'page' | 'video';
-    source_id: string;
+    galleryEntryId?: number;
+    createdBy?: number;
+    entryType: GalleryEntryTypes;
+    genericType: 'shop' | 'music' | 'podcast' | 'page' | 'video';
+    sourceId: string;
     title: string;
     description?: string;
     image?: string;
@@ -33,44 +37,53 @@ export declare type GalleryEntryItem = {
     detail?: any;
     date?: Date;
     tokens?: string[];
+    createdAt?: Date;
+    modifiedAt?: Date;
 };
 export declare type GalleryEntrySeedEtsy = {
-    entryType: 'etsy';
+    entryType: GalleryEntryTypes.Etsy;
     entry?: GalleryEntry;
     details?: {
         shopId: any;
     };
 };
 export declare type GalleryEntrySeedGooglePlace = {
-    entryType: 'google.place';
+    entryType: GalleryEntryTypes.GooglePlace;
     entry?: GalleryEntry;
     details?: {
         placeId: string;
     };
 };
 export declare type GalleryEntrySeedMusic = {
-    entryType: 'music';
+    entryType: GalleryEntryTypes.Music;
     entry?: GalleryEntry;
     details: {
         artistId: string;
     };
 };
 export declare type GalleryEntrySeedPodcast = {
-    entryType: 'podcast';
+    entryType: GalleryEntryTypes.Podcast;
     entry?: GalleryEntry;
     details: {
         feedUrl: string;
     };
 };
+export declare type GalleryEntrySeedShopify = {
+    entryType: GalleryEntryTypes.Shopify;
+    entry?: GalleryEntry;
+    details: {
+        shopUrl: string;
+    };
+};
 export declare type GalleryEntrySeedWordpress = {
-    entryType: 'wordpress';
+    entryType: GalleryEntryTypes.Wordpress;
     entry?: GalleryEntry;
     details: {
         url: string;
     };
 };
 export declare type GalleryEntrySeedYoutube = {
-    entryType: 'youtube';
+    entryType: GalleryEntryTypes.YouTube;
     entry?: GalleryEntry;
     details: {
         username?: string;
@@ -87,6 +100,7 @@ export declare enum GalleryEntryTypes {
     GooglePlace = "google.place",
     Music = "music",
     Podcast = "podcast",
+    Shopify = "shopify",
     Wordpress = "wordpress",
     YouTube = "youtube"
 }
@@ -106,7 +120,9 @@ declare const _default: (dataDomain: DataDomain) => {
     getGalleryImageUrl: (galleryId: number) => string;
     getGalleryEntries: (galleryId: number) => Promise<any>;
     getGalleryUserRole: (token: string, galleryId: number) => Promise<any>;
-    saveGallery: (token: string, gallery: Gallery) => Promise<any>;
+    saveGallery: (token: string, gallery: Gallery & {
+        title: string;
+    }) => Promise<any>;
     saveGalleryImage: (token: string, galleryId: number, image: any) => Promise<any>;
     saveGalleryEntry: (token: string, galleryId: number, seed: GalleryEntrySeed) => Promise<any>;
     saveUserItemActivity: (token: string, itemActivity: any) => Promise<any>;

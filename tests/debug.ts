@@ -1,4 +1,4 @@
-import clients from '../index.js'
+import clients, { TKDataDomain } from '../index.js'
 
 const [_entryPoint, _file, arg] = process.argv
 console.info(
@@ -55,7 +55,7 @@ function spotify() {
 
 function tentkeep() {
   clients
-    .tentkeep(2)
+    .tentkeep(TKDataDomain.Bootroots)
     .getPageInfo(arg as string)
     .then(print)
   // clients.tentkeep(2).getGalleries().then(print)

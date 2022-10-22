@@ -11,6 +11,7 @@ export var GalleryEntryTypes;
     GalleryEntryTypes["GooglePlace"] = "google.place";
     GalleryEntryTypes["Music"] = "music";
     GalleryEntryTypes["Podcast"] = "podcast";
+    GalleryEntryTypes["Shopify"] = "shopify";
     GalleryEntryTypes["Wordpress"] = "wordpress";
     GalleryEntryTypes["YouTube"] = "youtube";
 })(GalleryEntryTypes = GalleryEntryTypes || (GalleryEntryTypes = {}));

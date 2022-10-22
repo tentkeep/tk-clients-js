@@ -5,31 +5,35 @@ const TENTKEEP_HOST = 'https://api.tentkeep.com/v1'
 
 export type Gallery = {
   id?: number
-  title: string
+  title?: string
   description?: string
-  created_by?: number
-  tiny_image?: string
+  createdBy?: number
+  tinyImage?: string
+  createdAt?: Date
+  modifiedAt?: Date
 }
 export type GalleryEntry = {
   id?: number
-  gallery_id: number
-  created_by?: number
-  entry_type: 'etsy' | 'music' | 'podcast' | 'wordpress' | 'youtube'
-  generic_type: 'shop' | 'music' | 'podcast' | 'page' | 'video'
-  source_id: string
-  title: string
+  galleryId?: number
+  createdBy?: number
+  entryType?: GalleryEntryTypes
+  genericType?: 'shop' | 'music' | 'podcast' | 'page' | 'video'
+  sourceId?: string
+  title?: string
   description?: string
   image?: string
-  url: string
+  url?: string
   detail?: any
+  createdAt?: Date
+  modifiedAt?: Date
 }
 export type GalleryEntryItem = {
   id?: number
-  gallery_entry_id: number
-  created_by?: number
-  entry_type: 'etsy' | 'music' | 'podcast' | 'wordpress' | 'youtube'
-  generic_type: 'shop' | 'music' | 'podcast' | 'page' | 'video'
-  source_id: string
+  galleryEntryId?: number
+  createdBy?: number
+  entryType: GalleryEntryTypes
+  genericType: 'shop' | 'music' | 'podcast' | 'page' | 'video'
+  sourceId: string
   title: string
   description?: string
   image?: string
@@ -37,35 +41,42 @@ export type GalleryEntryItem = {
   detail?: any
   date?: Date
   tokens?: string[]
+  createdAt?: Date
+  modifiedAt?: Date
 }
 
 export type GalleryEntrySeedEtsy = {
-  entryType: 'etsy'
+  entryType: GalleryEntryTypes.Etsy
   entry?: GalleryEntry
   details?: { shopId }
 }
 export type GalleryEntrySeedGooglePlace = {
-  entryType: 'google.place'
+  entryType: GalleryEntryTypes.GooglePlace
   entry?: GalleryEntry
   details?: { placeId: string }
 }
 export type GalleryEntrySeedMusic = {
-  entryType: 'music'
+  entryType: GalleryEntryTypes.Music
   entry?: GalleryEntry
   details: { artistId: string }
 }
 export type GalleryEntrySeedPodcast = {
-  entryType: 'podcast'
+  entryType: GalleryEntryTypes.Podcast
   entry?: GalleryEntry
   details: { feedUrl: string }
 }
+export type GalleryEntrySeedShopify = {
+  entryType: GalleryEntryTypes.Shopify
+  entry?: GalleryEntry
+  details: { shopUrl: string }
+}
 export type GalleryEntrySeedWordpress = {
-  entryType: 'wordpress'
+  entryType: GalleryEntryTypes.Wordpress
   entry?: GalleryEntry
   details: { url: string }
 }
 export type GalleryEntrySeedYoutube = {
-  entryType: 'youtube'
+  entryType: GalleryEntryTypes.YouTube
   entry?: GalleryEntry
   details: { username?: string; channelId?: string }
 }
@@ -86,6 +97,7 @@ export enum GalleryEntryTypes {
   GooglePlace = 'google.place',
   Music = 'music',
   Podcast = 'podcast',
+  Shopify = 'shopify',
   Wordpress = 'wordpress',
   YouTube = 'youtube',
 }
@@ -147,7 +159,7 @@ export default (dataDomain: DataDomain) => {
       tentkeep(`/me/galleries/${galleryId}`, {
         headers: authHeaders(token),
       }),
-    saveGallery: (token: string, gallery: Gallery) =>
+    saveGallery: (token: string, gallery: Gallery & { title: string }) =>
       tentkeep(`/galleries`, {
         method: 'post',
         headers: postHeaders(token),

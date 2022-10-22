@@ -106,7 +106,9 @@ export declare const clients: {
         getGalleryImageUrl: (galleryId: number) => string;
         getGalleryEntries: (galleryId: number) => Promise<any>;
         getGalleryUserRole: (token: string, galleryId: number) => Promise<any>;
-        saveGallery: (token: string, gallery: _Gallery) => Promise<any>;
+        saveGallery: (token: string, gallery: _Gallery & {
+            title: string;
+        }) => Promise<any>;
         saveGalleryImage: (token: string, galleryId: number, image: any) => Promise<any>;
         saveGalleryEntry: (token: string, galleryId: number, seed: _GalleryEntrySeed) => Promise<any>;
         saveUserItemActivity: (token: string, itemActivity: any) => Promise<any>;

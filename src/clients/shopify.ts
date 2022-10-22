@@ -23,14 +23,25 @@ const productsSummary = async (
   limit: number = 25,
 ): Promise<ProductItem[]> => {
   const products = await raw.products(url, limit)
-  return products.products.map((product) => ({
-    sourceId: product.id.toString(),
-    title: productSummaryTitle(product),
-    description: product.body_html,
-    url: `${sanitizeUrl(url)}/products/${product.handle}`,
-    image: product.images[0]?.src,
-    price: product.variants[0]?.price,
-  }))
+  return products.products.reduce(
+    (items: ProductItem[], product: ShopifyProduct) => {
+      product.variants.forEach((variant) => {
+        const productItem = {
+          sourceId: product.id.toString(),
+          title: productSummaryTitle(product),
+          description: product.body_html,
+          image: product.images[0]?.src,
+        } as ProductItem
+        productItem.url = `${sanitizeUrl(url)}/products/${
+          product.handle
+        }?variant=${variant.id}`
+        productItem.price = variant.price
+        items.push(productItem)
+      })
+      return items
+    },
+    [] as ProductItem[],
+  )
 }
 
 export type ProductItem = Item & {

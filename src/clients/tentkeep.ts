@@ -1,5 +1,5 @@
 import { Place, ProductItem } from '../../index.js'
-import api, { API, sanitizeOptions } from '../api.js'
+import api, { API, ApiStatusError, sanitizeOptions } from '../api.js'
 
 const TENTKEEP_HOST = 'https://api.tentkeep.com/v1'
 
@@ -114,7 +114,19 @@ export default (dataDomain: DataDomain) => {
   }
 
   return {
-    exchangeAccessCode: (code) => {
+    authSignIn: (strategy: string) => {
+      // @ts-ignore
+      if (window) {
+        // @ts-ignore
+        window.location = `${TENTKEEP_HOST}/auth/authorize/${strategy}?dataDomain=${dataDomain}`
+      } else {
+        throw new ApiStatusError(
+          400,
+          'Sign in must occur in a browser context.',
+        )
+      }
+    },
+    authExchangeAccessCode: (code) => {
       const options = {
         method: 'post',
         headers: {

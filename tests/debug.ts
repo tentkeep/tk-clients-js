@@ -15,7 +15,7 @@ console.info(
 )
 console.log('ARG', arg)
 
-pageInfo()
+shopifyProductSummary()
 
 // OPTIONS BELOW
 

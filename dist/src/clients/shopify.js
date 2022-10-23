@@ -7,20 +7,25 @@ const raw = {
 };
 const productsSummary = async (url, limit = 25) => {
     const products = await raw.products(url, limit);
-    return products.products.reduce((items, product) => {
-        product.variants.forEach((variant) => {
-            const productItem = {
-                sourceId: product.id.toString(),
-                title: productSummaryTitle(product),
-                description: product.body_html,
-                image: product.images[0]?.src,
-            };
-            productItem.url = `${sanitizeUrl(url)}/products/${product.handle}?variant=${variant.id}`;
-            productItem.price = variant.price;
-            items.push(productItem);
-        });
-        return items;
-    }, []);
+    return products.products.map((product) => {
+        return {
+            sourceId: product.id.toString(),
+            title: productSummaryTitle(product),
+            description: product.body_html,
+            image: product.images[0]?.src,
+            date: product.updated_at,
+            variants: product.variants.map((variant) => {
+                return {
+                    sourceId: `${variant.id}`,
+                    title: variant.title,
+                    url: `${sanitizeUrl(url)}/products/${product.handle}?variant=${variant.id}`,
+                    date: variant.updated_at,
+                    price: parseFloat(variant.price),
+                    available: variant.available,
+                };
+            }),
+        };
+    });
 };
 export default {
     raw,

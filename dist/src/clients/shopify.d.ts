@@ -1,6 +1,10 @@
 import { Item } from '../../index.js';
 export declare type ProductItem = Item & {
-    price?: string | number;
+    variants: ProductVariantItem[];
+};
+export declare type ProductVariantItem = Item & {
+    price: number;
+    available?: boolean;
 };
 export declare type ShopifyProduct = {
     id: number;

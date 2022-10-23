@@ -23,29 +23,35 @@ const productsSummary = async (
   limit: number = 25,
 ): Promise<ProductItem[]> => {
   const products = await raw.products(url, limit)
-  return products.products.reduce(
-    (items: ProductItem[], product: ShopifyProduct) => {
-      product.variants.forEach((variant) => {
-        const productItem = {
-          sourceId: product.id.toString(),
-          title: productSummaryTitle(product),
-          description: product.body_html,
-          image: product.images[0]?.src,
-        } as ProductItem
-        productItem.url = `${sanitizeUrl(url)}/products/${
-          product.handle
-        }?variant=${variant.id}`
-        productItem.price = variant.price
-        items.push(productItem)
-      })
-      return items
-    },
-    [] as ProductItem[],
-  )
+  return products.products.map((product: ShopifyProduct) => {
+    return {
+      sourceId: product.id.toString(),
+      title: productSummaryTitle(product),
+      description: product.body_html,
+      image: product.images[0]?.src,
+      date: product.updated_at,
+      variants: product.variants.map((variant) => {
+        return {
+          sourceId: `${variant.id}`,
+          title: variant.title,
+          url: `${sanitizeUrl(url)}/products/${product.handle}?variant=${
+            variant.id
+          }`,
+          date: variant.updated_at,
+          price: parseFloat(variant.price),
+          available: variant.available,
+        } as ProductVariantItem
+      }),
+    } as ProductItem
+  })
 }
 
 export type ProductItem = Item & {
-  price?: string | number
+  variants: ProductVariantItem[]
+}
+export type ProductVariantItem = Item & {
+  price: number
+  available?: boolean
 }
 
 export type ShopifyProduct = {

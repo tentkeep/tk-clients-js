@@ -109,9 +109,9 @@ export declare const clients: {
         getGalleryUserRole: (token: string, galleryId: number) => Promise<any>;
         saveGallery: (token: string, gallery: _Gallery & {
             title: string;
-        }) => Promise<any>;
+        }) => Promise<_Gallery>;
         saveGalleryImage: (token: string, galleryId: number, image: any) => Promise<any>;
-        saveGalleryEntry: (token: string, galleryId: number, seed: _GalleryEntrySeed) => Promise<any>;
+        saveGalleryEntry: (token: string, galleryId: number, seed: _GalleryEntrySeed) => Promise<_GalleryEntry>;
         saveUserItemActivity: (token: string, itemActivity: any) => Promise<any>;
         searchEtsyShops: (query: string) => Promise<any>;
         searchMusicArtists: (query: string) => Promise<any>;

@@ -87,6 +87,7 @@ export type GalleryEntrySeed =
   | GalleryEntrySeedGooglePlace
   | GalleryEntrySeedMusic
   | GalleryEntrySeedPodcast
+  | GalleryEntrySeedShopify
   | GalleryEntrySeedWordpress
   | GalleryEntrySeedYoutube
 
@@ -178,7 +179,7 @@ export default (dataDomain: DataDomain) => {
         method: 'post',
         headers: postHeaders(token),
         body: gallery,
-      }),
+      }) as Promise<Gallery>,
     saveGalleryImage: async (token: string, galleryId: number, image) => {
       const body = {
         galleryId: galleryId,
@@ -208,7 +209,7 @@ export default (dataDomain: DataDomain) => {
         method: 'post',
         headers: postHeaders(token),
         body: seed,
-      }),
+      }) as Promise<GalleryEntry>,
     saveUserItemActivity: (token: string, itemActivity) =>
       tentkeep(`/me/activity/item`, {
         method: 'post',

@@ -92,7 +92,7 @@ export declare type GalleryEntrySeedYoutube = {
         channelId?: string;
     };
 };
-export declare type GalleryEntrySeed = GalleryEntrySeedEtsy | GalleryEntrySeedGooglePlace | GalleryEntrySeedMusic | GalleryEntrySeedPodcast | GalleryEntrySeedWordpress | GalleryEntrySeedYoutube;
+export declare type GalleryEntrySeed = GalleryEntrySeedEtsy | GalleryEntrySeedGooglePlace | GalleryEntrySeedMusic | GalleryEntrySeedPodcast | GalleryEntrySeedShopify | GalleryEntrySeedWordpress | GalleryEntrySeedYoutube;
 export declare enum DataDomain {
     Christian = 1,
     Bootroots = 2
@@ -125,9 +125,9 @@ declare const _default: (dataDomain: DataDomain) => {
     getGalleryUserRole: (token: string, galleryId: number) => Promise<any>;
     saveGallery: (token: string, gallery: Gallery & {
         title: string;
-    }) => Promise<any>;
+    }) => Promise<Gallery>;
     saveGalleryImage: (token: string, galleryId: number, image: any) => Promise<any>;
-    saveGalleryEntry: (token: string, galleryId: number, seed: GalleryEntrySeed) => Promise<any>;
+    saveGalleryEntry: (token: string, galleryId: number, seed: GalleryEntrySeed) => Promise<GalleryEntry>;
     saveUserItemActivity: (token: string, itemActivity: any) => Promise<any>;
     searchEtsyShops: (query: string) => Promise<any>;
     searchMusicArtists: (query: string) => Promise<any>;

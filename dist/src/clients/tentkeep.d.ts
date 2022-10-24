@@ -5,6 +5,8 @@ export declare type Gallery = {
     description?: string;
     createdBy?: number;
     tinyImage?: string;
+    url?: string;
+    image?: string;
     createdAt?: Date;
     modifiedAt?: Date;
 };

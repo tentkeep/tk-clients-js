@@ -4,6 +4,9 @@ import { sanitizeUrl } from '../shareable/common.js'
 import api, { ApiStatusError } from '../api.js'
 import clients from '../../index.js'
 
+/**
+ * PageSummary requires scraping the site with phantom = time
+ */
 const summary = async (url: string): Promise<PageSummary> => {
   let _url = sanitizeUrl(url)
 
@@ -38,7 +41,10 @@ const summary = async (url: string): Promise<PageSummary> => {
   }
 }
 
-const info = async (url: string) => {
+/**
+ * PageInfo does NOT require scraping the site with phantom = faster
+ */
+const info = async (url: string): Promise<PageInfo> => {
   let _url = sanitizeUrl(url)
 
   const site = await api(_url)
@@ -71,6 +77,13 @@ export type PageSummary = {
   icon?: string
   twitter?: string
   elements?: { meta; links; title }
+}
+
+type PageInfoFeatures = 'shopify'
+export type PageInfo = {
+  allowsIFrame: boolean
+  headers: Record<string, string>
+  features: PageInfoFeatures[]
 }
 
 function phantomjs(): string {

@@ -24,5 +24,5 @@ export const clients = {
 };
 export default clients;
 export { DataDomain as TKDataDomain };
-export { GalleryEntryTypes };
+export { GalleryEntryTypes, };
 //# sourceMappingURL=index.js.map

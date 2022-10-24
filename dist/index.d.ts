@@ -1,7 +1,7 @@
-import { Place as _Place } from './src/clients/google.js';
-import { PageSummary as _PageSummary } from './src/clients/page.js';
-import { ProductItem as _ProductItem } from './src/clients/shopify.js';
-import { DataDomain, GalleryEntryTypes, Gallery as _Gallery, GalleryEntry as _GalleryEntry, GalleryEntryItem as _GalleryEntryItem, GalleryEntrySeed as _GalleryEntrySeed } from './src/clients/tentkeep.js';
+import { Place } from './src/clients/google.js';
+import { PageSummary, PageInfo } from './src/clients/page.js';
+import { ProductItem } from './src/clients/shopify.js';
+import { DataDomain, GalleryEntryTypes, Gallery, GalleryEntry, GalleryEntryItem, GalleryEntrySeed } from './src/clients/tentkeep.js';
 export declare const clients: {
     etsy: {
         favorites: (userId: any) => Promise<any>;
@@ -34,8 +34,8 @@ export declare const clients: {
                 }>;
             };
         };
-        searchPlaces: (query: string) => Promise<_Place[]>;
-        placeDetails: (placeId: string) => Promise<_Place>;
+        searchPlaces: (query: string) => Promise<Place[]>;
+        placeDetails: (placeId: string) => Promise<Place>;
     };
     itunes: {
         podcasts: (query: any) => Promise<any>;
@@ -54,12 +54,8 @@ export declare const clients: {
         }>;
     };
     page: {
-        info: (url: string) => Promise<{
-            allowsIFrame: boolean;
-            headers: any;
-            features: string[];
-        }>;
-        summary: (url: string) => Promise<_PageSummary>;
+        info: (url: string) => Promise<PageInfo>;
+        summary: (url: string) => Promise<PageSummary>;
     };
     rss: {
         feed: (feedUrl: any) => Promise<any>;
@@ -80,7 +76,7 @@ export declare const clients: {
             collections: (url: string) => Promise<any>;
             collectionProducts: (url: string, collectionHandle: string) => Promise<any>;
         };
-        productsSummary: (url: string, limit?: number) => Promise<_ProductItem[]>;
+        productsSummary: (url: string, limit?: number) => Promise<ProductItem[]>;
     };
     spotify: {
         searchArtists: (query: any) => any;
@@ -95,23 +91,23 @@ export declare const clients: {
         authExchangeAccessCode: (code: any) => Promise<any>;
         getPageInfo: (url: string) => Promise<any>;
         getPageSummary: (url: string) => Promise<any>;
-        getPlaces: (query: string) => Promise<_Place[]>;
-        getPlaceDetail: (sourceId: string) => Promise<_Place>;
+        getPlaces: (query: string) => Promise<Place[]>;
+        getPlaceDetail: (sourceId: string) => Promise<Place>;
         getPodcastSummary: (feedUrl: string) => Promise<any>;
-        getShopifyProductsSummary: (url: string, limit?: number) => Promise<_ProductItem[]>;
+        getShopifyProductsSummary: (url: string, limit?: number) => Promise<ProductItem[]>;
         searchYoutubeChannels: (query: string) => Promise<any>;
-        getGalleries: () => Promise<_Gallery[]>;
-        getGallery: (galleryId: number) => Promise<_Gallery>;
+        getGalleries: () => Promise<Gallery[]>;
+        getGallery: (galleryId: number) => Promise<Gallery>;
         getRecentlyAddedGalleryEntryItems: () => Promise<any>;
         getGalleriesForUser: (token: string) => Promise<any>;
         getGalleryImageUrl: (galleryId: number) => string;
         getGalleryEntries: (galleryId: number) => Promise<any>;
         getGalleryUserRole: (token: string, galleryId: number) => Promise<any>;
-        saveGallery: (token: string, gallery: _Gallery & {
+        saveGallery: (token: string, gallery: Gallery & {
             title: string;
-        }) => Promise<_Gallery>;
+        }) => Promise<Gallery>;
         saveGalleryImage: (token: string, galleryId: number, image: any) => Promise<any>;
-        saveGalleryEntry: (token: string, galleryId: number, seed: _GalleryEntrySeed) => Promise<_GalleryEntry>;
+        saveGalleryEntry: (token: string, galleryId: number, seed: GalleryEntrySeed) => Promise<GalleryEntry>;
         saveUserItemActivity: (token: string, itemActivity: any) => Promise<any>;
         searchEtsyShops: (query: string) => Promise<any>;
         searchMusicArtists: (query: string) => Promise<any>;
@@ -171,12 +167,8 @@ export declare type Summary = Item & {
     userId?: string;
     items: Item[];
 };
-export declare type Place = _Place;
-export declare type PageSummary = _PageSummary;
-export declare type ProductItem = _ProductItem;
+export { Place };
+export { PageSummary, PageInfo };
+export { ProductItem };
 export { DataDomain as TKDataDomain };
-export { GalleryEntryTypes };
-export declare type Gallery = _Gallery;
-export declare type GalleryEntry = _GalleryEntry;
-export declare type GalleryEntryItem = _GalleryEntryItem;
-export declare type GalleryEntrySeed = _GalleryEntrySeed;
+export { Gallery, GalleryEntry, GalleryEntryItem, GalleryEntrySeed, GalleryEntryTypes, };

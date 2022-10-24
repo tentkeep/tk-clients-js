@@ -1,18 +1,18 @@
 import etsy from './src/clients/etsy.js'
-import google, { Place as _Place } from './src/clients/google.js'
+import google, { Place } from './src/clients/google.js'
 import itunes from './src/clients/itunes.js'
 import musickit from './src/clients/musickit.js'
-import page, { PageSummary as _PageSummary } from './src/clients/page.js'
+import page, { PageSummary, PageInfo } from './src/clients/page.js'
 import rss from './src/clients/rss.js'
-import shopify, { ProductItem as _ProductItem } from './src/clients/shopify.js'
+import shopify, { ProductItem } from './src/clients/shopify.js'
 import spotify from './src/clients/spotify.js'
 import tentkeep, {
   DataDomain,
   GalleryEntryTypes,
-  Gallery as _Gallery,
-  GalleryEntry as _GalleryEntry,
-  GalleryEntryItem as _GalleryEntryItem,
-  GalleryEntrySeed as _GalleryEntrySeed,
+  Gallery,
+  GalleryEntry,
+  GalleryEntryItem,
+  GalleryEntrySeed,
 } from './src/clients/tentkeep.js'
 import wordpress from './src/clients/wordpress.js'
 import youtube from './src/clients/youtube.js'
@@ -47,14 +47,16 @@ export type Summary = Item & {
   items: Item[]
 }
 
-export type Place = _Place
-export type PageSummary = _PageSummary
-export type ProductItem = _ProductItem
+export { Place }
+export { PageSummary, PageInfo }
+export { ProductItem }
 
 // MARK: TENTKEEP
 export { DataDomain as TKDataDomain }
-export { GalleryEntryTypes }
-export type Gallery = _Gallery
-export type GalleryEntry = _GalleryEntry
-export type GalleryEntryItem = _GalleryEntryItem
-export type GalleryEntrySeed = _GalleryEntrySeed
+export {
+  Gallery,
+  GalleryEntry,
+  GalleryEntryItem,
+  GalleryEntrySeed,
+  GalleryEntryTypes,
+}

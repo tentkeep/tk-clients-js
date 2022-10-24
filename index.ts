@@ -14,6 +14,7 @@ import tentkeep, {
   GalleryEntryItem,
   GalleryEntrySeed,
   GalleryUser,
+  GalleryEntryGenericTypes,
 } from './src/clients/tentkeep.js'
 import wordpress from './src/clients/wordpress.js'
 import youtube from './src/clients/youtube.js'
@@ -66,5 +67,6 @@ export {
   GalleryEntryItem,
   GalleryEntrySeed,
   GalleryEntryTypes,
+  GalleryEntryGenericTypes,
   GalleryUser,
 }

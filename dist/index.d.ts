@@ -1,7 +1,7 @@
 import { Place } from './src/clients/google.js';
 import { PageSummary, PageInfo } from './src/clients/page.js';
 import { ProductItem } from './src/clients/shopify.js';
-import { DataDomain, GalleryEntryTypes, Gallery, GalleryEntry, GalleryEntryItem, GalleryEntrySeed, GalleryUser } from './src/clients/tentkeep.js';
+import { DataDomain, GalleryEntryTypes, Gallery, GalleryEntry, GalleryEntryItem, GalleryEntrySeed, GalleryUser, GalleryEntryGenericTypes } from './src/clients/tentkeep.js';
 export declare const clients: {
     etsy: {
         favorites: (userId: any) => Promise<any>;
@@ -178,4 +178,4 @@ export { Place };
 export { PageSummary, PageInfo };
 export { ProductItem };
 export { DataDomain as TKDataDomain };
-export { Gallery, GalleryEntry, GalleryEntryItem, GalleryEntrySeed, GalleryEntryTypes, GalleryUser, };
+export { Gallery, GalleryEntry, GalleryEntryItem, GalleryEntrySeed, GalleryEntryTypes, GalleryEntryGenericTypes, GalleryUser, };

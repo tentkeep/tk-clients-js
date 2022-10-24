@@ -11,12 +11,13 @@ export declare type Gallery = {
     createdAt?: Date;
     modifiedAt?: Date;
 };
+export declare type GalleryEntryGenericTypes = 'shop' | 'music' | 'podcast' | 'page' | 'place' | 'video';
 export declare type GalleryEntry = {
     id?: number;
     galleryId?: number;
     createdBy?: number;
     entryType?: GalleryEntryTypes;
-    genericType?: 'shop' | 'music' | 'podcast' | 'page' | 'video';
+    genericType?: GalleryEntryGenericTypes;
     sourceId?: string;
     title?: string;
     description?: string;
@@ -31,7 +32,7 @@ export declare type GalleryEntryItem = {
     galleryEntryId?: number;
     createdBy?: number;
     entryType: GalleryEntryTypes;
-    genericType: 'shop' | 'music' | 'podcast' | 'page' | 'video';
+    genericType: GalleryEntryGenericTypes;
     sourceId: string;
     title: string;
     description?: string;

@@ -15,12 +15,19 @@ export type Gallery = {
   createdAt?: Date
   modifiedAt?: Date
 }
+export type GalleryEntryGenericTypes =
+  | 'shop'
+  | 'music'
+  | 'podcast'
+  | 'page'
+  | 'place'
+  | 'video'
 export type GalleryEntry = {
   id?: number
   galleryId?: number
   createdBy?: number
   entryType?: GalleryEntryTypes
-  genericType?: 'shop' | 'music' | 'podcast' | 'page' | 'video'
+  genericType?: GalleryEntryGenericTypes
   sourceId?: string
   title?: string
   description?: string
@@ -35,7 +42,7 @@ export type GalleryEntryItem = {
   galleryEntryId?: number
   createdBy?: number
   entryType: GalleryEntryTypes
-  genericType: 'shop' | 'music' | 'podcast' | 'page' | 'video'
+  genericType: GalleryEntryGenericTypes
   sourceId: string
   title: string
   description?: string

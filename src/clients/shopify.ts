@@ -1,4 +1,4 @@
-import { Item } from '../../index.js'
+import { GalleryEntry, GalleryEntryTypes, Item } from '../../index.js'
 import { sanitizeUrl } from '../shareable/common.js'
 import api from '../api.js'
 
@@ -6,8 +6,7 @@ const raw = {
   products: (
     url: string,
     limit: number = 250,
-  ): Promise<{ products: ShopifyProduct[] }> =>
-    api(`${sanitizeUrl(url)}/products.json?limit=${limit}`),
+  ): Promise<{ products: ShopifyProduct[] }> => api(productsUrl(url, limit)),
   collections: (url: string): Promise<any> =>
     api(`${sanitizeUrl(url)}/collections.json?limit=250`),
   collectionProducts: (url: string, collectionHandle: string): Promise<any> =>
@@ -21,9 +20,9 @@ const raw = {
 const productsSummary = async (
   url: string,
   limit: number = 25,
-): Promise<ProductItem[]> => {
+): Promise<GalleryEntry & { items?: ProductItem[] }> => {
   const products = await raw.products(url, limit)
-  return products.products.map((product: ShopifyProduct) => {
+  const productItems = products.products.map((product: ShopifyProduct) => {
     return {
       sourceId: product.id.toString(),
       title: productSummaryTitle(product),
@@ -44,6 +43,14 @@ const productsSummary = async (
       }),
     } as ProductItem
   })
+  return {
+    sourceId: 'products.json',
+    title: 'Products',
+    url: productsUrl(url, limit),
+    entryType: GalleryEntryTypes.Shopify,
+    genericType: 'shop',
+    items: productItems,
+  }
 }
 
 export type ProductItem = Item & {
@@ -108,6 +115,10 @@ export type ShopifyProduct = {
 export default {
   raw,
   productsSummary,
+}
+
+function productsUrl(url: string, limit: number): string {
+  return `${sanitizeUrl(url)}/products.json?limit=${limit}`
 }
 
 function productSummaryTitle(product: ShopifyProduct): string {

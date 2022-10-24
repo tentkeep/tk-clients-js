@@ -1,13 +1,14 @@
+import { GalleryEntryTypes } from '../../index.js';
 import { sanitizeUrl } from '../shareable/common.js';
 import api from '../api.js';
 const raw = {
-    products: (url, limit = 250) => api(`${sanitizeUrl(url)}/products.json?limit=${limit}`),
+    products: (url, limit = 250) => api(productsUrl(url, limit)),
     collections: (url) => api(`${sanitizeUrl(url)}/collections.json?limit=250`),
     collectionProducts: (url, collectionHandle) => api(`${sanitizeUrl(url)}/collections/${collectionHandle}/products.json?limit=250`),
 };
 const productsSummary = async (url, limit = 25) => {
     const products = await raw.products(url, limit);
-    return products.products.map((product) => {
+    const productItems = products.products.map((product) => {
         return {
             sourceId: product.id.toString(),
             title: productSummaryTitle(product),
@@ -26,11 +27,22 @@ const productsSummary = async (url, limit = 25) => {
             }),
         };
     });
+    return {
+        sourceId: 'products.json',
+        title: 'Products',
+        url: productsUrl(url, limit),
+        entryType: GalleryEntryTypes.Shopify,
+        genericType: 'shop',
+        items: productItems,
+    };
 };
 export default {
     raw,
     productsSummary,
 };
+function productsUrl(url, limit) {
+    return `${sanitizeUrl(url)}/products.json?limit=${limit}`;
+}
 function productSummaryTitle(product) {
     return (product.title +
         (product.variants.length > 1 ? ` - ${product.variants[0]?.title}` : ''));

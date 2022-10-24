@@ -1,4 +1,4 @@
-import { Item } from '../../index.js';
+import { GalleryEntry, Item } from '../../index.js';
 export declare type ProductItem = Item & {
     variants: ProductVariantItem[];
 };
@@ -63,6 +63,8 @@ declare const _default: {
         collections: (url: string) => Promise<any>;
         collectionProducts: (url: string, collectionHandle: string) => Promise<any>;
     };
-    productsSummary: (url: string, limit?: number) => Promise<ProductItem[]>;
+    productsSummary: (url: string, limit?: number) => Promise<GalleryEntry & {
+        items?: ProductItem[] | undefined;
+    }>;
 };
 export default _default;

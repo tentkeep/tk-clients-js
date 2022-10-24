@@ -76,7 +76,9 @@ export declare const clients: {
             collections: (url: string) => Promise<any>;
             collectionProducts: (url: string, collectionHandle: string) => Promise<any>;
         };
-        productsSummary: (url: string, limit?: number) => Promise<ProductItem[]>;
+        productsSummary: (url: string, limit?: number) => Promise<GalleryEntry & {
+            items?: ProductItem[] | undefined;
+        }>;
     };
     spotify: {
         searchArtists: (query: any) => any;

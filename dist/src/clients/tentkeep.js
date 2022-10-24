@@ -21,7 +21,7 @@ export default (dataDomain) => {
         _options.headers = _options.headers ?? {};
         _options.headers.key = new Date().toISOString().substring(0, 10);
         _options.headers['x-data-domain'] = dataDomain;
-        const url = new URL(`https://api.tentkeep.com/v1${path}`);
+        const url = new URL(`${TENTKEEP_HOST}${path}`);
         return api(url, _options);
     };
     return {

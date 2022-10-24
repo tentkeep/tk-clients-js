@@ -1,7 +1,7 @@
 import { Place } from './src/clients/google.js';
 import { PageSummary, PageInfo } from './src/clients/page.js';
 import { ProductItem } from './src/clients/shopify.js';
-import { DataDomain, GalleryEntryTypes, Gallery, GalleryEntry, GalleryEntryItem, GalleryEntrySeed } from './src/clients/tentkeep.js';
+import { DataDomain, GalleryEntryTypes, Gallery, GalleryEntry, GalleryEntryItem, GalleryEntrySeed, GalleryUser } from './src/clients/tentkeep.js';
 export declare const clients: {
     etsy: {
         favorites: (userId: any) => Promise<any>;
@@ -89,8 +89,8 @@ export declare const clients: {
     tentkeep: (dataDomain: DataDomain) => {
         authSignIn: (strategy: string) => void;
         authExchangeAccessCode: (code: any) => Promise<any>;
-        getPageInfo: (url: string) => Promise<any>;
-        getPageSummary: (url: string) => Promise<any>;
+        getPageInfo: (url: string) => Promise<PageInfo>;
+        getPageSummary: (url: string) => Promise<PageSummary>;
         getPlaces: (query: string) => Promise<Place[]>;
         getPlaceDetail: (sourceId: string) => Promise<Place>;
         getPodcastSummary: (feedUrl: string) => Promise<any>;
@@ -155,6 +155,11 @@ export declare const clients: {
     };
 };
 export default clients;
+export declare const logic: {
+    tentkeep: {
+        canEdit: (galleryUser: GalleryUser) => import("./src/clients/tentkeep.js").GalleryUserRoles | undefined;
+    };
+};
 export declare type Item = {
     sourceId: string;
     title: string;
@@ -171,4 +176,4 @@ export { Place };
 export { PageSummary, PageInfo };
 export { ProductItem };
 export { DataDomain as TKDataDomain };
-export { Gallery, GalleryEntry, GalleryEntryItem, GalleryEntrySeed, GalleryEntryTypes, };
+export { Gallery, GalleryEntry, GalleryEntryItem, GalleryEntrySeed, GalleryEntryTypes, GalleryUser, };

@@ -13,9 +13,12 @@ import tentkeep, {
   GalleryEntry,
   GalleryEntryItem,
   GalleryEntrySeed,
+  GalleryUser,
 } from './src/clients/tentkeep.js'
 import wordpress from './src/clients/wordpress.js'
 import youtube from './src/clients/youtube.js'
+
+import tentkeepLogic from './src/logic/l-tentkeep.js'
 
 export const clients = {
   etsy,
@@ -32,6 +35,10 @@ export const clients = {
 }
 
 export default clients
+
+export const logic = {
+  tentkeep: tentkeepLogic,
+}
 
 export type Item = {
   sourceId: string
@@ -59,4 +66,5 @@ export {
   GalleryEntryItem,
   GalleryEntrySeed,
   GalleryEntryTypes,
+  GalleryUser,
 }

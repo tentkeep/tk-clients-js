@@ -1,4 +1,5 @@
-import { Place, ProductItem } from '../../index.js'
+import { PageSummary } from '../../index.js'
+import { PageInfo, Place, ProductItem } from '../../index.js'
 import api, { API, ApiStatusError, sanitizeOptions } from '../api.js'
 
 const TENTKEEP_HOST = 'https://api.tentkeep.com/v1'
@@ -105,6 +106,15 @@ export enum GalleryEntryTypes {
   YouTube = 'youtube',
 }
 
+export type GalleryUserRoles = 'member' | 'creator' | 'owner'
+
+export type GalleryUser = {
+  galleryId?: number
+  userId?: number
+  roles?: GalleryUserRoles[]
+  domain?: number
+}
+
 export default (dataDomain: DataDomain) => {
   const tentkeep: API = (path: string, options) => {
     const _options = sanitizeOptions(options)
@@ -112,7 +122,7 @@ export default (dataDomain: DataDomain) => {
     _options.headers.key = new Date().toISOString().substring(0, 10)
     _options.headers['x-data-domain'] = dataDomain
 
-    const url = new URL(`https://api.tentkeep.com/v1${path}`)
+    const url = new URL(`${TENTKEEP_HOST}${path}`)
     return api(url, _options)
   }
 
@@ -142,8 +152,10 @@ export default (dataDomain: DataDomain) => {
       }
       return tentkeep(`/auth/token`, options)
     },
-    getPageInfo: (url: string) => tentkeep(`/proxy/page/info?url=${url}`),
-    getPageSummary: (url: string) => tentkeep(`/proxy/page/summary?url=${url}`),
+    getPageInfo: (url: string) =>
+      tentkeep(`/proxy/page/info?url=${url}`) as Promise<PageInfo>,
+    getPageSummary: (url: string) =>
+      tentkeep(`/proxy/page/summary?url=${url}`) as Promise<PageSummary>,
     getPlaces: (query: string): Promise<Place[]> =>
       tentkeep(`/proxy/places?q=${query}`),
     getPlaceDetail: (sourceId: string): Promise<Place> =>

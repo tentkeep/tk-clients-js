@@ -9,6 +9,7 @@ import spotify from './src/clients/spotify.js';
 import tentkeep, { DataDomain, GalleryEntryTypes, } from './src/clients/tentkeep.js';
 import wordpress from './src/clients/wordpress.js';
 import youtube from './src/clients/youtube.js';
+import tentkeepLogic from './src/logic/l-tentkeep.js';
 export const clients = {
     etsy,
     google,
@@ -23,6 +24,9 @@ export const clients = {
     youtube,
 };
 export default clients;
+export const logic = {
+    tentkeep: tentkeepLogic,
+};
 export { DataDomain as TKDataDomain };
 export { GalleryEntryTypes, };
 //# sourceMappingURL=index.js.map

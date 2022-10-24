@@ -1,4 +1,5 @@
-import { Place, ProductItem } from '../../index.js';
+import { PageSummary } from '../../index.js';
+import { PageInfo, Place, ProductItem } from '../../index.js';
 export declare type Gallery = {
     id?: number;
     title?: string;
@@ -106,11 +107,18 @@ export declare enum GalleryEntryTypes {
     Wordpress = "wordpress",
     YouTube = "youtube"
 }
+export declare type GalleryUserRoles = 'member' | 'creator' | 'owner';
+export declare type GalleryUser = {
+    galleryId?: number;
+    userId?: number;
+    roles?: GalleryUserRoles[];
+    domain?: number;
+};
 declare const _default: (dataDomain: DataDomain) => {
     authSignIn: (strategy: string) => void;
     authExchangeAccessCode: (code: any) => Promise<any>;
-    getPageInfo: (url: string) => Promise<any>;
-    getPageSummary: (url: string) => Promise<any>;
+    getPageInfo: (url: string) => Promise<PageInfo>;
+    getPageSummary: (url: string) => Promise<PageSummary>;
     getPlaces: (query: string) => Promise<Place[]>;
     getPlaceDetail: (sourceId: string) => Promise<Place>;
     getPodcastSummary: (feedUrl: string) => Promise<any>;

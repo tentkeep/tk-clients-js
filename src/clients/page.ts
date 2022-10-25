@@ -23,6 +23,16 @@ const summary = async (url: string): Promise<PageSummary> => {
   const meta = page.match(/<meta[^>]+>/g)?.map(xmlParser)
   const links = page.match(/<link[^>]+>/g)?.map(xmlParser)
   const title = page.match(/<title.*<\/title>/g)?.map(xmlParser)
+  const images: string[] = [
+    ...new Set(
+      page.match(/[^("']*(jpg|jpeg|png)[^)"']*/g)?.map((img) => {
+        img = img.split('?')[0] ?? '' // drop query params
+        img = img.replace(/^(\/[^/])/, `${_url}$1`) // expand absolute urls
+        img = img.replace(/^\.(\/[^/])/, `${_url}$1`) // expand relative urls
+        return img.replace(/^[/]+/, 'https://') // some CDNs use 2 leading forward slashes
+      }),
+    ),
+  ].filter((img) => img.startsWith('http'))
 
   return {
     url: _url,
@@ -31,6 +41,7 @@ const summary = async (url: string): Promise<PageSummary> => {
       title?.[title.length - 1]['__text'],
     description: findDescription(meta),
     image: findImage(meta, _url),
+    images,
     icon: findIcon(links, _url),
     twitter: meta?.find((m) => m.property === 'twitter:site')?.content,
     elements: {
@@ -74,6 +85,7 @@ export type PageSummary = {
   title: string
   description?: string
   image?: string
+  images?: string[]
   icon?: string
   twitter?: string
   elements?: { meta; links; title }
@@ -126,6 +138,7 @@ function findImage(
   webAddress: string,
 ): string | undefined {
   return (
+    meta?.find((m) => m.property === 'og:image:secure_url')?.content ??
     meta?.find((m) => m.property === 'og:image')?.content ??
     meta?.find((m) => m.property === 'twitter:image')?.content ??
     `https://www.google.com/s2/favicons?sz=128&domain_url=${webAddress}`

@@ -8,6 +8,7 @@ export declare type PageSummary = {
     title: string;
     description?: string;
     image?: string;
+    images?: string[];
     icon?: string;
     twitter?: string;
     elements?: {

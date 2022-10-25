@@ -17,12 +17,21 @@ const summary = async (url) => {
     const meta = page.match(/<meta[^>]+>/g)?.map(xmlParser);
     const links = page.match(/<link[^>]+>/g)?.map(xmlParser);
     const title = page.match(/<title.*<\/title>/g)?.map(xmlParser);
+    const images = [
+        ...new Set(page.match(/[^("']*(jpg|jpeg|png)[^)"']*/g)?.map((img) => {
+            img = img.split('?')[0] ?? '';
+            img = img.replace(/^(\/[^/])/, `${_url}$1`);
+            img = img.replace(/^\.(\/[^/])/, `${_url}$1`);
+            return img.replace(/^[/]+/, 'https://');
+        })),
+    ].filter((img) => img.startsWith('http'));
     return {
         url: _url,
         title: meta?.find((m) => m.property === 'og:site_name')?.content ??
             title?.[title.length - 1]['__text'],
         description: findDescription(meta),
         image: findImage(meta, _url),
+        images,
         icon: findIcon(links, _url),
         twitter: meta?.find((m) => m.property === 'twitter:site')?.content,
         elements: {
@@ -83,7 +92,8 @@ function findDescription(meta) {
         meta?.find((m) => m.property === 'og:description')?.content);
 }
 function findImage(meta, webAddress) {
-    return (meta?.find((m) => m.property === 'og:image')?.content ??
+    return (meta?.find((m) => m.property === 'og:image:secure_url')?.content ??
+        meta?.find((m) => m.property === 'og:image')?.content ??
         meta?.find((m) => m.property === 'twitter:image')?.content ??
         `https://www.google.com/s2/favicons?sz=128&domain_url=${webAddress}`);
 }

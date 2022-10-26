@@ -57,7 +57,7 @@ const allVideosForPlaylist = async (playlistId) => {
 };
 export default {
     ...resourcesApi,
-    channelSummary: async ({ username, channelId }) => {
+    channelSummary: async ({ username, channelId, }) => {
         let channelResponse;
         if (username) {
             channelResponse = await channelForUser(username);
@@ -82,16 +82,18 @@ export default {
             sourceId: channel.id,
             title: channel.snippet.title,
             image: img.url,
-            publishedAt: channel.snippet.publishedAt,
-            uploadsPlaylistId,
+            url: `https://youtube.com/channel/${channel.id}`,
             items: uploadedVideos.map((i) => ({
                 sourceId: i.id,
                 title: i.snippet.title,
                 description: i.snippet.description,
                 image: i.snippet.thumbnails.high.url,
+                url: `https://youtube.com/video/${i.contentDetails.videoId}`,
                 date: new Date(i.contentDetails.videoPublishedAt).toISOString(),
                 videoId: i.contentDetails.videoId,
             })),
+            publishedAt: channel.snippet.publishedAt,
+            uploadsPlaylistId,
             imageWidth: img.width,
             imageHeight: img.height,
             playlists: playlists.items.map((p) => ({

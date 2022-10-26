@@ -126,18 +126,15 @@ export declare const clients: {
         };
     };
     youtube: {
-        channelSummary: ({ username, channelId }: {
+        channelSummary: ({ username, channelId, }: {
             username: any;
             channelId: any;
-        }) => Promise<{
-            sourceId: any;
-            title: any;
-            image: any;
-            publishedAt: any;
+        }) => Promise<GalleryEntry & {
+            items: GalleryEntryItem[];
+            publishedAt: Date;
             uploadsPlaylistId: any;
-            items: any;
-            imageWidth: any;
-            imageHeight: any;
+            imageWidth: string;
+            imageHeight: string;
             playlists: any;
         }>;
         channelForUser: (username: any) => Promise<any>;

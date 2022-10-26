@@ -11,11 +11,11 @@ console.info(
   shopifyProductSummary,
   spotify,
   tentkeep,
-  youtubeChannelSearch,
+  youtube,
 )
 console.log('ARG', arg)
 
-tentkeep()
+youtube()
 
 // OPTIONS BELOW
 
@@ -56,18 +56,16 @@ function spotify() {
 function tentkeep() {
   clients
     .tentkeep(TKDataDomain.Bootroots)
-    .getRecentlyAddedGalleryEntryItems()
+    .searchYoutubeChannels('azurestandard.com')
     .then(print)
   // clients.tentkeep(2).getGalleries().then(print)
 }
 
-function youtubeChannelSearch() {
+function youtube() {
   clients.youtube
-    .search({
-      part: 'snippet,contentOwnerDetails',
-      maxResults: 3,
-      q: arg,
-      type: 'channel',
+    .channelSummary({
+      username: undefined,
+      channelId: 'UCkSIxqE14z-nX0f_Wy3JZEg',
     })
     .then(print)
 }

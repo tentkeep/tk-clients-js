@@ -1,3 +1,4 @@
+import { GalleryEntry, GalleryEntryItem } from '../../index.js';
 export declare type YoutubeResourceParams = any & {
     part: string;
     maxResults: number;
@@ -13,21 +14,19 @@ export interface YoutubeResources {
     videos: YoutubeResourceAPI;
     videoCategories: YoutubeResourceAPI;
 }
+declare type YoutubeEntry = {
+    items: GalleryEntryItem[];
+    publishedAt: Date;
+    uploadsPlaylistId: any;
+    imageWidth: string;
+    imageHeight: string;
+    playlists: any;
+};
 declare const _default: {
-    channelSummary: ({ username, channelId }: {
+    channelSummary: ({ username, channelId, }: {
         username: any;
         channelId: any;
-    }) => Promise<{
-        sourceId: any;
-        title: any;
-        image: any;
-        publishedAt: any;
-        uploadsPlaylistId: any;
-        items: any;
-        imageWidth: any;
-        imageHeight: any;
-        playlists: any;
-    }>;
+    }) => Promise<GalleryEntry & YoutubeEntry>;
     channelForUser: (username: any) => Promise<any>;
     playlistsForChannel: (channelId: any) => Promise<any>;
     playlist: (playlistId: any, opts?: {}) => Promise<any>;

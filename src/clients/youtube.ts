@@ -1,3 +1,4 @@
+import { GalleryEntry, GalleryEntryItem } from '../../index.js'
 import { API, api, ApiStatusError } from '../api.js'
 import { forKey } from '../shareable/common.js'
 const host = 'https://www.googleapis.com/youtube/v3'
@@ -81,9 +82,21 @@ const allVideosForPlaylist = async (playlistId) => {
   return videos
 }
 
+type YoutubeEntry = {
+  items: GalleryEntryItem[]
+  publishedAt: Date
+  uploadsPlaylistId
+  imageWidth: string
+  imageHeight: string
+  playlists
+}
+
 export default {
   ...resourcesApi,
-  channelSummary: async ({ username, channelId }) => {
+  channelSummary: async ({
+    username,
+    channelId,
+  }): Promise<GalleryEntry & YoutubeEntry> => {
     let channelResponse
     if (username) {
       channelResponse = await channelForUser(username)
@@ -108,13 +121,13 @@ export default {
       sourceId: channel.id,
       title: channel.snippet.title,
       image: img.url,
-      publishedAt: channel.snippet.publishedAt,
-      uploadsPlaylistId,
+      url: `https://youtube.com/channel/${channel.id}`,
       items: uploadedVideos.map((i) => ({
         sourceId: i.id,
         title: i.snippet.title,
         description: i.snippet.description,
         image: i.snippet.thumbnails.high.url,
+        url: `https://youtube.com/video/${i.contentDetails.videoId}`,
         date: new Date(i.contentDetails.videoPublishedAt).toISOString(),
         videoId: i.contentDetails.videoId,
         // kind: i.kind,
@@ -127,6 +140,8 @@ export default {
         // likes: i.statistics.likeCount, // requires video fetch
         // dislikes: i.statistics.dislikeCount // requires video fetch
       })),
+      publishedAt: channel.snippet.publishedAt,
+      uploadsPlaylistId,
       imageWidth: img.width,
       imageHeight: img.height,
       playlists: playlists.items.map((p) => ({

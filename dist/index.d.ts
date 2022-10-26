@@ -100,7 +100,8 @@ export declare const clients: {
         searchYoutubeChannels: (query: string, limit?: number) => Promise<any>;
         getGalleries: () => Promise<Gallery[]>;
         getGallery: (galleryId: number) => Promise<Gallery>;
-        getRecentGalleryEntryItems: (genericType?: GalleryEntryGenericTypes | undefined) => Promise<any>;
+        getRecentGalleryEntryItems: (genericType?: GalleryEntryGenericTypes | undefined) => Promise<GalleryEntryItem[]>;
+        getTrendingGalleryEntryItemTopics: (limit?: number) => Promise<string[]>;
         getGalleriesForUser: (token: string) => Promise<any>;
         getGalleryImageUrl: (galleryId: number) => string;
         getGalleryEntries: (galleryId: number) => Promise<any>;

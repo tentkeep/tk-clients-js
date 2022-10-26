@@ -183,7 +183,13 @@ export default (dataDomain: DataDomain) => {
       tentkeep(`/galleries/${galleryId}`),
     getRecentGalleryEntryItems: (
       genericType: GalleryEntryGenericTypes | undefined = undefined,
-    ) => tentkeep(`/gallery-entry-items/recent?genericType=${genericType}`),
+    ) =>
+      tentkeep(
+        `/gallery-entry-items/recent?genericType=${genericType}`,
+      ) as Promise<GalleryEntryItem[]>,
+    getTrendingGalleryEntryItemTopics: (
+      limit: number = 15,
+    ): Promise<string[]> => tentkeep(`/gallery-entry-items/trending?${limit}`),
     getGalleriesForUser: (token: string) =>
       tentkeep(`/me/galleries`, { headers: authHeaders(token) }),
     getGalleryImageUrl: (galleryId: number) =>

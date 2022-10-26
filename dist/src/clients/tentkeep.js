@@ -56,6 +56,7 @@ export default (dataDomain) => {
         getGalleries: () => tentkeep(`/galleries`),
         getGallery: (galleryId) => tentkeep(`/galleries/${galleryId}`),
         getRecentGalleryEntryItems: (genericType = undefined) => tentkeep(`/gallery-entry-items/recent?genericType=${genericType}`),
+        getTrendingGalleryEntryItemTopics: (limit = 15) => tentkeep(`/gallery-entry-items/trending?${limit}`),
         getGalleriesForUser: (token) => tentkeep(`/me/galleries`, { headers: authHeaders(token) }),
         getGalleryImageUrl: (galleryId) => `${TENTKEEP_HOST}/galleries/${galleryId}/image`,
         getGalleryEntries: (galleryId) => tentkeep(`/galleries/${galleryId}/entries`),

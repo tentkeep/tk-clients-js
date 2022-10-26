@@ -55,7 +55,7 @@ export default (dataDomain) => {
         searchYoutubeChannels: (query, limit = 5) => tentkeep(`/proxy/youtube/channels?q=${query}&limit=${limit}`),
         getGalleries: () => tentkeep(`/galleries`),
         getGallery: (galleryId) => tentkeep(`/galleries/${galleryId}`),
-        getRecentlyAddedGalleryEntryItems: () => tentkeep(`/gallery-entry-items/recent`),
+        getRecentGalleryEntryItems: (genericType = undefined) => tentkeep(`/gallery-entry-items/recent?genericType=${genericType}`),
         getGalleriesForUser: (token) => tentkeep(`/me/galleries`, { headers: authHeaders(token) }),
         getGalleryImageUrl: (galleryId) => `${TENTKEEP_HOST}/galleries/${galleryId}/image`,
         getGalleryEntries: (galleryId) => tentkeep(`/galleries/${galleryId}/entries`),

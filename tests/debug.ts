@@ -15,7 +15,7 @@ console.info(
 )
 console.log('ARG', arg)
 
-pageSummary()
+tentkeep()
 
 // OPTIONS BELOW
 
@@ -56,7 +56,7 @@ function spotify() {
 function tentkeep() {
   clients
     .tentkeep(TKDataDomain.Bootroots)
-    .getPageInfo(arg as string)
+    .getRecentlyAddedGalleryEntryItems()
     .then(print)
   // clients.tentkeep(2).getGalleries().then(print)
 }

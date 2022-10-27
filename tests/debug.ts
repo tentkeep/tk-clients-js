@@ -49,7 +49,8 @@ function podcastSummary() {
 function wordpress() {
   clients.wordpress
     .host(arg as string)
-    .summary()
+    // .summary()
+    .isWordpress()
     .then(print)
 }
 

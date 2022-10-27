@@ -70,6 +70,12 @@ const resourceMethods = (_host) =>
 export default {
   host: (_host: string) => ({
     ...resourceMethods(_host),
+    async isWordpress(): Promise<boolean> {
+      return resourceMethods(_host)
+        .posts({ per_page: 1 })
+        .then((posts) => posts.length === 1)
+        .catch((_err) => false)
+    },
     async summary(): Promise<GalleryEntrySummary> {
       const postsBaseUrl = `https://${_host}/wp-json/wp/v2/posts`
       const posts = await resourceMethods(_host).posts({ per_page: 100 })

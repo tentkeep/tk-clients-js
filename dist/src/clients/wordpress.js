@@ -38,6 +38,12 @@ const resourceMethods = (_host) => resources.reduce((wordpress, resource) => {
 export default {
     host: (_host) => ({
         ...resourceMethods(_host),
+        async isWordpress() {
+            return resourceMethods(_host)
+                .posts({ per_page: 1 })
+                .then((posts) => posts.length === 1)
+                .catch((_err) => false);
+        },
         async summary() {
             const postsBaseUrl = `https://${_host}/wp-json/wp/v2/posts`;
             const posts = await resourceMethods(_host).posts({ per_page: 100 });

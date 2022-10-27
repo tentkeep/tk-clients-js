@@ -29,6 +29,7 @@ export interface WordpressResources {
 }
 declare const _default: {
     host: (_host: string) => {
+        isWordpress(): Promise<boolean>;
         summary(): Promise<GalleryEntrySummary>;
         blockTypes: WordpressResourceAPI;
         blocks: WordpressResourceAPI;

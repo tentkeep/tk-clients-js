@@ -97,6 +97,7 @@ export declare const clients: {
         getPlaceDetail: (sourceId: string) => Promise<Place>;
         getPodcastSummary: (feedUrl: string) => Promise<any>;
         getShopifyProductsSummary: (url: string, limit?: number) => Promise<ProductItem[]>;
+        getWordpressPostsSummary: (url: string, limit?: number) => Promise<GalleryEntrySummary>;
         searchYoutubeChannels: (query: string, limit?: number) => Promise<any>;
         getGalleries: () => Promise<Gallery[]>;
         getGallery: (galleryId: number) => Promise<Gallery>;

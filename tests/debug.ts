@@ -16,7 +16,7 @@ console.info(
 )
 console.log('ARG', arg)
 
-wordpress()
+tentkeep()
 
 // OPTIONS BELOW
 
@@ -65,9 +65,10 @@ function spotify() {
 function tentkeep() {
   clients
     .tentkeep(TKDataDomain.Bootroots)
-    .searchYoutubeChannels('azurestandard.com')
+    // .getGalleries()
+    // .searchYoutubeChannels(arg as string)
+    .getWordpressPostsSummary(arg as string, 3)
     .then(print)
-  // clients.tentkeep(2).getGalleries().then(print)
 }
 
 function youtube() {

@@ -57,6 +57,7 @@ export default (dataDomain) => {
         getPlaceDetail: (sourceId) => tentkeep(`/proxy/places/detail?id=${sourceId}`),
         getPodcastSummary: (feedUrl) => tentkeep(`/proxy/rss/podcast-summary?feed=${feedUrl}`),
         getShopifyProductsSummary: (url, limit = 15) => tentkeep(`/proxy/shopify/products/summary?url=${url}&limit=${limit}`),
+        getWordpressPostsSummary: (url, limit = 5) => tentkeep(`/proxy/wordpress/posts?url=${url}&limit=${limit}`),
         searchYoutubeChannels: (query, limit = 5) => tentkeep(`/proxy/youtube/channels?q=${query}&limit=${limit}`),
         getGalleries: () => tentkeep(`/galleries`),
         getGallery: (galleryId) => tentkeep(`/galleries/${galleryId}`),

@@ -180,6 +180,11 @@ export default (dataDomain: DataDomain) => {
       limit: number = 15,
     ): Promise<ProductItem[]> =>
       tentkeep(`/proxy/shopify/products/summary?url=${url}&limit=${limit}`),
+    getWordpressPostsSummary: (
+      url: string,
+      limit: number = 5,
+    ): Promise<GalleryEntrySummary> =>
+      tentkeep(`/proxy/wordpress/posts?url=${url}&limit=${limit}`),
     searchYoutubeChannels: (query: string, limit: number = 5) =>
       tentkeep(`/proxy/youtube/channels?q=${query}&limit=${limit}`),
 

@@ -17,7 +17,7 @@ export declare type PageSummary = {
         title: any;
     };
 };
-declare type PageInfoFeatures = 'shopify';
+declare type PageInfoFeatures = 'shopify' | 'wordpress';
 export declare type PageInfo = {
     allowsIFrame: boolean;
     headers: Record<string, string>;

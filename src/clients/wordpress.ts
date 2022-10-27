@@ -1,6 +1,6 @@
 import { GalleryEntryItem, GalleryEntrySummary } from '../../index.js'
 import { api } from '../api.js'
-import { forKey } from '../shareable/common.js'
+import { forKey, sanitizeUrl } from '../shareable/common.js'
 import { GalleryEntryItemTagSource } from './tentkeep.js'
 
 const resources = [
@@ -54,11 +54,12 @@ export interface WordpressResources {
   plugins: WordpressResourceAPI
 }
 
-const resourceMethods = (_host) =>
+const resourceMethods = (site: string) =>
   resources.reduce((wordpress, resource) => {
     wordpress[toFunctionName(resource)] = (options: WordpressOptions) => {
       const id = typeof options === 'string' ? options : ''
-      const url = new URL(`https://${_host}/wp-json/wp/v2/${resource}/${id}`)
+
+      const url = new URL(`${site}/wp-json/wp/v2/${resource}/${id}`)
       if (typeof options === 'object') {
         forKey(options, (k) => url.searchParams.append(k, options[k]))
       }
@@ -68,64 +69,65 @@ const resourceMethods = (_host) =>
   }, {} as WordpressResources)
 
 export default {
-  host: (_host: string) => ({
-    ...resourceMethods(_host),
-    async isWordpress(): Promise<boolean> {
-      return resourceMethods(_host)
-        .posts({ per_page: 1 })
-        .then((posts) => posts.length === 1)
-        .catch((_err) => false)
-    },
-    async summary(): Promise<GalleryEntrySummary> {
-      const postsBaseUrl = `https://${_host}/wp-json/wp/v2/posts`
-      const posts = await resourceMethods(_host).posts({ per_page: 100 })
-      const authorRefs: string[] = []
-      const categoryRefs: string[] = []
-      const tagRefs: string[] = []
-      posts.forEach((p) => {
-        authorRefs.push(p.author)
-        categoryRefs.push(...(p.categories || []))
-        tagRefs.push(...(p.tags || []))
-      })
-      const categoriesPromise = resourceMethods(_host).categories({
-        per_page: 100,
-        include: categoryRefs.join(','),
-      })
-      const tagsPromise = resourceMethods(_host).tags({
-        per_page: 100,
-        include: tagRefs.join(','),
-      })
-      const [categories, tags] = await Promise.all([
-        categoriesPromise,
-        tagsPromise,
-      ])
+  host: (_host: string) => {
+    const url = sanitizeUrl(_host)
+    const resources = resourceMethods(url)
+    return {
+      ...resources,
+      async isWordpress(): Promise<boolean> {
+        return resources
+          .posts({ per_page: 1 })
+          .then((posts) => posts.length === 1)
+          .catch((_err) => false)
+      },
+      async summary(limit: number = 100): Promise<GalleryEntrySummary> {
+        const posts = await resources.posts({ per_page: limit })
+        const authorRefs: string[] = []
+        const categoryRefs: string[] = []
+        const tagRefs: string[] = []
+        posts.forEach((p) => {
+          authorRefs.push(p.author)
+          categoryRefs.push(...(p.categories || []))
+          tagRefs.push(...(p.tags || []))
+        })
+        const categoriesPromise = resources.categories({
+          per_page: 100,
+          include: categoryRefs.join(','),
+        })
+        const tagsPromise = resources.tags({
+          per_page: 100,
+          include: tagRefs.join(','),
+        })
+        const [categories, tags] = await Promise.all([
+          categoriesPromise,
+          tagsPromise,
+        ])
 
-      return {
-        sourceId: Buffer.from(_host).toString('base64'),
-        title: _host,
-        url: _host,
-        items: posts.map(
-          (post) =>
-            ({
-              sourceId: Buffer.from(`${postsBaseUrl}/${post.id}-`).toString(
-                'base64',
-              ),
-              title: extractPostTitle(post),
-              description: extractPostDescription(post),
-              entryType: 'wordpress',
-              genericType: 'page',
-              image: extractImageLink(post),
-              url: post.link,
-              date: new Date(post.date),
-              postId: post.id,
-              postDate: post.date,
-              author: extractPostAuthor(post),
-              tags: extractPostTags(post, categories, tags),
-            } as GalleryEntryItem),
-        ),
-      }
-    },
-  }),
+        return {
+          sourceId: Buffer.from(url).toString('base64'),
+          title: posts[0]?.yoast_head_json?.og_site_name || url,
+          url: url,
+          items: posts.map(
+            (post) =>
+              ({
+                sourceId: post.id.toString(),
+                title: extractPostTitle(post),
+                description: extractPostDescription(post),
+                entryType: 'wordpress',
+                genericType: 'page',
+                image: extractImageLink(post),
+                url: post.link,
+                date: new Date(post.date),
+                postId: post.id,
+                postDate: post.date,
+                author: extractPostAuthor(post),
+                tags: extractPostTags(post, categories, tags),
+              } as GalleryEntryItem),
+          ),
+        }
+      },
+    }
+  },
 }
 
 const toFunctionName = (resource) =>

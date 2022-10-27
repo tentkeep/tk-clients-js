@@ -47,16 +47,27 @@ const info = async (url) => {
     if (!site.ok) {
         throw new ApiStatusError(404, 'Site not found');
     }
-    const productsResponse = await clients.shopify.raw
+    let features = [];
+    const shopifyPromise = clients.shopify.raw
         .products(_url, 1)
-        .catch((_e) => ({
-        products: false,
-    }));
-    const hasShopify = !!productsResponse.products;
+        .then((r) => {
+        if (r.products !== undefined)
+            features.push('shopify');
+    })
+        .catch((_e) => { });
+    const wordpressPromise = clients.wordpress
+        .host(_url)
+        .isWordpress()
+        .then((r) => {
+        if (r)
+            features.push('wordpress');
+    })
+        .catch((_e) => { });
+    await Promise.allSettled([shopifyPromise, wordpressPromise]);
     return {
         allowsIFrame: !site.headers['x-frame-options'],
         headers: site.headers,
-        features: hasShopify ? ['shopify'] : [],
+        features,
     };
 };
 export default {

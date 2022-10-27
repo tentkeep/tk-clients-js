@@ -118,7 +118,7 @@ export declare const clients: {
     wordpress: {
         host: (_host: string) => {
             isWordpress(): Promise<boolean>;
-            summary(): Promise<GalleryEntrySummary>;
+            summary(limit?: number): Promise<GalleryEntrySummary>;
             blockTypes: import("./src/clients/wordpress.js").WordpressResourceAPI;
             blocks: import("./src/clients/wordpress.js").WordpressResourceAPI;
             blockRevisions: import("./src/clients/wordpress.js").WordpressResourceAPI;

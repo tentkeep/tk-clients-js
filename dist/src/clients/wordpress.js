@@ -1,5 +1,6 @@
 import { api } from '../api.js';
 import { forKey } from '../shareable/common.js';
+import { GalleryEntryItemTagSource } from './tentkeep.js';
 const resources = [
     'block-types',
     'blocks',
@@ -24,7 +25,7 @@ const resources = [
     'plugins',
 ];
 const resourceMethods = (_host) => resources.reduce((wordpress, resource) => {
-    wordpress[resourceToFunction(resource)] = (options = '') => {
+    wordpress[toFunctionName(resource)] = (options) => {
         const id = typeof options === 'string' ? options : '';
         const url = new URL(`https://${_host}/wp-json/wp/v2/${resource}/${id}`);
         if (typeof options === 'object') {
@@ -39,7 +40,7 @@ export default {
         ...resourceMethods(_host),
         async summary() {
             const postsBaseUrl = `https://${_host}/wp-json/wp/v2/posts`;
-            const posts = await api(`${postsBaseUrl}?per_page=100`);
+            const posts = await resourceMethods(_host).posts({ per_page: 100 });
             const authorRefs = [];
             const categoryRefs = [];
             const tagRefs = [];
@@ -48,9 +49,6 @@ export default {
                 categoryRefs.push(...(p.categories || []));
                 tagRefs.push(...(p.tags || []));
             });
-            const authorsPromise = resourceMethods(_host)
-                .users({ per_page: 100, include: authorRefs.join(',') })
-                .catch((_) => []);
             const categoriesPromise = resourceMethods(_host).categories({
                 per_page: 100,
                 include: categoryRefs.join(','),
@@ -59,8 +57,7 @@ export default {
                 per_page: 100,
                 include: tagRefs.join(','),
             });
-            const [authors, categories, tags] = await Promise.all([
-                authorsPromise,
+            const [categories, tags] = await Promise.all([
                 categoriesPromise,
                 tagsPromise,
             ]);
@@ -68,22 +65,61 @@ export default {
                 sourceId: Buffer.from(_host).toString('base64'),
                 title: _host,
                 url: _host,
-                items: posts.map((p) => ({
-                    sourceId: Buffer.from(`${postsBaseUrl}/${p.id}-`).toString('base64'),
-                    title: p.title.rendered,
-                    description: p.excerpt.rendered,
-                    image: (p.content.rendered.match(/img src="(.+?)"/) || [])[1],
-                    url: p.link,
-                    date: new Date(p.date).toISOString(),
-                    postId: p.id,
-                    postDate: p.date,
-                    author: (authors.find((a) => a.id === p.author) || {}).name,
-                    categories: (p.categories || []).map((c) => (categories.find((cat) => cat.id === c) || {}).name),
-                    tags: (p.tags || []).map((t) => (tags.find((tag) => tag.id === t) || {}).name),
+                items: posts.map((post) => ({
+                    sourceId: Buffer.from(`${postsBaseUrl}/${post.id}-`).toString('base64'),
+                    title: extractPostTitle(post),
+                    description: extractPostDescription(post),
+                    entryType: 'wordpress',
+                    genericType: 'page',
+                    image: extractImageLink(post),
+                    url: post.link,
+                    date: new Date(post.date),
+                    postId: post.id,
+                    postDate: post.date,
+                    author: extractPostAuthor(post),
+                    tags: extractPostTags(post, categories, tags),
                 })),
             };
         },
     }),
 };
-const resourceToFunction = (resource) => resource.replace(/-(.)/, (_, d) => d.toUpperCase());
+const toFunctionName = (resource) => resource.replace(/-(.)/, (_, d) => d.toUpperCase());
+function extractPostTitle(post) {
+    return (post.yoast_head_json?.title ||
+        post.yoast_head_json?.og_title ||
+        post.title?.rendered);
+}
+function extractPostDescription(post) {
+    return (post.yoast_head_json?.description ||
+        post.yoast_head_json?.og_description ||
+        post.excerpt?.rendered);
+}
+function extractImageLink(post) {
+    return (post.yoast_head_json?.og_image?.[0].url ||
+        post.featured_image_urls?.full?.[0] ||
+        post.featured_image_urls?.medium?.[0] ||
+        post.featured_image_urls?.large?.[0] ||
+        (post.content?.rendered?.match(/img src="(.+?)"/) || [])[1]);
+}
+function extractPostAuthor(post) {
+    return post.yoast_head_json?.author || post.author_info?.name || '';
+}
+function extractPostTags(post, categories, wTags) {
+    let tags = {};
+    post.categories?.forEach((c) => {
+        const tag = categories
+            .find((cat) => cat.id === c)
+            ?.name?.toLowerCase();
+        if (tag)
+            tags[tag] = GalleryEntryItemTagSource.Source;
+    });
+    post.tags?.forEach((t) => {
+        const tag = wTags
+            .find((tag) => tag.id === t)
+            ?.name?.toLowerCase();
+        if (tag)
+            tags[tag] = GalleryEntryItemTagSource.Source;
+    });
+    return tags;
+}
 //# sourceMappingURL=wordpress.js.map

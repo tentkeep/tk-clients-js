@@ -27,6 +27,9 @@ export declare type GalleryEntry = {
     createdAt?: Date;
     modifiedAt?: Date;
 };
+export declare type GalleryEntrySummary = GalleryEntry & {
+    items: GalleryEntryItem[];
+};
 export declare type GalleryEntryItem = {
     id?: number;
     galleryEntryId?: number;
@@ -40,10 +43,15 @@ export declare type GalleryEntryItem = {
     url: string;
     detail?: any;
     date?: Date;
+    tags?: Record<string, GalleryEntryItemTagSource>;
     tokens?: string[];
     createdAt?: Date;
     modifiedAt?: Date;
 };
+export declare enum GalleryEntryItemTagSource {
+    Source = "source",
+    User = "user"
+}
 export declare type GalleryEntrySeedEtsy = {
     entryType: GalleryEntryTypes.Etsy;
     entry?: GalleryEntry;

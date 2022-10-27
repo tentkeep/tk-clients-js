@@ -15,6 +15,7 @@ import tentkeep, {
   GalleryEntrySeed,
   GalleryUser,
   GalleryEntryGenericTypes,
+  GalleryEntrySummary,
 } from './src/clients/tentkeep.js'
 import wordpress from './src/clients/wordpress.js'
 import youtube from './src/clients/youtube.js'
@@ -64,6 +65,7 @@ export { DataDomain as TKDataDomain }
 export {
   Gallery,
   GalleryEntry,
+  GalleryEntrySummary,
   GalleryEntryItem,
   GalleryEntrySeed,
   GalleryEntryTypes,

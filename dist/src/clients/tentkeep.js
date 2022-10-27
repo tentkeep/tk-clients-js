@@ -1,5 +1,10 @@
 import api, { ApiStatusError, sanitizeOptions } from '../api.js';
 const TENTKEEP_HOST = 'https://api.tentkeep.com/v1';
+export var GalleryEntryItemTagSource;
+(function (GalleryEntryItemTagSource) {
+    GalleryEntryItemTagSource["Source"] = "source";
+    GalleryEntryItemTagSource["User"] = "user";
+})(GalleryEntryItemTagSource = GalleryEntryItemTagSource || (GalleryEntryItemTagSource = {}));
 export var DataDomain;
 (function (DataDomain) {
     DataDomain[DataDomain["Christian"] = 1] = "Christian";

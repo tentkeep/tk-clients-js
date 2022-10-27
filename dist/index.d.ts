@@ -1,7 +1,7 @@
 import { Place } from './src/clients/google.js';
 import { PageSummary, PageInfo } from './src/clients/page.js';
 import { ProductItem } from './src/clients/shopify.js';
-import { DataDomain, GalleryEntryTypes, Gallery, GalleryEntry, GalleryEntryItem, GalleryEntrySeed, GalleryUser, GalleryEntryGenericTypes } from './src/clients/tentkeep.js';
+import { DataDomain, GalleryEntryTypes, Gallery, GalleryEntry, GalleryEntryItem, GalleryEntrySeed, GalleryUser, GalleryEntryGenericTypes, GalleryEntrySummary } from './src/clients/tentkeep.js';
 export declare const clients: {
     etsy: {
         favorites: (userId: any) => Promise<any>;
@@ -116,13 +116,29 @@ export declare const clients: {
         searchMusicArtists: (query: string) => Promise<any>;
     };
     wordpress: {
-        host: (_host: any) => {
-            summary(): Promise<{
-                sourceId: string;
-                title: any;
-                url: any;
-                items: any;
-            }>;
+        host: (_host: string) => {
+            summary(): Promise<GalleryEntrySummary>;
+            blockTypes: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            blocks: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            blockRevisions: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            renderedBlocks: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            blockDirectoryItems: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            categories: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            comments: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            media: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            pages: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            pageRevisions: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            posts: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            postRevisions: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            postStatuses: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            postTypes: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            searchResults: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            settings: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            tags: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            taxonomies: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            themes: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            users: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            plugins: import("./src/clients/wordpress.js").WordpressResourceAPI;
         };
     };
     youtube: {
@@ -176,4 +192,4 @@ export { Place };
 export { PageSummary, PageInfo };
 export { ProductItem };
 export { DataDomain as TKDataDomain };
-export { Gallery, GalleryEntry, GalleryEntryItem, GalleryEntrySeed, GalleryEntryTypes, GalleryEntryGenericTypes, GalleryUser, };
+export { Gallery, GalleryEntry, GalleryEntrySummary, GalleryEntryItem, GalleryEntrySeed, GalleryEntryTypes, GalleryEntryGenericTypes, GalleryUser, };

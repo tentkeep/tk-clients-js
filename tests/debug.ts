@@ -11,11 +11,12 @@ console.info(
   shopifyProductSummary,
   spotify,
   tentkeep,
+  wordpress,
   youtube,
 )
 console.log('ARG', arg)
 
-youtube()
+wordpress()
 
 // OPTIONS BELOW
 
@@ -43,6 +44,13 @@ function pageInfo() {
 
 function podcastSummary() {
   clients.itunes.podcasts(arg as string).then(print)
+}
+
+function wordpress() {
+  clients.wordpress
+    .host(arg as string)
+    .summary()
+    .then(print)
 }
 
 function shopifyProductSummary() {

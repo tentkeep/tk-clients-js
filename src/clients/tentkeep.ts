@@ -37,6 +37,7 @@ export type GalleryEntry = {
   createdAt?: Date
   modifiedAt?: Date
 }
+export type GalleryEntrySummary = GalleryEntry & { items: GalleryEntryItem[] }
 export type GalleryEntryItem = {
   id?: number
   galleryEntryId?: number
@@ -50,9 +51,14 @@ export type GalleryEntryItem = {
   url: string
   detail?: any
   date?: Date
+  tags?: Record<string, GalleryEntryItemTagSource>
   tokens?: string[]
   createdAt?: Date
   modifiedAt?: Date
+}
+export enum GalleryEntryItemTagSource {
+  Source = 'source',
+  User = 'user',
 }
 
 export type GalleryEntrySeedEtsy = {

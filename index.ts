@@ -1,3 +1,4 @@
+import { BootrootsClaim } from './src/types/tentkeep-bootroots-claim.js'
 import etsy from './src/clients/etsy.js'
 import google from './src/clients/google.js'
 import itunes from './src/clients/itunes.js'
@@ -6,7 +7,8 @@ import page, { PageSummary, PageInfo } from './src/clients/page.js'
 import rss from './src/clients/rss.js'
 import shopify, { ProductItem } from './src/clients/shopify.js'
 import spotify from './src/clients/spotify.js'
-import tentkeep, {
+import tentkeep from './src/clients/tentkeep.js'
+import {
   DataDomain,
   GalleryEntryTypes,
   Gallery,
@@ -17,7 +19,7 @@ import tentkeep, {
   GalleryEntrySeed,
   GalleryUser,
   GalleryEntryGenericTypes,
-} from './src/clients/tentkeep.js'
+} from './src/types/tentkeep-types.js'
 import wordpress from './src/clients/wordpress.js'
 import youtube from './src/clients/youtube.js'
 
@@ -49,6 +51,7 @@ export { ProductItem }
 // MARK: TENTKEEP
 export { DataDomain as TKDataDomain }
 export {
+  BootrootsClaim,
   Gallery,
   GalleryEntry,
   GalleryEntrySummary,

@@ -1,7 +1,6 @@
-import { Place } from './src/clients/google.js';
 import { PageSummary, PageInfo } from './src/clients/page.js';
 import { ProductItem } from './src/clients/shopify.js';
-import { DataDomain, GalleryEntryTypes, Gallery, GalleryEntry, GalleryEntryItem, GalleryEntrySeed, GalleryUser, GalleryEntryGenericTypes, GalleryEntrySummary } from './src/clients/tentkeep.js';
+import { DataDomain, GalleryEntryTypes, Gallery, GalleryEntry, GalleryEntrySummary, GalleryEntryPlace, GalleryEntryItem, GalleryEntrySeed, GalleryUser, GalleryEntryGenericTypes } from './src/clients/tentkeep.js';
 export declare const clients: {
     etsy: {
         favorites: (userId: any) => Promise<any>;
@@ -34,8 +33,8 @@ export declare const clients: {
                 }>;
             };
         };
-        searchPlaces: (query: string) => Promise<Place[]>;
-        placeDetails: (placeId: string) => Promise<Place>;
+        searchPlaces: (query: string) => Promise<GalleryEntryPlace[]>;
+        placeDetails: (placeId: string) => Promise<GalleryEntryPlace>;
     };
     itunes: {
         podcasts: (query: any) => Promise<any>;
@@ -93,8 +92,8 @@ export declare const clients: {
         authExchangeAccessCode: (code: any) => Promise<any>;
         getPageInfo: (url: string) => Promise<PageInfo>;
         getPageSummary: (url: string) => Promise<PageSummary>;
-        getPlaces: (query: string) => Promise<Place[]>;
-        getPlaceDetail: (sourceId: string) => Promise<Place>;
+        getPlaces: (query: string) => Promise<GalleryEntryPlace[]>;
+        getPlaceDetail: (sourceId: string) => Promise<GalleryEntryPlace>;
         getPodcastSummary: (feedUrl: string) => Promise<any>;
         getShopifyProductsSummary: (url: string, limit?: number) => Promise<ProductItem[]>;
         getWordpressPostsSummary: (url: string, limit?: number) => Promise<GalleryEntrySummary>;
@@ -149,6 +148,7 @@ export declare const clients: {
             channelId: any;
         }) => Promise<GalleryEntry & {
             items: GalleryEntryItem[];
+        } & {
             publishedAt: Date;
             uploadsPlaylistId: any;
             imageWidth: string;
@@ -178,20 +178,7 @@ export declare const logic: {
         canEdit: (galleryUser: GalleryUser) => import("./src/clients/tentkeep.js").GalleryUserRoles | undefined;
     };
 };
-export declare type Item = {
-    sourceId: string;
-    title: string;
-    description?: string;
-    image?: string;
-    url?: string;
-    date?: Date;
-};
-export declare type Summary = Item & {
-    userId?: string;
-    items: Item[];
-};
-export { Place };
 export { PageSummary, PageInfo };
 export { ProductItem };
 export { DataDomain as TKDataDomain };
-export { Gallery, GalleryEntry, GalleryEntrySummary, GalleryEntryItem, GalleryEntrySeed, GalleryEntryTypes, GalleryEntryGenericTypes, GalleryUser, };
+export { Gallery, GalleryEntry, GalleryEntrySummary, GalleryEntryPlace, GalleryEntryItem, GalleryEntrySeed, GalleryEntryTypes, GalleryEntryGenericTypes, GalleryUser, };

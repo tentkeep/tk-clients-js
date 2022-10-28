@@ -1,5 +1,5 @@
 import etsy from './src/clients/etsy.js'
-import google, { Place } from './src/clients/google.js'
+import google from './src/clients/google.js'
 import itunes from './src/clients/itunes.js'
 import musickit from './src/clients/musickit.js'
 import page, { PageSummary, PageInfo } from './src/clients/page.js'
@@ -11,11 +11,12 @@ import tentkeep, {
   GalleryEntryTypes,
   Gallery,
   GalleryEntry,
+  GalleryEntrySummary,
+  GalleryEntryPlace,
   GalleryEntryItem,
   GalleryEntrySeed,
   GalleryUser,
   GalleryEntryGenericTypes,
-  GalleryEntrySummary,
 } from './src/clients/tentkeep.js'
 import wordpress from './src/clients/wordpress.js'
 import youtube from './src/clients/youtube.js'
@@ -42,21 +43,6 @@ export const logic = {
   tentkeep: tentkeepLogic,
 }
 
-export type Item = {
-  sourceId: string
-  title: string
-  description?: string
-  image?: string
-  url?: string
-  date?: Date
-}
-
-export type Summary = Item & {
-  userId?: string
-  items: Item[]
-}
-
-export { Place }
 export { PageSummary, PageInfo }
 export { ProductItem }
 
@@ -66,6 +52,7 @@ export {
   Gallery,
   GalleryEntry,
   GalleryEntrySummary,
+  GalleryEntryPlace,
   GalleryEntryItem,
   GalleryEntrySeed,
   GalleryEntryTypes,

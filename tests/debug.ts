@@ -16,7 +16,7 @@ console.info(
 )
 console.log('ARG', arg)
 
-tentkeep()
+googlePlaces()
 
 // OPTIONS BELOW
 
@@ -73,10 +73,15 @@ function tentkeep() {
 
 function youtube() {
   clients.youtube
-    .channelSummary({
-      username: undefined,
-      channelId: 'UCkSIxqE14z-nX0f_Wy3JZEg',
-    })
+    .playlist('UUkSIxqE14z-nX0f_Wy3JZEg')
+    // .channels({
+    //   id: 'UCkSIxqE14z-nX0f_Wy3JZEg',
+    //   part: 'snippet,contentDetails',
+    // })
+    // .channelSummary({
+    //   username: undefined,
+    //   channelId: 'UCkSIxqE14z-nX0f_Wy3JZEg',
+    // })
     .then(print)
 }
 

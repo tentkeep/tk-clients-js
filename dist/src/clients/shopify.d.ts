@@ -1,8 +1,8 @@
-import { GalleryEntry, Item } from '../../index.js';
-export declare type ProductItem = Item & {
+import { GalleryEntry, GalleryEntryItem } from '../../index.js';
+export declare type ProductItem = GalleryEntryItem & {
     variants: ProductVariantItem[];
 };
-export declare type ProductVariantItem = Item & {
+export declare type ProductVariantItem = GalleryEntryItem & {
     price: number;
     available?: boolean;
 };

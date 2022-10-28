@@ -1,4 +1,4 @@
-import { GalleryEntry, GalleryEntryItem } from '../../index.js'
+import { GalleryEntrySummary } from '../../index.js'
 import { API, api, ApiStatusError } from '../api.js'
 import { forKey } from '../shareable/common.js'
 const host = 'https://www.googleapis.com/youtube/v3'
@@ -68,10 +68,10 @@ const videosForPlaylist = (playlistId, opts = {}) => {
     }) // 1 x #pages
 }
 const allVideosForPlaylist = async (playlistId) => {
-  const first = await playlist(playlistId)
-  const videos = first.items
+  const firstPage = await playlist(playlistId)
+  const videos = firstPage.items
   let pageCount = 1
-  let nextPageToken = first.nextPageToken
+  let nextPageToken = firstPage.nextPageToken
   while (nextPageToken) {
     const page = await playlist(playlistId, { pageToken: nextPageToken })
     videos.push(...page.items)
@@ -83,7 +83,6 @@ const allVideosForPlaylist = async (playlistId) => {
 }
 
 type YoutubeEntry = {
-  items: GalleryEntryItem[]
   publishedAt: Date
   uploadsPlaylistId
   imageWidth: string
@@ -96,7 +95,7 @@ export default {
   channelSummary: async ({
     username,
     channelId,
-  }): Promise<GalleryEntry & YoutubeEntry> => {
+  }): Promise<GalleryEntrySummary & YoutubeEntry> => {
     let channelResponse
     if (username) {
       channelResponse = await channelForUser(username)

@@ -1,0 +1,80 @@
+{
+  "playlists": [
+    {
+      "image": "https://i.ytimg.com/vi/O56RWvIYqkc/hqdefault.jpg",
+      "title": "Founder Friday",
+      "sourceId": "PLCYG3sU6EMssAJ2hNRxH_nbcSqXykRDqJ",
+      "itemCount": 5,
+      "description": "",
+      "publishedAt": "2022-07-11T01:24:04Z"
+    },
+    {
+      "image": "https://i.ytimg.com/vi/H4dO1hsIvNM/hqdefault.jpg",
+      "title": "Founder Friday",
+      "sourceId": "PLCYG3sU6EMsvpaL1Imwp1PdFrss3VmiPF",
+      "itemCount": 4,
+      "description": "",
+      "publishedAt": "2022-05-24T15:04:10Z"
+    },
+    {
+      "image": "https://i.ytimg.com/vi/xoRZbVoIeXs/hqdefault.jpg",
+      "title": "Delivery and Route Updates",
+      "sourceId": "PLCYG3sU6EMstjg2ZONTqdS5N1r-q-csVt",
+      "itemCount": 2,
+      "description": "",
+      "publishedAt": "2021-11-12T19:48:55Z"
+    },
+    {
+      "image": "https://i.ytimg.com/vi/uJTPk4knnlU/hqdefault.jpg",
+      "title": "Azure Clean",
+      "sourceId": "PLCYG3sU6EMst7L_jrsLTsb0Cl_jeeba12",
+      "itemCount": 8,
+      "description": "",
+      "publishedAt": "2020-01-14T22:26:12Z"
+    },
+    {
+      "image": "https://i.ytimg.com/vi/C-jwTrX4KSM/hqdefault.jpg",
+      "title": "For Advertising",
+      "sourceId": "PLCYG3sU6EMsuEMM_Y0iz9Xijav1VAiQ38",
+      "itemCount": 3,
+      "description": "",
+      "publishedAt": "2019-12-23T06:48:55Z"
+    },
+    {
+      "image": "https://i.ytimg.com/vi/1QQHeJ3JsFM/hqdefault.jpg",
+      "title": "From Our Founder & CEO",
+      "sourceId": "PLCYG3sU6EMsvB2BlRXulB1veILW1nYKdS",
+      "itemCount": 18,
+      "description": "",
+      "publishedAt": "2019-12-17T19:07:56Z"
+    },
+    {
+      "image": "https://i.ytimg.com/vi/TuTp9DVBY8M/hqdefault.jpg",
+      "title": "Cooking, Baking & Recipes",
+      "sourceId": "PLCYG3sU6EMss2APF4eeavPBk3YsyMxVHh",
+      "itemCount": 20,
+      "description": "",
+      "publishedAt": "2019-12-17T19:04:12Z"
+    },
+    {
+      "image": "https://i.ytimg.com/vi/lCjU5sDfa9g/hqdefault.jpg",
+      "title": "Meet Your Farmer",
+      "sourceId": "PLCYG3sU6EMssrPRiq4pcavNxxCEqvm_Pd",
+      "itemCount": 3,
+      "description": "",
+      "publishedAt": "2019-05-17T18:55:23Z"
+    },
+    {
+      "image": "https://i.ytimg.com/vi/Vp6i1tgUIDI/hqdefault.jpg",
+      "title": "About Azure",
+      "sourceId": "PLCYG3sU6EMsvu39HBDt0GWtxu5R43wdAp",
+      "itemCount": 4,
+      "description": "",
+      "publishedAt": "2015-11-25T04:56:17Z"
+    }
+  ],
+  "imageWidth": 88,
+  "imageHeight": 88,
+  "publishedAt": "2011-07-19T15:11:42Z",
+  "uploadsPlaylistId": "UUDrK0DHakytP0-c43kPit-g"
+}

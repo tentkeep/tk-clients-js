@@ -42,10 +42,10 @@ const videosForPlaylist = (playlistId, opts = {}) => {
     });
 };
 const allVideosForPlaylist = async (playlistId) => {
-    const first = await playlist(playlistId);
-    const videos = first.items;
+    const firstPage = await playlist(playlistId);
+    const videos = firstPage.items;
     let pageCount = 1;
-    let nextPageToken = first.nextPageToken;
+    let nextPageToken = firstPage.nextPageToken;
     while (nextPageToken) {
         const page = await playlist(playlistId, { pageToken: nextPageToken });
         videos.push(...page.items);

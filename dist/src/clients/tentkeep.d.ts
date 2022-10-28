@@ -1,5 +1,5 @@
 import { PageSummary } from '../../index.js';
-import { PageInfo, Place, ProductItem } from '../../index.js';
+import { PageInfo, ProductItem } from '../../index.js';
 export declare type Gallery = {
     id?: number;
     title?: string;
@@ -29,6 +29,22 @@ export declare type GalleryEntry = {
 };
 export declare type GalleryEntrySummary = GalleryEntry & {
     items: GalleryEntryItem[];
+};
+export declare type GalleryEntryPlace = GalleryEntry & {
+    detail?: GalleryEntryDetailPlace;
+};
+export declare type GalleryEntryDetailPlace = {
+    address: string;
+    streetNumber: string;
+    street: string;
+    city: string;
+    county: string;
+    province: string;
+    country: string;
+    postalCode: string;
+    phone?: string;
+    latitude: number;
+    longitude: number;
 };
 export declare type GalleryEntryItem = {
     id?: number;
@@ -128,8 +144,8 @@ declare const _default: (dataDomain: DataDomain) => {
     authExchangeAccessCode: (code: any) => Promise<any>;
     getPageInfo: (url: string) => Promise<PageInfo>;
     getPageSummary: (url: string) => Promise<PageSummary>;
-    getPlaces: (query: string) => Promise<Place[]>;
-    getPlaceDetail: (sourceId: string) => Promise<Place>;
+    getPlaces: (query: string) => Promise<GalleryEntryPlace[]>;
+    getPlaceDetail: (sourceId: string) => Promise<GalleryEntryPlace>;
     getPodcastSummary: (feedUrl: string) => Promise<any>;
     getShopifyProductsSummary: (url: string, limit?: number) => Promise<ProductItem[]>;
     getWordpressPostsSummary: (url: string, limit?: number) => Promise<GalleryEntrySummary>;

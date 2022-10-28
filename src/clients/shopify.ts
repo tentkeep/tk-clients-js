@@ -1,4 +1,8 @@
-import { GalleryEntry, GalleryEntryTypes, Item } from '../../index.js'
+import {
+  GalleryEntry,
+  GalleryEntryItem,
+  GalleryEntryTypes,
+} from '../../index.js'
 import { sanitizeUrl } from '../shareable/common.js'
 import api from '../api.js'
 
@@ -53,10 +57,10 @@ const productsSummary = async (
   }
 }
 
-export type ProductItem = Item & {
+export type ProductItem = GalleryEntryItem & {
   variants: ProductVariantItem[]
 }
-export type ProductVariantItem = Item & {
+export type ProductVariantItem = GalleryEntryItem & {
   price: number
   available?: boolean
 }

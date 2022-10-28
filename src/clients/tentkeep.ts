@@ -1,5 +1,5 @@
 import { PageSummary } from '../../index.js'
-import { PageInfo, Place, ProductItem } from '../../index.js'
+import { PageInfo, ProductItem } from '../../index.js'
 import api, { API, ApiStatusError, sanitizeOptions } from '../api.js'
 
 const TENTKEEP_HOST = 'https://api.tentkeep.com/v1'
@@ -38,6 +38,24 @@ export type GalleryEntry = {
   modifiedAt?: Date
 }
 export type GalleryEntrySummary = GalleryEntry & { items: GalleryEntryItem[] }
+export type GalleryEntryPlace = GalleryEntry & {
+  detail?: GalleryEntryDetailPlace
+}
+export type GalleryEntryDetailPlace = {
+  address: string
+  streetNumber: string
+  street: string
+  city: string
+  county: string
+  province: string
+  country: string
+  postalCode: string
+
+  phone?: string
+  latitude: number
+  longitude: number
+}
+
 export type GalleryEntryItem = {
   id?: number
   galleryEntryId?: number
@@ -169,9 +187,9 @@ export default (dataDomain: DataDomain) => {
       tentkeep(`/proxy/page/info?url=${url}`) as Promise<PageInfo>,
     getPageSummary: (url: string) =>
       tentkeep(`/proxy/page/summary?url=${url}`) as Promise<PageSummary>,
-    getPlaces: (query: string): Promise<Place[]> =>
+    getPlaces: (query: string): Promise<GalleryEntryPlace[]> =>
       tentkeep(`/proxy/places?q=${query}`),
-    getPlaceDetail: (sourceId: string): Promise<Place> =>
+    getPlaceDetail: (sourceId: string): Promise<GalleryEntryPlace> =>
       tentkeep(`/proxy/places/detail?id=${sourceId}`),
     getPodcastSummary: (feedUrl: string) =>
       tentkeep(`/proxy/rss/podcast-summary?feed=${feedUrl}`),

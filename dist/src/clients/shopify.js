@@ -1,4 +1,4 @@
-import { GalleryEntryTypes } from '../../index.js';
+import { GalleryEntryTypes, } from '../../index.js';
 import { sanitizeUrl } from '../shareable/common.js';
 import api from '../api.js';
 const raw = {

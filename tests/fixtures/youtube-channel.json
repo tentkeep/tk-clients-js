@@ -1,0 +1,48 @@
+{
+  "kind": "youtube#channelListResponse",
+  "etag": "b4GvpCCh-gWokrsfy__WkvYlooA",
+  "pageInfo": {
+    "totalResults": 1,
+    "resultsPerPage": 5
+  },
+  "items": [
+    {
+      "kind": "youtube#channel",
+      "etag": "J0fJ2K3uSZjGgrkmkwF6Es8AgF4",
+      "id": "UCkSIxqE14z-nX0f_Wy3JZEg",
+      "snippet": {
+        "title": "Trinity Linton",
+        "description": "Hi, my name is Trinity and I am so happy you are joining me on this adventure. I take you along and show you how to preserve food, garden, and cook! I have been canning for 6 years now and pressure canning for 4 years. I love being able to preserve my own foods and I hope you get something out of this channel!\nJoin me for Gardening, cooking, canning and a lot more! \n\nIf your interested in purchasing through Azure, using my link helps me out and blesses us! Thanks for your support! \nhttps://www.azurestandard.com/start\nShare Code: TrinityLinton1",
+        "publishedAt": "2015-02-12T19:25:35Z",
+        "thumbnails": {
+          "default": {
+            "url": "https://yt3.ggpht.com/ytc/AMLnZu8Y5RMqJyvhebcMK-TDH5u0CPJ-dQ_BeeUt9KvBgw=s88-c-k-c0x00ffffff-no-rj",
+            "width": 88,
+            "height": 88
+          },
+          "medium": {
+            "url": "https://yt3.ggpht.com/ytc/AMLnZu8Y5RMqJyvhebcMK-TDH5u0CPJ-dQ_BeeUt9KvBgw=s240-c-k-c0x00ffffff-no-rj",
+            "width": 240,
+            "height": 240
+          },
+          "high": {
+            "url": "https://yt3.ggpht.com/ytc/AMLnZu8Y5RMqJyvhebcMK-TDH5u0CPJ-dQ_BeeUt9KvBgw=s800-c-k-c0x00ffffff-no-rj",
+            "width": 800,
+            "height": 800
+          }
+        },
+        "localized": {
+          "title": "Trinity Linton",
+          "description": "Hi, my name is Trinity and I am so happy you are joining me on this adventure. I take you along and show you how to preserve food, garden, and cook! I have been canning for 6 years now and pressure canning for 4 years. I love being able to preserve my own foods and I hope you get something out of this channel!\nJoin me for Gardening, cooking, canning and a lot more! \n\nIf your interested in purchasing through Azure, using my link helps me out and blesses us! Thanks for your support! \nhttps://www.azurestandard.com/start\nShare Code: TrinityLinton1"
+        },
+        "country": "US"
+      },
+      "contentDetails": {
+        "relatedPlaylists": {
+          "likes": "",
+          "uploads": "UUkSIxqE14z-nX0f_Wy3JZEg"
+        }
+      }
+    }
+  ]
+}

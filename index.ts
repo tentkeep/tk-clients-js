@@ -18,6 +18,7 @@ import {
   GalleryEntryItem,
   GalleryEntrySeed,
   GalleryUser,
+  GalleryClaim,
   GalleryEntryGenericTypes,
 } from './src/types/tentkeep-types.js'
 import wordpress from './src/clients/wordpress.js'
@@ -61,4 +62,5 @@ export {
   GalleryEntryTypes,
   GalleryEntryGenericTypes,
   GalleryUser,
+  GalleryClaim,
 }

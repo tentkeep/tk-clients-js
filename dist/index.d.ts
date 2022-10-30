@@ -1,7 +1,7 @@
 import { BootrootsClaim } from './src/types/tentkeep-bootroots-claim.js';
 import { PageSummary, PageInfo } from './src/clients/page.js';
 import { ProductItem } from './src/clients/shopify.js';
-import { DataDomain, GalleryEntryTypes, Gallery, GalleryEntry, GalleryEntrySummary, GalleryEntryPlace, GalleryEntryItem, GalleryEntrySeed, GalleryUser, GalleryEntryGenericTypes } from './src/types/tentkeep-types.js';
+import { DataDomain, GalleryEntryTypes, Gallery, GalleryEntry, GalleryEntrySummary, GalleryEntryPlace, GalleryEntryItem, GalleryEntrySeed, GalleryUser, GalleryClaim, GalleryEntryGenericTypes } from './src/types/tentkeep-types.js';
 export declare const clients: {
     etsy: {
         favorites: (userId: any) => Promise<any>;
@@ -182,4 +182,4 @@ export declare const logic: {
 export { PageSummary, PageInfo };
 export { ProductItem };
 export { DataDomain as TKDataDomain };
-export { BootrootsClaim, Gallery, GalleryEntry, GalleryEntrySummary, GalleryEntryPlace, GalleryEntryItem, GalleryEntrySeed, GalleryEntryTypes, GalleryEntryGenericTypes, GalleryUser, };
+export { BootrootsClaim, Gallery, GalleryEntry, GalleryEntrySummary, GalleryEntryPlace, GalleryEntryItem, GalleryEntrySeed, GalleryEntryTypes, GalleryEntryGenericTypes, GalleryUser, GalleryClaim, };

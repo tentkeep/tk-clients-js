@@ -139,3 +139,9 @@ export type GalleryUser = {
   roles?: GalleryUserRoles[]
   domain?: number
 }
+
+export type GalleryClaim = {
+  value: number
+  short: string
+  label: string
+}

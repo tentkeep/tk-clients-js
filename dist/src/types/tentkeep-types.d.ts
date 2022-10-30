@@ -137,3 +137,8 @@ export declare type GalleryUser = {
     roles?: GalleryUserRoles[];
     domain?: number;
 };
+export declare type GalleryClaim = {
+    value: number;
+    short: string;
+    label: string;
+};

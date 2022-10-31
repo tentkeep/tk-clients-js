@@ -1,4 +1,4 @@
-export const BootrootsClaim = {
+export const BootrootsAttribute = {
     SellsFood: { value: 10000, short: 'food', label: 'sells food' },
     SellsOrganicFood: { value: 10010, short: 'organic', label: 'sells organic food', },
     SellsBulkFood: { value: 10020, short: 'bulk', label: 'sells bulk' },

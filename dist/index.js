@@ -1,4 +1,4 @@
-import { BootrootsClaim } from './src/types/tentkeep-bootroots-claim.js';
+import { BootrootsAttribute } from './src/types/tentkeep-bootroots-claim.js';
 import etsy from './src/clients/etsy.js';
 import google from './src/clients/google.js';
 import itunes from './src/clients/itunes.js';
@@ -30,5 +30,5 @@ export const logic = {
     tentkeep: tentkeepLogic,
 };
 export { DataDomain as TKDataDomain };
-export { BootrootsClaim, GalleryEntryTypes, };
+export { BootrootsAttribute, GalleryEntryTypes, };
 //# sourceMappingURL=index.js.map

@@ -1,6 +1,6 @@
-import { GalleryClaim } from "../../index.js";
+import { GalleryAttribute } from "../../index.js";
 
-export const BootrootsClaim: Record<string, GalleryClaim> = {
+export const BootrootsAttribute: Record<string, GalleryAttribute> = {
   //SellsFood
   SellsFood: { value: 10000, short: 'food', label: 'sells food' },
   SellsOrganicFood: { value: 10010, short: 'organic', label: 'sells organic food', },

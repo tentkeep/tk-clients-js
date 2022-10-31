@@ -6,6 +6,7 @@ export type Gallery = {
   tinyImage?: string
   url?: string
   image?: string
+  attributes?: number[]
   createdAt?: Date
   modifiedAt?: Date
 }
@@ -140,7 +141,7 @@ export type GalleryUser = {
   domain?: number
 }
 
-export type GalleryClaim = {
+export type GalleryAttribute = {
   value: number
   short: string
   label: string

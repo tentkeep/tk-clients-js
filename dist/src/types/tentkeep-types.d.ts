@@ -6,6 +6,7 @@ export declare type Gallery = {
     tinyImage?: string;
     url?: string;
     image?: string;
+    attributes?: number[];
     createdAt?: Date;
     modifiedAt?: Date;
 };
@@ -137,7 +138,7 @@ export declare type GalleryUser = {
     roles?: GalleryUserRoles[];
     domain?: number;
 };
-export declare type GalleryClaim = {
+export declare type GalleryAttribute = {
     value: number;
     short: string;
     label: string;

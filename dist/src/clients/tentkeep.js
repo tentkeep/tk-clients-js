@@ -71,6 +71,11 @@ export default (dataDomain) => {
                 body: image,
             });
         },
+        updateGallery: (token, gallery) => tentkeep(`/galleries/${gallery.id}`, {
+            method: 'put',
+            headers: postHeaders(token),
+            body: gallery,
+        }),
         saveGalleryEntry: (token, galleryId, seed) => tentkeep(`/galleries/${galleryId}/entries`, {
             method: 'post',
             headers: postHeaders(token),

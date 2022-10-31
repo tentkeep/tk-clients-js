@@ -111,6 +111,9 @@ export declare const clients: {
             title: string;
         }) => Promise<Gallery>;
         saveGalleryImage: (token: string, galleryId: number, image: any) => Promise<any>;
+        updateGallery: (token: string, gallery: Gallery & {
+            id: number;
+        }) => Promise<Gallery>;
         saveGalleryEntry: (token: string, galleryId: number, seed: GalleryEntrySeed) => Promise<GalleryEntry>;
         saveUserItemActivity: (token: string, itemActivity: any) => Promise<any>;
         searchEtsyShops: (query: string) => Promise<any>;

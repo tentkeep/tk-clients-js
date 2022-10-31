@@ -123,6 +123,12 @@ export default (dataDomain: DataDomain) => {
         body: image,
       })
     },
+    updateGallery: (token: string, gallery: Gallery & { id: number }) =>
+      tentkeep(`/galleries/${gallery.id}`, {
+        method: 'put',
+        headers: postHeaders(token),
+        body: gallery,
+      }) as Promise<Gallery>,
     saveGalleryEntry: (
       token: string,
       galleryId: number,

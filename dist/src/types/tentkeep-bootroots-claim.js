@@ -59,4 +59,7 @@ export const BootrootsAttribute = {
     ServicesPickupOnly: { value: 50012, short: 'pickup', label: 'pickup only' },
     ServicesButchery: { value: 50050, short: 'butchery', label: 'butchery' },
 };
+export function findBootrootsAttribute(value) {
+    return Object.values(BootrootsAttribute).find(att => att.value === value);
+}
 //# sourceMappingURL=tentkeep-bootroots-claim.js.map

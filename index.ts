@@ -1,4 +1,7 @@
-import { BootrootsAttribute } from './src/types/tentkeep-bootroots-claim.js'
+import {
+  BootrootsAttribute,
+  findBootrootsAttribute,
+} from './src/types/tentkeep-bootroots-claim.js'
 import etsy from './src/clients/etsy.js'
 import google from './src/clients/google.js'
 import itunes from './src/clients/itunes.js'
@@ -53,6 +56,7 @@ export { ProductItem }
 export { DataDomain as TKDataDomain }
 export {
   BootrootsAttribute,
+  findBootrootsAttribute,
   Gallery,
   GalleryEntry,
   GalleryEntrySummary,

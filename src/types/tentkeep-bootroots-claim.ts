@@ -75,3 +75,7 @@ export const BootrootsAttribute: Record<string, GalleryAttribute> = {
   ServicesPickupOnly: { value: 50012, short: 'pickup', label: 'pickup only' },
   ServicesButchery: { value: 50050, short: 'butchery', label: 'butchery' },
 }
+
+export function findBootrootsAttribute(value: number): GalleryAttribute | undefined {
+  return Object.values(BootrootsAttribute).find(att => att.value === value)
+}

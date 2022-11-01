@@ -143,3 +143,14 @@ export declare type GalleryAttribute = {
     short: string;
     label: string;
 };
+export declare type Place = {
+    title?: string;
+    location?: PlaceLocation;
+    galleryId?: number;
+    galleryEntryId?: number;
+    galleryEntryItemId?: number;
+};
+export declare type PlaceLocation = {
+    lat: number;
+    long: number;
+};

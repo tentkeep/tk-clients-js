@@ -23,6 +23,9 @@ import {
   GalleryUser,
   GalleryAttribute,
   GalleryEntryGenericTypes,
+  Place,
+  PlaceLocation,
+  GalleryEntryDetailPlace,
 } from './src/types/tentkeep-types.js'
 import wordpress from './src/clients/wordpress.js'
 import youtube from './src/clients/youtube.js'
@@ -61,10 +64,13 @@ export {
   GalleryEntry,
   GalleryEntrySummary,
   GalleryEntryPlace,
+  GalleryEntryDetailPlace,
   GalleryEntryItem,
   GalleryEntrySeed,
   GalleryEntryTypes,
   GalleryEntryGenericTypes,
   GalleryUser,
   GalleryAttribute,
+  Place,
+  PlaceLocation,
 }

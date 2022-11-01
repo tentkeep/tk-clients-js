@@ -146,3 +146,15 @@ export type GalleryAttribute = {
   short: string
   label: string
 }
+
+export type Place = {
+  title?: string
+  location?: PlaceLocation
+  galleryId?: number
+  galleryEntryId?: number
+  galleryEntryItemId?: number
+}
+export type PlaceLocation = {
+  lat: number
+  long: number
+}

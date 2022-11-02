@@ -26,6 +26,7 @@ import {
   Place,
   PlaceLocation,
   GalleryEntryDetailPlace,
+  GalleryPlace,
 } from './src/types/tentkeep-types.js'
 import wordpress from './src/clients/wordpress.js'
 import youtube from './src/clients/youtube.js'
@@ -73,4 +74,5 @@ export {
   GalleryAttribute,
   Place,
   PlaceLocation,
+  GalleryPlace,
 }

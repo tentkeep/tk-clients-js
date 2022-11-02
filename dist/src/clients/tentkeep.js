@@ -40,6 +40,7 @@ export default (dataDomain, TENTKEEP_HOST = DEFAULT_HOST) => {
         getWordpressPostsSummary: (url, limit = 5) => tentkeep(`/proxy/wordpress/posts?url=${url}&limit=${limit}`),
         searchYoutubeChannels: (query, limit = 5) => tentkeep(`/proxy/youtube/channels?q=${query}&limit=${limit}`),
         getGalleries: () => tentkeep(`/galleries`),
+        getGalleriesNearby: (postalCode, options) => tentkeep(`/galleries/nearby?postalCode=${postalCode}&miles=${options.miles}&limit=${options.limit}`),
         getGallery: (galleryId) => tentkeep(`/galleries/${galleryId}`),
         getRecentGalleryEntryItems: (genericType = undefined) => tentkeep(`/gallery-entry-items/recent?genericType=${genericType}`),
         getTrendingGalleryEntryItemTopics: (limit = 15) => tentkeep(`/gallery-entry-items/trending?${limit}`),

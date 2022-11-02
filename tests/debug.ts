@@ -16,7 +16,7 @@ console.info(
 )
 console.log('ARG', arg)
 
-googlePlaces()
+tentkeep()
 
 // OPTIONS BELOW
 
@@ -64,10 +64,11 @@ function spotify() {
 
 function tentkeep() {
   clients
-    .tentkeep(TKDataDomain.Bootroots)
+    .tentkeep(TKDataDomain.Bootroots, 'http://localhost:3749/v1')
     // .getGalleries()
     // .searchYoutubeChannels(arg as string)
-    .getWordpressPostsSummary(arg as string, 3)
+    // .getWordpressPostsSummary(arg as string, 3)
+    .getGalleriesNearby('40207', { miles: 60, limit: 5 })
     .then(print)
 }
 

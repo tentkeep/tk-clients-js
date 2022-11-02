@@ -154,3 +154,6 @@ export declare type PlaceLocation = {
     lat: number;
     long: number;
 };
+export declare type GalleryPlace = Gallery & {
+    detail: GalleryEntryDetailPlace;
+};

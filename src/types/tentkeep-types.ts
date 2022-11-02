@@ -158,3 +158,9 @@ export type PlaceLocation = {
   lat: number
   long: number
 }
+
+// Special Types
+
+export type GalleryPlace = Gallery & {
+  detail: GalleryEntryDetailPlace
+}

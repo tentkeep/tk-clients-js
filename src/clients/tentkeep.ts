@@ -8,6 +8,7 @@ import {
   GalleryEntrySeed,
   GalleryEntrySummary,
   PageSummary,
+  GalleryPlace,
 } from '../../index.js'
 import { PageInfo, ProductItem } from '../../index.js'
 import api, { API, ApiStatusError, sanitizeOptions } from '../api.js'
@@ -80,6 +81,13 @@ export default (
 
     // GALLERIES
     getGalleries: (): Promise<Gallery[]> => tentkeep(`/galleries`),
+    getGalleriesNearby: (
+      postalCode: string,
+      options: { miles: number; limit: number },
+    ): Promise<GalleryPlace[]> =>
+      tentkeep(
+        `/galleries/nearby?postalCode=${postalCode}&miles=${options.miles}&limit=${options.limit}`,
+      ),
     getGallery: (galleryId: number): Promise<Gallery> =>
       tentkeep(`/galleries/${galleryId}`),
     getRecentGalleryEntryItems: (

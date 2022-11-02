@@ -1,5 +1,5 @@
 import { DataDomain } from '../types/tentkeep-types.js';
-import { Gallery, GalleryEntry, GalleryEntryGenericTypes, GalleryEntryItem, GalleryEntryPlace, GalleryEntrySeed, GalleryEntrySummary, PageSummary } from '../../index.js';
+import { Gallery, GalleryEntry, GalleryEntryGenericTypes, GalleryEntryItem, GalleryEntryPlace, GalleryEntrySeed, GalleryEntrySummary, PageSummary, GalleryPlace } from '../../index.js';
 import { PageInfo, ProductItem } from '../../index.js';
 declare const _default: (dataDomain: DataDomain, TENTKEEP_HOST?: string | undefined) => {
     authSignIn: (strategy: string) => void;
@@ -13,6 +13,10 @@ declare const _default: (dataDomain: DataDomain, TENTKEEP_HOST?: string | undefi
     getWordpressPostsSummary: (url: string, limit?: number) => Promise<GalleryEntrySummary>;
     searchYoutubeChannels: (query: string, limit?: number) => Promise<any>;
     getGalleries: () => Promise<Gallery[]>;
+    getGalleriesNearby: (postalCode: string, options: {
+        miles: number;
+        limit: number;
+    }) => Promise<GalleryPlace[]>;
     getGallery: (galleryId: number) => Promise<Gallery>;
     getRecentGalleryEntryItems: (genericType?: GalleryEntryGenericTypes | undefined) => Promise<GalleryEntryItem[]>;
     getTrendingGalleryEntryItemTopics: (limit?: number) => Promise<string[]>;

@@ -1,4 +1,3 @@
-import { URL } from 'url';
 import api, { ApiStatusError } from '../api.js';
 const raw = {
     places: {

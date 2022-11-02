@@ -1,5 +1,4 @@
 import { GalleryEntryPlace } from '../../index.js'
-import { URL } from 'url'
 import api, { ApiStatusError } from '../api.js'
 import { GalleryEntryDetailPlace } from '../types/tentkeep-types.js'
 

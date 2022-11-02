@@ -88,7 +88,7 @@ export declare const clients: {
         playlist: (playlistId: any) => any;
         playlistTracks: (playlistId: any) => any;
     };
-    tentkeep: (dataDomain: DataDomain) => {
+    tentkeep: (dataDomain: DataDomain, TENTKEEP_HOST?: string | undefined) => {
         authSignIn: (strategy: string) => void;
         authExchangeAccessCode: (code: any) => Promise<any>;
         getPageInfo: (url: string) => Promise<PageInfo>;

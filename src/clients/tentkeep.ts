@@ -12,9 +12,12 @@ import {
 import { PageInfo, ProductItem } from '../../index.js'
 import api, { API, ApiStatusError, sanitizeOptions } from '../api.js'
 
-const TENTKEEP_HOST = 'https://api.tentkeep.com/v1'
+const DEFAULT_HOST = 'https://api.tentkeep.com/v1'
 
-export default (dataDomain: DataDomain) => {
+export default (
+  dataDomain: DataDomain,
+  TENTKEEP_HOST: string | undefined = DEFAULT_HOST,
+) => {
   const tentkeep: API = (path: string, options) => {
     const _options = sanitizeOptions(options)
     _options.headers = _options.headers ?? {}
@@ -27,10 +30,11 @@ export default (dataDomain: DataDomain) => {
 
   return {
     authSignIn: (strategy: string) => {
+      // The Auth needs to come from the real api so that OAuth providers respect it
       // @ts-ignore
       if (window) {
         // @ts-ignore
-        window.location = `${TENTKEEP_HOST}/auth/authorize/${strategy}?dataDomain=${dataDomain}`
+        window.location = `${DEFAULT_HOST}/auth/authorize/${strategy}?dataDomain=${dataDomain}`
       } else {
         throw new ApiStatusError(
           400,

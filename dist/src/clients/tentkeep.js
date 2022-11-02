@@ -1,6 +1,6 @@
 import api, { ApiStatusError, sanitizeOptions } from '../api.js';
-const TENTKEEP_HOST = 'https://api.tentkeep.com/v1';
-export default (dataDomain) => {
+const DEFAULT_HOST = 'https://api.tentkeep.com/v1';
+export default (dataDomain, TENTKEEP_HOST = DEFAULT_HOST) => {
     const tentkeep = (path, options) => {
         const _options = sanitizeOptions(options);
         _options.headers = _options.headers ?? {};
@@ -12,7 +12,7 @@ export default (dataDomain) => {
     return {
         authSignIn: (strategy) => {
             if (window) {
-                window.location = `${TENTKEEP_HOST}/auth/authorize/${strategy}?dataDomain=${dataDomain}`;
+                window.location = `${DEFAULT_HOST}/auth/authorize/${strategy}?dataDomain=${dataDomain}`;
             }
             else {
                 throw new ApiStatusError(400, 'Sign in must occur in a browser context.');

@@ -1,7 +1,7 @@
 import { DataDomain } from '../types/tentkeep-types.js';
 import { Gallery, GalleryEntry, GalleryEntryGenericTypes, GalleryEntryItem, GalleryEntryPlace, GalleryEntrySeed, GalleryEntrySummary, PageSummary } from '../../index.js';
 import { PageInfo, ProductItem } from '../../index.js';
-declare const _default: (dataDomain: DataDomain) => {
+declare const _default: (dataDomain: DataDomain, TENTKEEP_HOST?: string | undefined) => {
     authSignIn: (strategy: string) => void;
     authExchangeAccessCode: (code: any) => Promise<any>;
     getPageInfo: (url: string) => Promise<PageInfo>;

@@ -1,24 +1,25 @@
-import {
-  BootrootsAttribute,
-  findBootrootsAttribute,
-} from './src/types/tentkeep-bootroots-claim.js'
 import etsy from './src/clients/etsy.js'
 import google from './src/clients/google.js'
 import itunes from './src/clients/itunes.js'
 import musickit from './src/clients/musickit.js'
-import page, { PageSummary, PageInfo } from './src/clients/page.js'
+import page from './src/clients/page.js'
 import rss from './src/clients/rss.js'
-import shopify, { ProductItem } from './src/clients/shopify.js'
+import shopify from './src/clients/shopify.js'
 import spotify from './src/clients/spotify.js'
-import tentkeep from './src/clients/tentkeep.js'
-import {
-  DataDomain,
+import wordpress from './src/clients/wordpress.js'
+import youtube from './src/clients/youtube.js'
+
+import tentkeep, {
+  BootrootsAttribute,
+  findBootrootsAttribute,
+  TKDataDomain,
   GalleryEntryTypes,
   Gallery,
   GalleryEntry,
   GalleryEntrySummary,
   GalleryEntryPlace,
   GalleryEntryItem,
+  GalleryEntryItemProduct,
   GalleryEntrySeed,
   GalleryUser,
   GalleryAttribute,
@@ -27,11 +28,11 @@ import {
   PlaceLocation,
   GalleryEntryDetailPlace,
   GalleryPlace,
-} from './src/types/tentkeep-types.js'
-import wordpress from './src/clients/wordpress.js'
-import youtube from './src/clients/youtube.js'
-
-import tentkeepLogic from './src/logic/l-tentkeep.js'
+  PageSummary,
+  PageInfo,
+  Location,
+} from 'tentkeep'
+import { logic as tentkeepLogic } from 'tentkeep'
 
 export const clients = {
   etsy,
@@ -54,10 +55,10 @@ export const logic = {
 }
 
 export { PageSummary, PageInfo }
-export { ProductItem }
+export { Location }
 
 // MARK: TENTKEEP
-export { DataDomain as TKDataDomain }
+export { TKDataDomain }
 export {
   BootrootsAttribute,
   findBootrootsAttribute,
@@ -67,6 +68,7 @@ export {
   GalleryEntryPlace,
   GalleryEntryDetailPlace,
   GalleryEntryItem,
+  GalleryEntryItemProduct,
   GalleryEntrySeed,
   GalleryEntryTypes,
   GalleryEntryGenericTypes,

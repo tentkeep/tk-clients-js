@@ -1,4 +1,4 @@
-import clients, { TKDataDomain } from '../index.js'
+import clients from '../index.js'
 
 const [_entryPoint, _file, arg] = process.argv
 console.info(
@@ -16,7 +16,7 @@ console.info(
 )
 console.log('ARG', arg)
 
-tentkeep()
+googlePlaces()
 
 // OPTIONS BELOW
 
@@ -63,13 +63,15 @@ function spotify() {
 }
 
 function tentkeep() {
-  clients
-    .tentkeep(TKDataDomain.Bootroots, 'http://localhost:3749/v1')
-    // .getGalleries()
-    // .searchYoutubeChannels(arg as string)
-    // .getWordpressPostsSummary(arg as string, 3)
-    .getGalleriesNearby('40207', { miles: 60, limit: 5 })
-    .then(print)
+  // tk(TKDataDomain.Bootroots, {
+  //   baseUrl: 'http://localhost:3749/v1',
+  //   api: api,
+  // })
+  // // .getGalleries()
+  // // .searchYoutubeChannels(arg as string)
+  // // .getWordpressPostsSummary(arg as string, 3)
+  // .getGalleriesNearby('40207', { miles: 60, limit: 5 })
+  // .then(print)
 }
 
 function youtube() {

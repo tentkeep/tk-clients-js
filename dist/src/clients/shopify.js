@@ -14,6 +14,7 @@ const productsSummary = async (url, limit = 25) => {
             title: productSummaryTitle(product),
             description: product.body_html,
             image: product.images[0]?.src,
+            url: `${sanitizeUrl(url)}/products/${product.handle}`,
             date: product.updated_at,
             variants: product.variants.map((variant) => {
                 return {

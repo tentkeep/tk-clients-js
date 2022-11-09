@@ -1,10 +1,11 @@
 import {
   GalleryEntry,
-  GalleryEntryItem,
+  GalleryEntryItemProduct,
   GalleryEntryTypes,
 } from '../../index.js'
 import { sanitizeUrl } from '../shareable/common.js'
 import api from '../api.js'
+import { GalleryEntryItemProductVariant } from 'tentkeep/dist/src/types/tentkeep-types.js'
 
 const raw = {
   products: (
@@ -24,7 +25,7 @@ const raw = {
 const productsSummary = async (
   url: string,
   limit: number = 25,
-): Promise<GalleryEntry & { items?: ProductItem[] }> => {
+): Promise<GalleryEntry & { items?: GalleryEntryItemProduct[] }> => {
   const products = await raw.products(url, limit)
   const productItems = products.products.map((product: ShopifyProduct) => {
     return {
@@ -32,6 +33,7 @@ const productsSummary = async (
       title: productSummaryTitle(product),
       description: product.body_html,
       image: product.images[0]?.src,
+      url: `${sanitizeUrl(url)}/products/${product.handle}`,
       date: product.updated_at,
       variants: product.variants.map((variant) => {
         return {
@@ -43,9 +45,9 @@ const productsSummary = async (
           date: variant.updated_at,
           price: parseFloat(variant.price),
           available: variant.available,
-        } as ProductVariantItem
+        } as GalleryEntryItemProductVariant
       }),
-    } as ProductItem
+    } as GalleryEntryItemProduct
   })
   return {
     sourceId: 'products.json',
@@ -55,14 +57,6 @@ const productsSummary = async (
     genericType: 'shop',
     items: productItems,
   }
-}
-
-export type ProductItem = GalleryEntryItem & {
-  variants: ProductVariantItem[]
-}
-export type ProductVariantItem = GalleryEntryItem & {
-  price: number
-  available?: boolean
 }
 
 export type ShopifyProduct = {

@@ -1,6 +1,6 @@
 import { GalleryEntryPlace } from '../../index.js'
 import api, { ApiStatusError } from '../api.js'
-import { GalleryEntryDetailPlace } from '../types/tentkeep-types.js'
+import { GalleryEntryDetailPlace } from 'tentkeep'
 
 const raw = {
   places: {

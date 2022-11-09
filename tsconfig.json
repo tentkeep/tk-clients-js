@@ -1,7 +1,7 @@
 {
   "include": ["./**/*.ts", "phantomjs"],
   "exclude": [
-    "node_modules", "tests"
+    "node_modules", "tests", "dist"
   ],
   "compilerOptions": {
     "lib": [

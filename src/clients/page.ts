@@ -3,6 +3,7 @@ import X2JS from 'x2js'
 import { sanitizeUrl } from '../shareable/common.js'
 import api, { ApiStatusError } from '../api.js'
 import clients from '../../index.js'
+import { PageInfo, PageSummary, PageInfoFeatures } from 'tentkeep'
 
 /**
  * PageSummary requires scraping the site with phantom = time
@@ -88,24 +89,6 @@ const info = async (url: string): Promise<PageInfo> => {
 export default {
   info,
   summary,
-}
-
-export type PageSummary = {
-  url: string
-  title: string
-  description?: string
-  image?: string
-  images?: string[]
-  icon?: string
-  twitter?: string
-  elements?: { meta; links; title }
-}
-
-type PageInfoFeatures = 'shopify' | 'wordpress'
-export type PageInfo = {
-  allowsIFrame: boolean
-  headers: Record<string, string>
-  features: PageInfoFeatures[]
 }
 
 function phantomjs(): string {

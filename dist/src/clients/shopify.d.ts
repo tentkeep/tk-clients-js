@@ -1,11 +1,4 @@
-import { GalleryEntry, GalleryEntryItem } from '../../index.js';
-export declare type ProductItem = GalleryEntryItem & {
-    variants: ProductVariantItem[];
-};
-export declare type ProductVariantItem = GalleryEntryItem & {
-    price: number;
-    available?: boolean;
-};
+import { GalleryEntry, GalleryEntryItemProduct } from '../../index.js';
 export declare type ShopifyProduct = {
     id: number;
     title: string;
@@ -64,7 +57,7 @@ declare const _default: {
         collectionProducts: (url: string, collectionHandle: string) => Promise<any>;
     };
     productsSummary: (url: string, limit?: number) => Promise<GalleryEntry & {
-        items?: ProductItem[] | undefined;
+        items?: GalleryEntryItemProduct[] | undefined;
     }>;
 };
 export default _default;

@@ -1,4 +1,4 @@
-import { BootrootsAttribute, findBootrootsAttribute, TKDataDomain, GalleryEntryTypes, Gallery, GalleryEntry, GalleryEntrySummary, GalleryEntryPlace, GalleryEntryItem, GalleryEntryItemProduct, GalleryEntrySeed, GalleryUser, GalleryAttribute, GalleryEntryGenericTypes, Place, PlaceLocation, GalleryEntryDetailPlace, GalleryPlace, PageSummary, PageInfo, Location } from 'tentkeep';
+import { BootrootsAttribute, findBootrootsAttribute, TKDataDomain, GalleryEntryTypes, Gallery, GalleryEntry, GalleryEntrySummary, GalleryEntryPlace, GalleryEntryItem, GalleryEntryItemProduct, GalleryEntrySeed, GalleryUser, GalleryAttribute, GalleryEntryGenericTypes, Place, PlaceLocation, GalleryEntryDetailPlace, GalleryPlace, PageSummary, PageInfo, Location, SearchResults } from 'tentkeep';
 export declare const clients: {
     etsy: {
         favorites: (userId: any) => Promise<any>;
@@ -85,12 +85,10 @@ export declare const clients: {
         playlist: (playlistId: any) => any;
         playlistTracks: (playlistId: any) => any;
     };
-    tentkeep: (dataDomain: TKDataDomain, config?: {
-        baseUrl: string | undefined;
-        api: import("tentkeep/dist/src/api.js").API | undefined;
-    } | undefined) => {
-        authSignIn: (strategy: string, redirect: string) => void;
+    tentkeep: (dataDomain: TKDataDomain, config?: import("tentkeep/dist/src/tentkeep.js").TKConfig | undefined) => {
+        authSignIn: (strategy: string, redirect: string, options: import("tentkeep").AuthOptions) => void | Promise<import("tentkeep").Token>;
         authExchangeAccessCode: (code: any) => Promise<any>;
+        authRefreshTokens: (refreshToken: string) => Promise<import("tentkeep").Token>;
         getPageInfo: (url: string) => Promise<PageInfo>;
         getPageSummary: (url: string) => Promise<PageSummary>;
         getPlaces: (query: string) => Promise<GalleryEntryPlace[]>;
@@ -100,6 +98,7 @@ export declare const clients: {
         getWordpressPostsSummary: (url: string, limit?: number | undefined) => Promise<GalleryEntrySummary>;
         searchYoutubeChannels: (query: string, limit?: number | undefined) => Promise<any>;
         getGalleries: () => Promise<Gallery[]>;
+        searchGalleries: (query: string) => Promise<SearchResults<Gallery>>;
         getGalleriesNearby: (location: Location, options: {
             miles: number;
             limit: number;
@@ -107,10 +106,11 @@ export declare const clients: {
         getGallery: (galleryId: number) => Promise<Gallery>;
         getRecentGalleryEntryItems: (genericType?: GalleryEntryGenericTypes | undefined) => Promise<GalleryEntryItem[]>;
         getTrendingGalleryEntryItemTopics: (limit?: number | undefined) => Promise<string[]>;
-        getGalleriesForUser: (token: string) => Promise<any>;
+        getGalleriesForUser: (token: string) => Promise<import("tentkeep").UserGallery[]>;
         getGalleryImageUrl: (galleryId: number) => string;
         getGalleryEntries: (galleryId: number, itemLimit?: number | undefined) => Promise<GalleryEntrySummary[]>;
         getGalleryUserRole: (token: string, galleryId: number) => Promise<any>;
+        joinGallery: (token: string, galleryId: number) => Promise<GalleryUser>;
         saveGallery: (token: string, gallery: Gallery & {
             title: string;
         }) => Promise<Gallery>;
@@ -189,4 +189,4 @@ export declare const logic: {
 export { PageSummary, PageInfo };
 export { Location };
 export { TKDataDomain };
-export { BootrootsAttribute, findBootrootsAttribute, Gallery, GalleryEntry, GalleryEntrySummary, GalleryEntryPlace, GalleryEntryDetailPlace, GalleryEntryItem, GalleryEntryItemProduct, GalleryEntrySeed, GalleryEntryTypes, GalleryEntryGenericTypes, GalleryUser, GalleryAttribute, Place, PlaceLocation, GalleryPlace, };
+export { BootrootsAttribute, findBootrootsAttribute, Gallery, GalleryEntry, GalleryEntrySummary, GalleryEntryPlace, GalleryEntryDetailPlace, GalleryEntryItem, GalleryEntryItemProduct, GalleryEntrySeed, GalleryEntryTypes, GalleryEntryGenericTypes, GalleryUser, GalleryAttribute, Place, PlaceLocation, GalleryPlace, SearchResults, };

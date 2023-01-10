@@ -31,6 +31,7 @@ import tentkeep, {
   PageSummary,
   PageInfo,
   Location,
+  SearchResults,
 } from 'tentkeep'
 import { logic as tentkeepLogic } from 'tentkeep'
 
@@ -77,4 +78,5 @@ export {
   Place,
   PlaceLocation,
   GalleryPlace,
+  SearchResults,
 }

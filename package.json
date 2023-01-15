@@ -28,7 +28,7 @@
   "dependencies": {
     "got": "^12.4.1",
     "jsonwebtoken": "^9.0.0",
-    "tentkeep": "github:tentkeep/tk-client#97ea8228ced4da2c76aac118afc502b4cc4a552c",
+    "tentkeep": "github:tentkeep/tk-client#01eb84f0a8e2ed1ecfb72c60c960d69a036602e8",
     "x2js": "^3.4.3",
     "xml2js": "^0.4.23"
   },

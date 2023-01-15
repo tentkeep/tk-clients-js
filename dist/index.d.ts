@@ -1,4 +1,4 @@
-import { BootrootsAttribute, findBootrootsAttribute, TKDataDomain, GalleryEntryTypes, Gallery, GalleryEntry, GalleryEntrySummary, GalleryEntryPlace, GalleryEntryItem, GalleryEntryItemProduct, GalleryEntrySeed, GalleryUser, GalleryAttribute, GalleryEntryGenericTypes, Place, PlaceLocation, GalleryEntryDetailPlace, GalleryPlace, PageSummary, PageInfo, Location, SearchResults } from 'tentkeep';
+export * from 'tentkeep';
 export declare const clients: {
     etsy: {
         favorites: (userId: any) => Promise<any>;
@@ -31,8 +31,8 @@ export declare const clients: {
                 }>;
             };
         };
-        searchPlaces: (query: string) => Promise<GalleryEntryPlace[]>;
-        placeDetails: (placeId: string) => Promise<GalleryEntryPlace>;
+        searchPlaces: (query: string) => Promise<import("tentkeep").GalleryEntryPlace[]>;
+        placeDetails: (placeId: string) => Promise<import("tentkeep").GalleryEntryPlace>;
     };
     itunes: {
         podcasts: (query: any) => Promise<any>;
@@ -51,8 +51,8 @@ export declare const clients: {
         }>;
     };
     page: {
-        info: (url: string) => Promise<PageInfo>;
-        summary: (url: string) => Promise<PageSummary>;
+        info: (url: string) => Promise<import("tentkeep").PageInfo>;
+        summary: (url: string) => Promise<import("tentkeep").PageSummary>;
     };
     rss: {
         feed: (feedUrl: any) => Promise<any>;
@@ -73,8 +73,8 @@ export declare const clients: {
             collections: (url: string) => Promise<any>;
             collectionProducts: (url: string, collectionHandle: string) => Promise<any>;
         };
-        productsSummary: (url: string, limit?: number) => Promise<GalleryEntry & {
-            items?: GalleryEntryItemProduct[] | undefined;
+        productsSummary: (url: string, limit?: number) => Promise<import("tentkeep").GalleryEntry & {
+            items?: import("tentkeep").GalleryEntryItemProduct[] | undefined;
         }>;
     };
     spotify: {
@@ -85,40 +85,41 @@ export declare const clients: {
         playlist: (playlistId: any) => any;
         playlistTracks: (playlistId: any) => any;
     };
-    tentkeep: (dataDomain: TKDataDomain, config?: import("tentkeep/dist/src/tentkeep.js").TKConfig | undefined) => {
+    tentkeep: (dataDomain: import("tentkeep").TKDataDomain, config?: import("tentkeep/dist/src/tentkeep.js").TKConfig | undefined) => {
         authSignIn: (strategy: string, redirect: string, options: import("tentkeep").AuthOptions) => void | Promise<import("tentkeep").Token>;
         authExchangeAccessCode: (code: any) => Promise<any>;
         authRefreshTokens: (refreshToken: string) => Promise<import("tentkeep").Token>;
-        getPageInfo: (url: string) => Promise<PageInfo>;
-        getPageSummary: (url: string) => Promise<PageSummary>;
-        getPlaces: (query: string) => Promise<GalleryEntryPlace[]>;
-        getPlaceDetail: (sourceId: string) => Promise<GalleryEntryPlace>;
+        getPageInfo: (url: string) => Promise<import("tentkeep").PageInfo>;
+        getPageSummary: (url: string) => Promise<import("tentkeep").PageSummary>;
+        getPlaces: (query: string) => Promise<import("tentkeep").GalleryEntryPlace[]>;
+        getPlaceDetail: (sourceId: string) => Promise<import("tentkeep").GalleryEntryPlace>;
         getPodcastSummary: (feedUrl: string) => Promise<any>;
-        getShopifyProductsSummary: (url: string, limit?: number | undefined) => Promise<GalleryEntrySummary>;
-        getWordpressPostsSummary: (url: string, limit?: number | undefined) => Promise<GalleryEntrySummary>;
+        getShopifyProductsSummary: (url: string, limit?: number | undefined) => Promise<import("tentkeep").GalleryEntrySummary>;
+        getWordpressPostsSummary: (url: string, limit?: number | undefined) => Promise<import("tentkeep").GalleryEntrySummary>;
         searchYoutubeChannels: (query: string, limit?: number | undefined) => Promise<any>;
-        getGalleries: () => Promise<Gallery[]>;
-        searchGalleries: (query: string) => Promise<SearchResults<Gallery>>;
-        getGalleriesNearby: (location: Location, options: {
+        getGalleries: () => Promise<import("tentkeep").Gallery[]>;
+        searchGalleries: (query: string) => Promise<import("tentkeep").SearchResults<import("tentkeep").Gallery>>;
+        getGalleriesNearby: (location: import("tentkeep").Location, options: {
             miles: number;
             limit: number;
-        }) => Promise<GalleryPlace[]>;
-        getGallery: (galleryId: number) => Promise<Gallery>;
-        getRecentGalleryEntryItems: (genericType?: GalleryEntryGenericTypes | undefined) => Promise<GalleryEntryItem[]>;
+        }) => Promise<import("tentkeep").GalleryPlace[]>;
+        getGallery: (galleryId: number) => Promise<import("tentkeep").Gallery>;
+        getRecentGalleryEntryItems: (genericType?: import("tentkeep").GalleryEntryGenericTypes | undefined) => Promise<import("tentkeep").GalleryEntryItem[]>;
         getTrendingGalleryEntryItemTopics: (limit?: number | undefined) => Promise<string[]>;
         getGalleriesForUser: (token: string) => Promise<import("tentkeep").UserGallery[]>;
         getGalleryImageUrl: (galleryId: number) => string;
-        getGalleryEntries: (galleryId: number, itemLimit?: number | undefined) => Promise<GalleryEntrySummary[]>;
+        getGalleryEntries: (galleryId: number, itemLimit?: number | undefined) => Promise<import("tentkeep").GalleryEntrySummary[]>;
         getGalleryUserRole: (token: string, galleryId: number) => Promise<any>;
-        joinGallery: (token: string, galleryId: number) => Promise<GalleryUser>;
-        saveGallery: (token: string, gallery: Gallery & {
+        joinGallery: (token: string, galleryId: number) => Promise<import("tentkeep").GalleryUser>;
+        saveGallery: (token: string, gallery: import("tentkeep").Gallery & {
             title: string;
-        }) => Promise<Gallery>;
+        }) => Promise<import("tentkeep").Gallery>;
         saveGalleryImage: (token: string, galleryId: number, image: any) => Promise<any>;
-        updateGallery: (token: string, gallery: Gallery & {
+        updateGallery: (token: string, gallery: import("tentkeep").Gallery & {
             id: number;
-        }) => Promise<Gallery>;
-        saveGalleryEntry: (token: string, galleryId: number, seed: GalleryEntrySeed) => Promise<GalleryEntry>;
+        }) => Promise<import("tentkeep").Gallery>;
+        saveGalleryEntry: (token: string, galleryId: number, seed: import("tentkeep").GalleryEntrySeed) => Promise<import("tentkeep").GalleryEntry>;
+        linkGalleries: (token: string, parentGalleryId: number, childGalleryIds: number[]) => Promise<any>;
         saveUserItemActivity: (token: string, itemActivity: any) => Promise<any>;
         searchEtsyShops: (query: string) => Promise<any>;
         searchMusicArtists: (query: string) => Promise<any>;
@@ -126,7 +127,7 @@ export declare const clients: {
     wordpress: {
         host: (_host: string) => {
             isWordpress(): Promise<boolean>;
-            summary(limit?: number): Promise<GalleryEntrySummary>;
+            summary(limit?: number): Promise<import("tentkeep").GalleryEntrySummary>;
             blockTypes: import("./src/clients/wordpress.js").WordpressResourceAPI;
             blocks: import("./src/clients/wordpress.js").WordpressResourceAPI;
             blockRevisions: import("./src/clients/wordpress.js").WordpressResourceAPI;
@@ -154,8 +155,8 @@ export declare const clients: {
         channelSummary: ({ username, channelId, }: {
             username: any;
             channelId: any;
-        }) => Promise<GalleryEntry & {
-            items: GalleryEntryItem[];
+        }) => Promise<import("tentkeep").GalleryEntry & {
+            items: import("tentkeep").GalleryEntryItem[];
         } & {
             publishedAt: Date;
             uploadsPlaylistId: any;
@@ -183,10 +184,6 @@ export declare const clients: {
 export default clients;
 export declare const logic: {
     tentkeep: {
-        canEdit: (galleryUser: GalleryUser) => import("tentkeep/dist/src/types/tentkeep-types.js").GalleryUserRoles | undefined;
+        canEdit: (galleryUser: import("tentkeep").GalleryUser) => import("tentkeep/dist/src/types/tentkeep-types.js").GalleryUserRoles | undefined;
     };
 };
-export { PageSummary, PageInfo };
-export { Location };
-export { TKDataDomain };
-export { BootrootsAttribute, findBootrootsAttribute, Gallery, GalleryEntry, GalleryEntrySummary, GalleryEntryPlace, GalleryEntryDetailPlace, GalleryEntryItem, GalleryEntryItemProduct, GalleryEntrySeed, GalleryEntryTypes, GalleryEntryGenericTypes, GalleryUser, GalleryAttribute, Place, PlaceLocation, GalleryPlace, SearchResults, };

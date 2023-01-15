@@ -9,31 +9,10 @@ import spotify from './src/clients/spotify.js'
 import wordpress from './src/clients/wordpress.js'
 import youtube from './src/clients/youtube.js'
 
-import tentkeep, {
-  BootrootsAttribute,
-  findBootrootsAttribute,
-  TKDataDomain,
-  GalleryEntryTypes,
-  Gallery,
-  GalleryEntry,
-  GalleryEntrySummary,
-  GalleryEntryPlace,
-  GalleryEntryItem,
-  GalleryEntryItemProduct,
-  GalleryEntrySeed,
-  GalleryUser,
-  GalleryAttribute,
-  GalleryEntryGenericTypes,
-  Place,
-  PlaceLocation,
-  GalleryEntryDetailPlace,
-  GalleryPlace,
-  PageSummary,
-  PageInfo,
-  Location,
-  SearchResults,
-} from 'tentkeep'
+import tentkeep from 'tentkeep'
 import { logic as tentkeepLogic } from 'tentkeep'
+
+export * from 'tentkeep'
 
 export const clients = {
   etsy,
@@ -53,30 +32,4 @@ export default clients
 
 export const logic = {
   tentkeep: tentkeepLogic,
-}
-
-export { PageSummary, PageInfo }
-export { Location }
-
-// MARK: TENTKEEP
-export { TKDataDomain }
-export {
-  BootrootsAttribute,
-  findBootrootsAttribute,
-  Gallery,
-  GalleryEntry,
-  GalleryEntrySummary,
-  GalleryEntryPlace,
-  GalleryEntryDetailPlace,
-  GalleryEntryItem,
-  GalleryEntryItemProduct,
-  GalleryEntrySeed,
-  GalleryEntryTypes,
-  GalleryEntryGenericTypes,
-  GalleryUser,
-  GalleryAttribute,
-  Place,
-  PlaceLocation,
-  GalleryPlace,
-  SearchResults,
 }

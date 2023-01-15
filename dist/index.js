@@ -8,8 +8,9 @@ import shopify from './src/clients/shopify.js';
 import spotify from './src/clients/spotify.js';
 import wordpress from './src/clients/wordpress.js';
 import youtube from './src/clients/youtube.js';
-import tentkeep, { BootrootsAttribute, findBootrootsAttribute, TKDataDomain, GalleryEntryTypes, } from 'tentkeep';
+import tentkeep from 'tentkeep';
 import { logic as tentkeepLogic } from 'tentkeep';
+export * from 'tentkeep';
 export const clients = {
     etsy,
     google,
@@ -27,6 +28,4 @@ export default clients;
 export const logic = {
     tentkeep: tentkeepLogic,
 };
-export { TKDataDomain };
-export { BootrootsAttribute, findBootrootsAttribute, GalleryEntryTypes, };
 //# sourceMappingURL=index.js.map

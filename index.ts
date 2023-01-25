@@ -12,8 +12,6 @@ import youtube from './src/clients/youtube.js'
 import tentkeep from 'tentkeep'
 import { logic as tentkeepLogic } from 'tentkeep'
 
-export * from 'tentkeep'
-
 export const clients = {
   etsy,
   google,

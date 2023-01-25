@@ -1,4 +1,4 @@
-import { GalleryEntry, GalleryEntryItemProduct } from '../../index.js';
+import { GalleryEntry, GalleryEntryItemProduct } from 'tentkeep';
 export declare type ShopifyProduct = {
     id: number;
     title: string;

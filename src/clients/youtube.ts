@@ -1,4 +1,4 @@
-import { GalleryEntrySummary } from '../../index.js'
+import { GalleryEntrySummary } from 'tentkeep'
 import { API, api, ApiStatusError } from '../api.js'
 import { forKey } from '../shareable/common.js'
 const host = 'https://www.googleapis.com/youtube/v3'

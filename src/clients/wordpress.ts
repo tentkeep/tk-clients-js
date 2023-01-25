@@ -1,4 +1,4 @@
-import { GalleryEntryItem, GalleryEntrySummary } from '../../index.js'
+import { GalleryEntryItem, GalleryEntrySummary } from 'tentkeep'
 import { api } from '../api.js'
 import { forKey, sanitizeUrl } from '../shareable/common.js'
 import { GalleryEntryItemTagSource } from 'tentkeep'

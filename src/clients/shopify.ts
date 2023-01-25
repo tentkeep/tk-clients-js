@@ -2,7 +2,7 @@ import {
   GalleryEntry,
   GalleryEntryItemProduct,
   GalleryEntryTypes,
-} from '../../index.js'
+} from 'tentkeep'
 import { sanitizeUrl } from '../shareable/common.js'
 import api from '../api.js'
 import { GalleryEntryItemProductVariant } from 'tentkeep/dist/src/types/tentkeep-types.js'

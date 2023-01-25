@@ -1,4 +1,3 @@
-export * from 'tentkeep';
 export declare const clients: {
     etsy: {
         favorites: (userId: any) => Promise<any>;

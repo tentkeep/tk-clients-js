@@ -1,4 +1,4 @@
-import { GalleryEntrySummary } from '../../index.js';
+import { GalleryEntrySummary } from 'tentkeep';
 export declare type YoutubeResourceParams = any & {
     part: string;
     maxResults: number;

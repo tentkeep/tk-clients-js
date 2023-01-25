@@ -1,4 +1,4 @@
-import { GalleryEntrySummary } from '../../index.js';
+import { GalleryEntrySummary } from 'tentkeep';
 export declare type WordpressOptions = {
     per_page?: number;
     include?: string;

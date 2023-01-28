@@ -35,18 +35,20 @@ const productsSummary = async (
       image: product.images[0]?.src,
       url: `${sanitizeUrl(url)}/products/${product.handle}`,
       date: product.updated_at,
-      variants: product.variants.map((variant) => {
-        return {
-          sourceId: `${variant.id}`,
-          title: variant.title,
-          url: `${sanitizeUrl(url)}/products/${product.handle}?variant=${
-            variant.id
-          }`,
-          date: variant.updated_at,
-          price: parseFloat(variant.price),
-          available: variant.available,
-        } as GalleryEntryItemProductVariant
-      }),
+      detail: {
+        variants: product.variants.map((variant) => {
+          return {
+            sourceId: `${variant.id}`,
+            title: variant.title,
+            url: `${sanitizeUrl(url)}/products/${product.handle}?variant=${
+              variant.id
+            }`,
+            date: variant.updated_at,
+            price: parseFloat(variant.price),
+            available: variant.available,
+          } as GalleryEntryItemProductVariant
+        }),
+      },
     } as GalleryEntryItemProduct
   })
   return {

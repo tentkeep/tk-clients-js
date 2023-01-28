@@ -118,7 +118,10 @@ export declare const clients: {
             id: number;
         }) => Promise<import("tentkeep").Gallery>;
         saveGalleryEntry: (token: string, galleryId: number, seed: import("tentkeep").GalleryEntrySeed) => Promise<import("tentkeep").GalleryEntry>;
-        linkGalleries: (token: string, parentGalleryId: number, childGalleryIds: number[]) => Promise<any>;
+        linkGalleries: (token: string, parentGalleryId: number, childGalleryIds: number[]) => Promise<{
+            galleryEntry: import("tentkeep").GalleryEntry;
+            galleryEntryItems: import("tentkeep").GalleryEntryItem[];
+        }>;
         saveUserItemActivity: (token: string, itemActivity: any) => Promise<any>;
         searchEtsyShops: (query: string) => Promise<any>;
         searchMusicArtists: (query: string) => Promise<any>;

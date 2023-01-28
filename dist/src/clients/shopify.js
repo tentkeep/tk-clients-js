@@ -16,16 +16,18 @@ const productsSummary = async (url, limit = 25) => {
             image: product.images[0]?.src,
             url: `${sanitizeUrl(url)}/products/${product.handle}`,
             date: product.updated_at,
-            variants: product.variants.map((variant) => {
-                return {
-                    sourceId: `${variant.id}`,
-                    title: variant.title,
-                    url: `${sanitizeUrl(url)}/products/${product.handle}?variant=${variant.id}`,
-                    date: variant.updated_at,
-                    price: parseFloat(variant.price),
-                    available: variant.available,
-                };
-            }),
+            detail: {
+                variants: product.variants.map((variant) => {
+                    return {
+                        sourceId: `${variant.id}`,
+                        title: variant.title,
+                        url: `${sanitizeUrl(url)}/products/${product.handle}?variant=${variant.id}`,
+                        date: variant.updated_at,
+                        price: parseFloat(variant.price),
+                        available: variant.available,
+                    };
+                }),
+            },
         };
     });
     return {

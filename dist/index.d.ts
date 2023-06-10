@@ -1,4 +1,8 @@
 export declare const clients: {
+    discourse: (host: string) => {
+        search: (query: string) => Promise<import("./src/clients/discourse.js").SearchResponse>;
+        users: (userId: number) => Promise<any>;
+    };
     etsy: {
         favorites: (userId: any) => Promise<any>;
         listing: (listingId: any) => Promise<any>;

@@ -1,5 +1,18 @@
 import { api } from '../api.js';
 export default (host) => ({
+    privateMessage: (fromUsername, toUsername, subject, message) => discourse(`${host}/posts.json`, {
+        method: 'post',
+        headers: {
+            'Api-Username': fromUsername,
+            'Content-Type': 'application/json',
+        },
+        body: {
+            title: subject,
+            raw: message,
+            target_recipients: toUsername,
+            archetype: 'private_message',
+        },
+    }),
     search: (query) => discourse(`${host}/search/query?term=${query}`, {
         headers: { Accept: 'application/json' },
     }),
@@ -12,8 +25,10 @@ const discourse = (url, options = null) => {
     _options.headers = {
         ...options?.headers,
         'Api-Key': apiKey,
-        'Api-Username': apiUsername,
     };
+    if (!_options.headers['Api-Username']) {
+        _options.headers['Api-Username'] = apiUsername;
+    }
     const _url = url instanceof URL ? url : new URL(url);
     return api(_url, _options);
 };

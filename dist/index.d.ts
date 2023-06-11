@@ -1,5 +1,6 @@
 export declare const clients: {
     discourse: (host: string) => {
+        privateMessage: (fromUsername: string, toUsername: string, subject: string, message: string) => Promise<any>;
         search: (query: string) => Promise<import("./src/clients/discourse.js").SearchResponse>;
         users: (userId: number) => Promise<any>;
     };

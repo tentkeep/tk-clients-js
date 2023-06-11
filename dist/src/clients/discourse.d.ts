@@ -1,4 +1,5 @@
 declare const _default: (host: string) => {
+    privateMessage: (fromUsername: string, toUsername: string, subject: string, message: string) => Promise<any>;
     search: (query: string) => Promise<SearchResponse>;
     users: (userId: number) => Promise<any>;
 };

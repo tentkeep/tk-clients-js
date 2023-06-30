@@ -1,5 +1,5 @@
 declare const _default: (host: string) => {
-    groupMembers: (groupId: number) => Promise<GroupMembers>;
+    groupMembers: (groupName: string) => Promise<GroupMembers>;
     privateMessage: (fromUsername: string, toUsername: string, subject: string, message: string) => Promise<any>;
     search: (query: string) => Promise<SearchResponse>;
     users: (userId: number) => Promise<any>;

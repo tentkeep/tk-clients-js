@@ -1,6 +1,6 @@
 import { api } from '../api.js';
 export default (host) => ({
-    groupMembers: (groupId) => discourse(`${host}/groups/${groupId}/members.json`),
+    groupMembers: (groupName) => discourse(`${host}/groups/${groupName}/members.json`),
     privateMessage: (fromUsername, toUsername, subject, message) => discourse(`${host}/posts.json`, {
         method: 'post',
         headers: {

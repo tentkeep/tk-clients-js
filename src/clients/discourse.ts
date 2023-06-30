@@ -1,9 +1,9 @@
 import { API, api } from '../api.js'
 
 export default (host: string) => ({
-  groupMembers: (groupId: number) =>
+  groupMembers: (groupName: string) =>
     discourse(
-      `${host}/groups/${groupId}/members.json`,
+      `${host}/groups/${groupName}/members.json`,
     ) as Promise<GroupMembers>,
   privateMessage: (
     fromUsername: string,

@@ -1,4 +1,5 @@
 declare const _default: (host: string) => {
+    groupMembers: (groupId: number) => Promise<GroupMembers>;
     privateMessage: (fromUsername: string, toUsername: string, subject: string, message: string) => Promise<any>;
     search: (query: string) => Promise<SearchResponse>;
     users: (userId: number) => Promise<any>;
@@ -66,4 +67,24 @@ export declare type SearchResponse = {
         tag_ids: number[];
         group_ids: number[];
     };
+};
+export declare type GroupMembers = {
+    members: UserMember[];
+    owners: UserMember[];
+    meta: {
+        total: number;
+        limit: number;
+        offset: number;
+    };
+};
+export declare type UserMember = {
+    id: number;
+    username?: string;
+    name?: string;
+    avatar_template?: string;
+    title?: string;
+    last_posted_at?: string;
+    last_seen_at?: string;
+    added_at?: string;
+    timezone?: string;
 };

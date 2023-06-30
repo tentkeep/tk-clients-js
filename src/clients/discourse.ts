@@ -1,6 +1,10 @@
 import { API, api } from '../api.js'
 
 export default (host: string) => ({
+  groupMembers: (groupId: number) =>
+    discourse(
+      `${host}/groups/${groupId}/members.json`,
+    ) as Promise<GroupMembers>,
   privateMessage: (
     fromUsername: string,
     toUsername: string,
@@ -104,4 +108,25 @@ export type SearchResponse = {
     tag_ids: number[]
     group_ids: number[]
   }
+}
+
+export type GroupMembers = {
+  members: UserMember[]
+  owners: UserMember[]
+  meta: {
+    total: number
+    limit: number
+    offset: number
+  }
+}
+export type UserMember = {
+  id: number
+  username?: string
+  name?: string
+  avatar_template?: string
+  title?: string
+  last_posted_at?: string
+  last_seen_at?: string
+  added_at?: string
+  timezone?: string
 }

@@ -10,7 +10,8 @@
     "copy-dist-files": "cp -rL page-phantomjs-meta-grabber.js dist/",
     "debug": ". config/local.sh && ts-node --esm --project tsconfig.json ./tests/debug.ts",
     "test": "test",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "ship": "./scripts/ship.sh"
   },
   "repository": {
     "type": "git",

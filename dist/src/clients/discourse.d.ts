@@ -82,7 +82,8 @@ export declare type Group = {
     owner_usernames?: string;
     automatic_membership_email_domains?: string;
     visibility_level?: GroupVisibility;
-    messageable_level?: number;
+    messageable_level?: MessageableLevel;
+    members_visibility_level?: GroupVisibility;
     primary_group?: boolean;
     flair_icon?: string;
     flair_upload_id?: 0;

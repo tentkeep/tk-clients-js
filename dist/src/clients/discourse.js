@@ -1,5 +1,19 @@
 import { api } from '../api.js';
 export default (host) => ({
+    addGroupMembers: (groupId, usernames) => discourse(`${host}/groups/${groupId}/members.json`, {
+        method: 'put',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: { usernames: usernames.join(',') },
+    }),
+    createGroup: (group) => discourse(`${host}/admin/groups.json`, {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: { group },
+    }),
     groupMembers: (groupName) => discourse(`${host}/groups/${groupName}/members.json`),
     privateMessage: (fromUsername, toUsername, subject, message) => discourse(`${host}/posts.json`, {
         method: 'post',
@@ -12,6 +26,13 @@ export default (host) => ({
             raw: message,
             target_recipients: toUsername,
             archetype: 'private_message',
+        },
+    }),
+    replyToTopic: (topicId, message) => discourse(`${host}/groups/posts.json`, {
+        method: 'post',
+        body: {
+            topic_id: topicId,
+            raw: message,
         },
     }),
     search: (query) => discourse(`${host}/search/query?term=${query}`, {
@@ -33,4 +54,12 @@ const discourse = (url, options = null) => {
     const _url = url instanceof URL ? url : new URL(url);
     return api(_url, _options);
 };
+export var GroupVisibility;
+(function (GroupVisibility) {
+    GroupVisibility[GroupVisibility["Everyone"] = 0] = "Everyone";
+    GroupVisibility[GroupVisibility["LoggedOnUser"] = 1] = "LoggedOnUser";
+    GroupVisibility[GroupVisibility["OwnersMembersModerators"] = 2] = "OwnersMembersModerators";
+    GroupVisibility[GroupVisibility["OwnersModerators"] = 3] = "OwnersModerators";
+    GroupVisibility[GroupVisibility["Owners"] = 4] = "Owners";
+})(GroupVisibility = GroupVisibility || (GroupVisibility = {}));
 //# sourceMappingURL=discourse.js.map

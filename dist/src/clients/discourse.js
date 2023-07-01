@@ -62,4 +62,13 @@ export var GroupVisibility;
     GroupVisibility[GroupVisibility["OwnersModerators"] = 3] = "OwnersModerators";
     GroupVisibility[GroupVisibility["Owners"] = 4] = "Owners";
 })(GroupVisibility = GroupVisibility || (GroupVisibility = {}));
+export var MessageableLevel;
+(function (MessageableLevel) {
+    MessageableLevel[MessageableLevel["Nobody"] = 0] = "Nobody";
+    MessageableLevel[MessageableLevel["Admins"] = 1] = "Admins";
+    MessageableLevel[MessageableLevel["AdminsModerators"] = 2] = "AdminsModerators";
+    MessageableLevel[MessageableLevel["AdminsModeratorsMembers"] = 3] = "AdminsModeratorsMembers";
+    MessageableLevel[MessageableLevel["AdminsModeratorsOwners"] = 4] = "AdminsModeratorsOwners";
+    MessageableLevel[MessageableLevel["Everyone"] = 99] = "Everyone";
+})(MessageableLevel = MessageableLevel || (MessageableLevel = {}));
 //# sourceMappingURL=discourse.js.map

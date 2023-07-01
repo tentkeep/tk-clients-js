@@ -143,6 +143,7 @@ export type Group = {
   owner_usernames?: string
   automatic_membership_email_domains?: string
   visibility_level?: GroupVisibility
+  messageable_level?: number
   primary_group?: boolean
   flair_icon?: string
   flair_upload_id?: 0
@@ -162,6 +163,14 @@ export enum GroupVisibility {
   OwnersMembersModerators = 2,
   OwnersModerators = 3,
   Owners = 4,
+}
+export enum MessageableLevel {
+  Nobody = 0,
+  Admins = 1,
+  AdminsModerators = 2,
+  AdminsModeratorsMembers = 3,
+  AdminsModeratorsOwners = 4,
+  Everyone = 99,
 }
 export type GroupMembers = {
   members: UserMember[]

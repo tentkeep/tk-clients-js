@@ -1,6 +1,6 @@
 declare const _default: (host: string) => {
-    addGroupMembers: (groupId: number, usernames: string[]) => Promise<AddGroupMembersResponse>;
-    addGroupOwners: (groupId: number, usernames: string[]) => Promise<AddGroupMembersResponse>;
+    addGroupMembers: (groupId: number, usernames: string[], actingUser: string | 'admin') => Promise<AddGroupMembersResponse>;
+    addGroupOwners: (groupId: number, usernames: string[], actingUser: string | 'admin') => Promise<AddGroupMembersResponse>;
     createGroup: (group: Group) => Promise<{
         basic_group: Group;
     }>;

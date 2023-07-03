@@ -1,21 +1,31 @@
 import { API, api } from '../api.js'
 
 export default (host: string) => ({
-  addGroupMembers: (groupId: number, usernames: string[]) =>
+  addGroupMembers: (
+    groupId: number,
+    usernames: string[],
+    actingUser: string | 'admin',
+  ) =>
     discourse(`${host}/groups/${groupId}/members.json`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
+        'Api-Username': actingUser === 'admin' ? undefined : actingUser,
       },
       body: { usernames: usernames.join(',') },
     }) as Promise<AddGroupMembersResponse>,
-  addGroupOwners: (groupId: number, usernames: string[]) =>
+  addGroupOwners: (
+    groupId: number,
+    usernames: string[],
+    actingUser: string | 'admin',
+  ) =>
     discourse(`${host}/groups/${groupId}/owners.json`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
+        'Api-Username': actingUser === 'admin' ? undefined : actingUser,
       },
       body: { usernames: usernames.join(',') },
     }) as Promise<AddGroupMembersResponse>,

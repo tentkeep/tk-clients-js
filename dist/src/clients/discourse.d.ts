@@ -6,6 +6,7 @@ declare const _default: (host: string) => {
     }>;
     groupMembers: (groupName: string) => Promise<GroupMembers>;
     privateMessage: (fromUsername: string, toUsername: string, subject: string, message: string) => Promise<NewPostResponse>;
+    removeGroupMembers: (groupId: number, usernames: string[], actingUser: string | 'admin') => Promise<AddGroupMembersResponse>;
     replyToTopic: (topicId: number, message: string) => Promise<NewPostResponse>;
     search: (query: string) => Promise<SearchResponse>;
     users: (userId: number) => Promise<any>;

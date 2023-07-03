@@ -60,6 +60,20 @@ export default (host: string) => ({
         archetype: 'private_message',
       },
     }) as Promise<NewPostResponse>,
+  removeGroupMembers: (
+    groupId: number,
+    usernames: string[],
+    actingUser: string | 'admin',
+  ) =>
+    discourse(`${host}/groups/${groupId}/members.json`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'Api-Username': actingUser === 'admin' ? undefined : actingUser,
+      },
+      body: { usernames: usernames.join(',') },
+    }) as Promise<AddGroupMembersResponse>,
   replyToTopic: (topicId: number, message: string) =>
     discourse(`${host}/groups/posts.json`, {
       method: 'post',

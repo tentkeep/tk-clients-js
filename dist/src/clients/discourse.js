@@ -39,6 +39,15 @@ export default (host) => ({
             archetype: 'private_message',
         },
     }),
+    removeGroupMembers: (groupId, usernames, actingUser) => discourse(`${host}/groups/${groupId}/members.json`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            'Api-Username': actingUser === 'admin' ? undefined : actingUser,
+        },
+        body: { usernames: usernames.join(',') },
+    }),
     replyToTopic: (topicId, message) => discourse(`${host}/groups/posts.json`, {
         method: 'post',
         body: {

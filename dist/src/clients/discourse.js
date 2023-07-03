@@ -4,6 +4,15 @@ export default (host) => ({
         method: 'put',
         headers: {
             'Content-Type': 'application/json',
+            Accept: 'application/json',
+        },
+        body: { usernames: usernames.join(',') },
+    }),
+    addGroupOwners: (groupId, usernames) => discourse(`${host}/groups/${groupId}/owners.json`, {
+        method: 'put',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
         },
         body: { usernames: usernames.join(',') },
     }),

@@ -6,6 +6,16 @@ export default (host: string) => ({
       method: 'put',
       headers: {
         'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: { usernames: usernames.join(',') },
+    }) as Promise<AddGroupMembersResponse>,
+  addGroupOwners: (groupId: number, usernames: string[]) =>
+    discourse(`${host}/groups/${groupId}/owners.json`, {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
       },
       body: { usernames: usernames.join(',') },
     }) as Promise<AddGroupMembersResponse>,

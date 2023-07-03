@@ -1,6 +1,7 @@
 export declare const clients: {
     discourse: (host: string) => {
         addGroupMembers: (groupId: number, usernames: string[]) => Promise<import("./src/clients/discourse.js").AddGroupMembersResponse>;
+        addGroupOwners: (groupId: number, usernames: string[]) => Promise<import("./src/clients/discourse.js").AddGroupMembersResponse>;
         createGroup: (group: import("./src/clients/discourse.js").Group) => Promise<{
             basic_group: import("./src/clients/discourse.js").Group;
         }>;

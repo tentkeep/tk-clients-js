@@ -4,7 +4,9 @@ declare const _default: (host: string) => {
     createGroup: (group: Group) => Promise<{
         basic_group: Group;
     }>;
-    group: (groupName: string) => Promise<Group>;
+    group: (groupName: string) => Promise<{
+        group: Group;
+    }>;
     groupMembers: (groupName: string) => Promise<GroupMembers>;
     privateMessage: (fromUsername: string, toUsername: string, subject: string, message: string) => Promise<NewPostResponse>;
     removeGroupMembers: (groupId: number, usernames: string[], actingUser: string | 'admin') => Promise<AddGroupMembersResponse>;

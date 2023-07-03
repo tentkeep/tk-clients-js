@@ -38,7 +38,7 @@ export default (host: string) => ({
       body: { group },
     }) as Promise<{ basic_group: Group }>,
   group: (groupName: string) =>
-    discourse(`${host}/groups/${groupName}.json`) as Promise<Group>,
+    discourse(`${host}/groups/${groupName}.json`) as Promise<{ group: Group }>,
   groupMembers: (groupName: string) =>
     discourse(
       `${host}/groups/${groupName}/members.json`,

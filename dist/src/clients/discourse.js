@@ -25,6 +25,7 @@ export default (host) => ({
         },
         body: { group },
     }),
+    group: (groupName) => discourse(`${host}/groups/${groupName}.json`),
     groupMembers: (groupName) => discourse(`${host}/groups/${groupName}/members.json`),
     privateMessage: (fromUsername, toUsername, subject, message) => discourse(`${host}/posts.json`, {
         method: 'post',

@@ -26,6 +26,10 @@ function mapPlace(place) {
     if (!place.place_id || !place.name) {
         throw new ApiStatusError(412, 'Missing sourceId or title');
     }
+    function findComponent(type) {
+        return (place.address_components?.find((c) => c.types.includes(type))
+            ?.short_name ?? '');
+    }
     return {
         sourceId: place.place_id,
         title: place.name,
@@ -44,9 +48,5 @@ function mapPlace(place) {
             longitude: place.geometry?.location?.lng,
         },
     };
-    function findComponent(type) {
-        return (place.address_components?.find((c) => c.types.includes(type))
-            ?.short_name ?? '');
-    }
 }
 //# sourceMappingURL=google.js.map

@@ -6,6 +6,7 @@ import {
 import { sanitizeUrl } from '../shareable/common.js'
 import api from '../api.js'
 import { GalleryEntryItemProductVariant } from 'tentkeep/dist/src/types/tentkeep-types.js'
+import { nanoid } from 'nanoid'
 
 const raw = {
   products: (
@@ -25,9 +26,10 @@ const raw = {
 const productsSummary = async (
   url: string,
   limit: number = 25,
-): Promise<GalleryEntry & { items?: GalleryEntryItemProduct[] }> => {
+): Promise<GalleryEntry & { items: GalleryEntryItemProduct[] }> => {
   const products = await raw.products(url, limit)
   const productItems = products.products.map((product: ShopifyProduct) => {
+    const id = nanoid(14)
     return {
       sourceId: product.id.toString(),
       title: productSummaryTitle(product),
@@ -36,8 +38,10 @@ const productsSummary = async (
       url: `${sanitizeUrl(url)}/products/${product.handle}`,
       date: product.updated_at,
       detail: {
+        id,
         variants: product.variants.map((variant) => {
           return {
+            id: `${id}-${variant.id}`,
             sourceId: `${variant.id}`,
             title: variant.title,
             url: `${sanitizeUrl(url)}/products/${product.handle}?variant=${

@@ -1,6 +1,5 @@
 import { GalleryEntryPlace } from 'tentkeep'
 import api, { ApiStatusError } from '../api.js'
-import { GalleryEntryDetailPlace } from 'tentkeep'
 
 const raw = {
   places: {
@@ -71,6 +70,14 @@ function mapPlace(place: GooglePlace): GalleryEntryPlace {
   if (!place.place_id || !place.name) {
     throw new ApiStatusError(412, 'Missing sourceId or title')
   }
+
+  function findComponent(type: GooglePlaceTypes) {
+    return (
+      place.address_components?.find((c) => c.types.includes(type))
+        ?.short_name ?? ''
+    )
+  }
+
   return {
     sourceId: place.place_id!,
     title: place.name!,
@@ -87,13 +94,6 @@ function mapPlace(place: GooglePlace): GalleryEntryPlace {
       phone: place.international_phone_number,
       latitude: place.geometry?.location?.lat as unknown as number,
       longitude: place.geometry?.location?.lng as unknown as number,
-    } as GalleryEntryDetailPlace,
-  }
-
-  function findComponent(type: GooglePlaceTypes) {
-    return (
-      place.address_components?.find((c) => c.types.includes(type))
-        ?.short_name ?? ''
-    )
-  }
+    },
+  } as GalleryEntryPlace
 }

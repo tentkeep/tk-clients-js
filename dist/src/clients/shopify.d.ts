@@ -57,7 +57,7 @@ declare const _default: {
         collectionProducts: (url: string, collectionHandle: string) => Promise<any>;
     };
     productsSummary: (url: string, limit?: number) => Promise<GalleryEntry & {
-        items?: GalleryEntryItemProduct[] | undefined;
+        items: GalleryEntryItemProduct[];
     }>;
 };
 export default _default;

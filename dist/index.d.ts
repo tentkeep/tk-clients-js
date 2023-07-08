@@ -89,7 +89,7 @@ export declare const clients: {
             collectionProducts: (url: string, collectionHandle: string) => Promise<any>;
         };
         productsSummary: (url: string, limit?: number) => Promise<import("tentkeep").GalleryEntry & {
-            items?: import("tentkeep").GalleryEntryItemProduct[] | undefined;
+            items: import("tentkeep").GalleryEntryItemProduct[];
         }>;
     };
     spotify: {
@@ -100,47 +100,146 @@ export declare const clients: {
         playlist: (playlistId: any) => any;
         playlistTracks: (playlistId: any) => any;
     };
-    tentkeep: (dataDomain: import("tentkeep").TKDataDomain, config?: import("tentkeep/dist/src/tentkeep.js").TKConfig | undefined) => {
-        authSignIn: (strategy: string, redirect: string, options: import("tentkeep").AuthOptions) => void | Promise<import("tentkeep").Token>;
-        authExchangeAccessCode: (code: any) => Promise<any>;
-        authRefreshTokens: (refreshToken: string) => Promise<import("tentkeep").Token>;
-        getPageInfo: (url: string) => Promise<import("tentkeep").PageInfo>;
-        getPageSummary: (url: string) => Promise<import("tentkeep").PageSummary>;
-        getPlaces: (query: string) => Promise<import("tentkeep").GalleryEntryPlace[]>;
-        getPlaceDetail: (sourceId: string) => Promise<import("tentkeep").GalleryEntryPlace>;
-        getPodcastSummary: (feedUrl: string) => Promise<any>;
-        getShopifyProductsSummary: (url: string, limit?: number | undefined) => Promise<import("tentkeep").GalleryEntrySummary>;
-        getWordpressPostsSummary: (url: string, limit?: number | undefined) => Promise<import("tentkeep").GalleryEntrySummary>;
-        searchYoutubeChannels: (query: string, limit?: number | undefined) => Promise<any>;
-        getGalleries: () => Promise<import("tentkeep").Gallery[]>;
-        searchGalleries: (query: string) => Promise<import("tentkeep").SearchResults<import("tentkeep").Gallery>>;
+    tentkeep: (dataDomain: import("tentkeep").TKDataDomain, key: string, config?: import("tentkeep/dist/src/tentkeep.js").TKConfig | undefined) => {
+        setApiKey: (key: string) => void;
+        auth: {
+            authSignIn: (strategy: string, redirect: string, options: import("tentkeep").AuthOptions) => void | Promise<import("tentkeep").Token>;
+            authExchangeAccessCode: (code: string) => Promise<import("tentkeep").TokenUser>;
+            authRefreshTokens: (refreshToken: string) => Promise<import("tentkeep").TokenUser>;
+            signOut: (token: string) => Promise<any>;
+        };
+        images: {
+            saveImages: (token: string, entityType: "galleries" | "stores", entityId: number, entityImages: import("tentkeep").EntityImageUpload[], attributes: Record<string, any>) => Promise<{
+                images: import("tentkeep").EntityImage[];
+            }>;
+            proxy: (imageUrl: string) => Promise<any>;
+        };
+        proxy: {
+            getPageInfo: (url: string) => Promise<import("tentkeep").PageInfo>;
+            getPageSummary: (url: string) => Promise<import("tentkeep").PageSummary>;
+            getPlaces: (query: string) => Promise<import("tentkeep").GalleryEntryPlace[]>;
+            getPlaceDetail: (sourceId: string) => Promise<import("tentkeep").GalleryEntryPlace>;
+            getPodcastSummary: (feedUrl: string) => Promise<any>;
+            getShopifyProductsSummary: (url: string, limit?: number | undefined) => Promise<import("tentkeep").GalleryEntrySummary>;
+            getWordpressPostsSummary: (url: string, limit?: number | undefined) => Promise<import("tentkeep").GalleryEntrySummary>;
+            searchYoutubeChannels: (query: string, limit?: number | undefined) => Promise<any>;
+            searchEtsyShops: (query: string) => Promise<any>;
+            searchMusicArtists: (query: string) => Promise<any>;
+        };
+        session: {
+            getEnv: () => Promise<any>;
+            getMapKitToken: () => Promise<any>;
+            getSessionToken: (key: string) => Promise<any>;
+        };
+        shop: {
+            createProductScheme: (token: string, storeId: number, productScheme: import("tentkeep").ProductScheme) => Promise<any>;
+            createBucket: (token: string, storeId: number, bucket: import("tentkeep").Bucket) => Promise<{
+                locations: import("tentkeep").PlaceDetail[];
+                buckets: import("tentkeep").Bucket[];
+            }>;
+            createBucketProducts: (token: string, bucketId: number, bucketProducts: import("tentkeep").BucketProduct[]) => Promise<{
+                bucketProducts: import("tentkeep").BucketProduct[];
+            }>;
+            getStore: (token: string, storeId: number) => Promise<import("tentkeep").Store>;
+            registerStore: (token: string, galleryId: number, storeId: number) => Promise<{
+                url: string;
+            }>;
+            getStoreStatus: (token: string, storeId: number) => Promise<{
+                status: string;
+            }>;
+            getStoreBuckets: (token: string, storeId: number) => Promise<{
+                buckets: import("tentkeep").Bucket[];
+            }>;
+            getStoreOrders: (token: string, storeId: number) => Promise<{
+                orders: import("tentkeep").Order[];
+            }>;
+            getProductBundleForProduct: (token: string, productId: number) => Promise<import("tentkeep").ProductBundle>;
+            getProductBundles: (token: string, storeId: number) => Promise<{
+                bundles: import("tentkeep").ProductBundle[];
+            }>;
+            getBucketQuantities: (token: string | undefined, storeId: number) => Promise<import("tentkeep").BucketQuantitiesResponse>;
+            getBucketProducts: (token: string, bucketId: number) => Promise<{
+                bucketProducts: import("tentkeep").BucketProduct[];
+            }>;
+            checkout: (token: string | undefined, orders: {
+                orders: number[];
+            }) => Promise<import("tentkeep").CheckoutSession>;
+            getCheckoutRedirectUrl: () => string;
+            getOrdersBundles: (token: string) => Promise<{
+                ordersBundles: import("tentkeep").OrdersBundle[];
+            }>;
+            getOrdersBundlesDrafting: (token: string) => Promise<{
+                ordersBundles: import("tentkeep").OrdersBundle[];
+            }>;
+            getLatestOpenOrdersBundle: (token: string) => Promise<{
+                ordersBundle: import("tentkeep").OrdersBundle;
+            }>;
+            saveOrders: (token: string | undefined, orders: import("tentkeep").Order[]) => Promise<{
+                orders: import("tentkeep").Order[];
+            }>;
+            getOrdersBundle: (token: string, ordersBundleId: number) => Promise<{
+                ordersBundle: import("tentkeep").OrdersBundle;
+            }>;
+            saveOrdersBundle: (token: string | undefined, ordersBundle: import("tentkeep").OrdersBundle) => Promise<{
+                ordersBundle: import("tentkeep").OrdersBundle;
+            }>;
+            startGroupOrdersBundle: (token: string, ordersBundleId: number) => Promise<{
+                ordersBundle: import("tentkeep").OrdersBundle;
+            }>;
+        };
+        onUnauthorized: (callback: () => void) => void;
+        search: (query: string, options?: import("tentkeep").SearchOptions | undefined) => Promise<import("tentkeep").SearchResponse>;
+        searchUsers: (token: string, query: string, options?: import("tentkeep").SearchOptions | undefined) => Promise<import("tentkeep").SearchResponse>;
+        getGroup: (token: string, groupName: string) => Promise<{
+            group: import("tentkeep").Group;
+        }>;
+        updateGroup: (token: string, groupId: number, changes: {
+            members?: string[] | undefined;
+            owners?: string[] | undefined;
+            remove?: string[] | undefined;
+        }) => Promise<any>;
+        getGalleries: (options?: import("tentkeep").SearchOptions | undefined) => Promise<import("tentkeep").TKResponse | import("tentkeep").Gallery>;
+        searchGalleries: (query: string, options?: import("tentkeep").SearchOptions | undefined) => Promise<import("tentkeep").SearchResponse>;
+        searchGalleryEntryItems: (query: string, options?: import("tentkeep").SearchOptions | undefined) => Promise<import("tentkeep").SearchResponse>;
         getGalleriesNearby: (location: import("tentkeep").Location, options: {
             miles: number;
             limit: number;
         }) => Promise<import("tentkeep").GalleryPlace[]>;
+        getGalleriesForGalleryEntries: (galleryEntryIds: number[]) => Promise<import("tentkeep").TKResponse>;
         getGallery: (galleryId: number) => Promise<import("tentkeep").Gallery>;
+        getGalleryEntryItem: (galleryEntryItemId: number) => Promise<import("tentkeep").GalleryEntryItem>;
         getRecentGalleryEntryItems: (genericType?: import("tentkeep").GalleryEntryGenericTypes | undefined) => Promise<import("tentkeep").GalleryEntryItem[]>;
         getTrendingGalleryEntryItemTopics: (limit?: number | undefined) => Promise<string[]>;
         getGalleriesForUser: (token: string) => Promise<import("tentkeep").UserGallery[]>;
+        getGalleryUsers: (token: string, galleryId: number) => Promise<import("tentkeep").GalleryUsersSummary>;
         getGalleryImageUrl: (galleryId: number) => string;
         getGalleryEntries: (galleryId: number, itemLimit?: number | undefined) => Promise<import("tentkeep").GalleryEntrySummary[]>;
         getGalleryUserRole: (token: string, galleryId: number) => Promise<any>;
+        followGallery: (token: string, galleryId: number) => Promise<{
+            galleryUsers: import("tentkeep").GalleryUser[];
+        }>;
+        unfollowGallery: (token: string, galleryId: number) => Promise<{
+            galleryUsers: import("tentkeep").GalleryUser[];
+        }>;
         joinGallery: (token: string, galleryId: number) => Promise<import("tentkeep").GalleryUser>;
         saveGallery: (token: string, gallery: import("tentkeep").Gallery & {
             title: string;
         }) => Promise<import("tentkeep").Gallery>;
-        saveGalleryImage: (token: string, galleryId: number, image: any) => Promise<any>;
         updateGallery: (token: string, gallery: import("tentkeep").Gallery & {
             id: number;
         }) => Promise<import("tentkeep").Gallery>;
+        addGalleryAdmin: (token: string, galleryId: number, users: ({
+            id: number;
+        } | {
+            username: string;
+        })[]) => Promise<import("tentkeep").GalleryUsersSummary>;
         saveGalleryEntry: (token: string, galleryId: number, seed: import("tentkeep").GalleryEntrySeed) => Promise<import("tentkeep").GalleryEntry>;
         linkGalleries: (token: string, parentGalleryId: number, childGalleryIds: number[]) => Promise<{
             galleryEntry: import("tentkeep").GalleryEntry;
             galleryEntryItems: import("tentkeep").GalleryEntryItem[];
         }>;
         saveUserItemActivity: (token: string, itemActivity: any) => Promise<any>;
-        searchEtsyShops: (query: string) => Promise<any>;
-        searchMusicArtists: (query: string) => Promise<any>;
+        findOrCreateStoreForGallery: (token: string, galleryId: number) => Promise<any>;
     };
     wordpress: {
         host: (_host: string) => {
@@ -202,6 +301,6 @@ export declare const clients: {
 export default clients;
 export declare const logic: {
     tentkeep: {
-        canEdit: (galleryUser: import("tentkeep").GalleryUser) => import("tentkeep/dist/src/types/tentkeep-types.js").GalleryUserRoles | undefined;
+        canEdit: (galleryUser: import("tentkeep").GalleryUser) => import("tentkeep").GalleryUserRoles | undefined;
     };
 };

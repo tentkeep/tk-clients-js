@@ -1,6 +1,7 @@
 import { GalleryEntryTypes, } from 'tentkeep';
 import { sanitizeUrl } from '../shareable/common.js';
 import api from '../api.js';
+import { nanoid } from 'nanoid';
 const raw = {
     products: (url, limit = 250) => api(productsUrl(url, limit)),
     collections: (url) => api(`${sanitizeUrl(url)}/collections.json?limit=250`),
@@ -9,6 +10,7 @@ const raw = {
 const productsSummary = async (url, limit = 25) => {
     const products = await raw.products(url, limit);
     const productItems = products.products.map((product) => {
+        const id = nanoid(14);
         return {
             sourceId: product.id.toString(),
             title: productSummaryTitle(product),
@@ -17,8 +19,10 @@ const productsSummary = async (url, limit = 25) => {
             url: `${sanitizeUrl(url)}/products/${product.handle}`,
             date: product.updated_at,
             detail: {
+                id,
                 variants: product.variants.map((variant) => {
                     return {
+                        id: `${id}-${variant.id}`,
                         sourceId: `${variant.id}`,
                         title: variant.title,
                         url: `${sanitizeUrl(url)}/products/${product.handle}?variant=${variant.id}`,

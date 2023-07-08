@@ -9,6 +9,7 @@ console.info(
   pageInfo,
   podcastSummary,
   shopifyProductSummary,
+  shopifyRaw,
   spotify,
   tentkeep,
   wordpress,
@@ -16,7 +17,7 @@ console.info(
 )
 console.log('ARG', arg)
 
-googlePlaces()
+shopifyProductSummary()
 
 // OPTIONS BELOW
 
@@ -55,7 +56,10 @@ function wordpress() {
 }
 
 function shopifyProductSummary() {
-  clients.shopify.productsSummary(arg as string, 5).then(print)
+  clients.shopify.productsSummary(arg as string, 250).then(print)
+}
+function shopifyRaw() {
+  clients.shopify.raw.products(arg as string, 250).then(print)
 }
 
 function spotify() {

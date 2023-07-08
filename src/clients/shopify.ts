@@ -118,7 +118,10 @@ export default {
 }
 
 function productsUrl(url: string, limit: number): string {
-  return `${sanitizeUrl(url)}/products.json?limit=${limit}`
+  const _url = new URL(url)
+  _url.pathname = '/products.json'
+  _url.searchParams.append('limit', limit.toString())
+  return _url.toString()
 }
 
 function productSummaryTitle(product: ShopifyProduct): string {

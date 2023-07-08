@@ -45,7 +45,9 @@ export default {
 };
 function productsUrl(url, limit) {
     const _url = new URL(url);
-    _url.pathname = '/products.json';
+    if (!_url.pathname.endsWith('/products.json')) {
+        _url.pathname = '/products.json';
+    }
     _url.searchParams.append('limit', limit.toString());
     return _url.toString();
 }

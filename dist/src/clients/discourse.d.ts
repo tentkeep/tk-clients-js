@@ -12,7 +12,7 @@ declare const _default: (host: string) => {
     removeGroupMembers: (groupId: number, usernames: string[], actingUser: string | 'admin') => Promise<AddGroupMembersResponse>;
     replyToTopic: (topicId: number, message: string) => Promise<NewPostResponse>;
     search: (query: string) => Promise<SearchResponse>;
-    user: <T extends string | number>(user: T) => Promise<DiscourseUser>;
+    user: <T extends string | number>(user: T) => Promise<T extends number ? DiscourseUser : DiscourseUserPlus>;
 };
 export default _default;
 export declare type SearchResponse = {
@@ -152,6 +152,29 @@ export declare type DiscourseUser = {
     tl3_requirements: any;
     groups: Group[];
     external_ids: any;
+};
+export declare type DiscourseUserPlus = {
+    user_badges: any[];
+    badges: any[];
+    badge_types: any[];
+    users: {
+        id: number;
+        username: string;
+        name?: string;
+        avatar_template?: string;
+        flair_name?: string;
+        admin: boolean;
+        moderator: boolean;
+        trust_level: number;
+    }[];
+    user: DiscourseUser & {
+        group_users: {
+            group_id: number;
+            user_id: number;
+            notification_level: number;
+        }[];
+        user_option: any;
+    };
 };
 export declare type Group = {
     id?: number;

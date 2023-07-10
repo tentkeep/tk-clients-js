@@ -88,7 +88,9 @@ export default (host: string) => ({
     discourse(`${host}/search/query?term=${query}`, {
       headers: { Accept: 'application/json' },
     }) as Promise<SearchResponse>,
-  user: <T extends number | string>(user: T): Promise<DiscourseUser> => {
+  user: <T extends number | string>(
+    user: T,
+  ): Promise<T extends number ? DiscourseUser : DiscourseUserPlus> => {
     return typeof user === 'number'
       ? discourse(`${host}/admin/users/${user}.json`)
       : discourse(`${host}/u/${user}.json`)
@@ -248,6 +250,30 @@ export type DiscourseUser = {
   tl3_requirements: any
   groups: Group[]
   external_ids: any
+}
+
+export type DiscourseUserPlus = {
+  user_badges: any[]
+  badges: any[]
+  badge_types: any[]
+  users: {
+    id: number
+    username: string
+    name?: string
+    avatar_template?: string
+    flair_name?: string
+    admin: boolean
+    moderator: boolean
+    trust_level: number
+  }[]
+  user: DiscourseUser & {
+    group_users: {
+      group_id: number
+      user_id: number
+      notification_level: number
+    }[]
+    user_option: any
+  }
 }
 
 export type Group = {

@@ -59,7 +59,11 @@ export default (host) => ({
     search: (query) => discourse(`${host}/search/query?term=${query}`, {
         headers: { Accept: 'application/json' },
     }),
-    users: (userId) => discourse(`${host}/admin/users/${userId}.json`),
+    user: (user) => {
+        return typeof user === 'number'
+            ? discourse(`${host}/admin/users/${user}.json`)
+            : discourse(`${host}/u/${user}.json`);
+    },
 });
 const discourse = (url, options = null) => {
     const apiKey = process.env.DISCOURSE_KEY;

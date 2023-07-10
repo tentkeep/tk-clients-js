@@ -13,7 +13,7 @@ export declare const clients: {
         removeGroupMembers: (groupId: number, usernames: string[], actingUser: string) => Promise<import("./src/clients/discourse.js").AddGroupMembersResponse>;
         replyToTopic: (topicId: number, message: string) => Promise<import("./src/clients/discourse.js").NewPostResponse>;
         search: (query: string) => Promise<import("./src/clients/discourse.js").SearchResponse>;
-        users: (userId: number) => Promise<any>;
+        user: <T extends string | number>(user: T) => Promise<import("./src/clients/discourse.js").DiscourseUser>;
     };
     etsy: {
         favorites: (userId: any) => Promise<any>;

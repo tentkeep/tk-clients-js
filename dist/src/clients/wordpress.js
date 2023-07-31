@@ -108,7 +108,7 @@ function extractImageLink(post) {
         post.featured_image_urls?.full?.[0] ||
         post.featured_image_urls?.medium?.[0] ||
         post.featured_image_urls?.large?.[0] ||
-        (post.content?.rendered?.match(/img src="(.+?)"/) || [])[1]);
+        (post.content?.rendered?.match(/img[^>]*src=\\?"(.+?)\\?"/) || [])[1]);
 }
 function extractPostAuthor(post) {
     return post.yoast_head_json?.author || post.author_info?.name || '';

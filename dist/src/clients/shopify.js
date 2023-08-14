@@ -12,7 +12,7 @@ const productsSummary = async (url, limit = 25) => {
     const productItems = products.products.map((product) => {
         return {
             sourceId: product.id.toString(),
-            title: productSummaryTitle(product),
+            title: product.title,
             description: product.body_html.replace(/\s\s\s+/, ' '),
             image: product.images[0]?.src,
             url: `${sanitizeUrl(url)}/products/${product.handle}`,
@@ -52,9 +52,5 @@ function productsUrl(url, limit) {
     }
     _url.searchParams.append('limit', limit.toString());
     return _url.toString();
-}
-function productSummaryTitle(product) {
-    return (product.title +
-        (product.variants.length > 1 ? ` - ${product.variants[0]?.title}` : ''));
 }
 //# sourceMappingURL=shopify.js.map

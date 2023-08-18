@@ -32,7 +32,7 @@ const productsSummary = async (
     return {
       sourceId: product.id.toString(),
       title: product.title,
-      description: product.body_html.replace(/\s\s\s+/, ' '),
+      description: product.body_html?.replace(/\s\s\s+/, ' '),
       image: product.images[0]?.src,
       url: `${sanitizeUrl(url)}/products/${product.handle}`,
       date: product.updated_at,

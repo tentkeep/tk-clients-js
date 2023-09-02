@@ -22,10 +22,7 @@ declare type YoutubeEntry = {
     playlists: any;
 };
 declare const _default: {
-    channelSummary: ({ username, channelId, }: {
-        username: any;
-        channelId: any;
-    }) => Promise<GalleryEntrySummary & YoutubeEntry>;
+    summarize: (channelId: string) => Promise<GalleryEntrySummary & YoutubeEntry>;
     channelForUser: (username: any) => Promise<any>;
     playlistsForChannel: (channelId: any) => Promise<any>;
     playlist: (playlistId: any, opts?: {}) => Promise<any>;

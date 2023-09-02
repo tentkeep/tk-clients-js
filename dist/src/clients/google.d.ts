@@ -1,6 +1,3 @@
-import { GalleryEntryPlace } from '@tentkeep/tentkeep';
-declare function searchPlaces(query: string): Promise<GalleryEntryPlace[]>;
-declare function placeDetails(placeId: string): Promise<GalleryEntryPlace>;
 declare const _default: {
     raw: {
         places: {
@@ -10,8 +7,8 @@ declare const _default: {
             }>;
         };
     };
-    searchPlaces: typeof searchPlaces;
-    placeDetails: typeof placeDetails;
+    search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry>;
+    summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
 };
 export default _default;
 declare type GooglePlaceTypes = 'street_number' | 'route' | 'locality' | 'administrative_area_level_1' | 'administrative_area_level_2' | 'administrative_area_level_3' | 'country' | 'postal_code' | 'political';

@@ -1,3 +1,4 @@
+import { GalleryEntryTypes, } from '@tentkeep/tentkeep';
 import { api } from '../api.js';
 import { forKey } from '../shareable/common.js';
 const flatten = (obj, keepAsArray, keyPath = '') => {
@@ -29,12 +30,23 @@ const feed = (feedUrl) => api(feedUrl)
     flattenChannel(channel);
     return channel;
 });
-export default {
-    feed,
-    podcastSummary: (feedUrl) => feed(feedUrl).then((podcast) => {
+const contentClient = {
+    search: async (query) => {
+        const podcast = await feed(query);
+        return {
+            sourceId: query,
+            entryType: GalleryEntryTypes.Podcast,
+            genericType: 'podcast',
+            title: podcast.title,
+            description: podcast.description,
+            image: podcast.image,
+            url: query,
+        };
+    },
+    summarize: (feedUrl) => feed(feedUrl).then((podcast) => {
         const { title, description, image, item } = podcast;
         const pubDateComparator = (a, b) => {
-            return new Date(b.pubDate) - new Date(a.pubDate);
+            return new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime();
         };
         const recentItems = item.sort(pubDateComparator);
         console.log('Podcast with episode count:', recentItems.length);
@@ -46,17 +58,26 @@ export default {
             url: feedUrl,
             items: recentItems.map((i) => ({
                 sourceId: Buffer.from(i.enclosure.$url).toString('base64'),
+                entryType: GalleryEntryTypes.Podcast,
+                genericType: 'podcast',
                 title: i.title,
                 description: i.description,
                 url: i.enclosure.$url,
-                date: new Date(i.pubDate).toISOString(),
-                pubDate: i.pubDate,
-                author: i['itunes:author'],
-                duration: i['itunes:duration'],
-                length: i.enclosure.$length,
-                type: i.enclosure.$type,
+                date: new Date(i.pubDate),
+                images: [image.url],
+                detail: {
+                    pubDate: i.pubDate,
+                    author: i['itunes:author'],
+                    duration: i['itunes:duration'],
+                    length: i.enclosure.$length,
+                    type: i.enclosure.$type,
+                },
             })),
         };
     }),
+};
+export default {
+    feed,
+    ...contentClient,
 };
 //# sourceMappingURL=rss.js.map

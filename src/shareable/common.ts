@@ -2,7 +2,7 @@ export const forKey = (obj, callback) => {
   Object.keys(obj).forEach(callback)
 }
 
-export const tryGet = (accessor, fallback = undefined) => {
+export const tryGet = (accessor, fallback: any = undefined) => {
   try {
     return accessor()
   } catch {

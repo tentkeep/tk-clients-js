@@ -1,4 +1,8 @@
-import { GalleryEntrySummary } from '@tentkeep/tentkeep'
+import {
+  GalleryEntryItem,
+  GalleryEntrySummary,
+  GalleryEntryTypes,
+} from '@tentkeep/tentkeep'
 import { API, api, ApiStatusError } from '../api.js'
 import { forKey } from '../shareable/common.js'
 const host = 'https://www.googleapis.com/youtube/v3'
@@ -92,19 +96,13 @@ type YoutubeEntry = {
 
 export default {
   ...resourcesApi,
-  channelSummary: async ({
-    username,
-    channelId,
-  }): Promise<GalleryEntrySummary & YoutubeEntry> => {
-    let channelResponse
-    if (username) {
-      channelResponse = await channelForUser(username)
-    } else {
-      channelResponse = await resourcesApi.channels({
-        id: channelId,
-        part: 'snippet,contentDetails',
-      })
-    }
+  summarize: async (
+    channelId: string,
+  ): Promise<GalleryEntrySummary & YoutubeEntry> => {
+    const channelResponse = await resourcesApi.channels({
+      id: channelId,
+      part: 'snippet,contentDetails',
+    })
     if (!channelResponse.items || channelResponse.items.length !== 1) {
       throw new Error('404')
     }
@@ -121,24 +119,29 @@ export default {
       title: channel.snippet.title,
       image: img.url,
       url: `https://youtube.com/channel/${channel.id}`,
-      items: uploadedVideos.map((i) => ({
-        sourceId: i.id,
-        title: i.snippet.title,
-        description: i.snippet.description,
-        image: i.snippet.thumbnails.high.url,
-        url: `https://youtube.com/video/${i.contentDetails.videoId}`,
-        date: new Date(i.contentDetails.videoPublishedAt).toISOString(),
-        videoId: i.contentDetails.videoId,
-        // kind: i.kind,
-        // channelId: i.snippet.channelId,
-        // channelTitle: i.snippet.channelTitle,
-        // duration: i.contentDetails.duration, // requires video fetch
-        // definition: i.contentDetails.definition, // requires video fetch
-        // tags: (i.snippet.tags || []).join('||'), // requires video fetch
-        // views: i.statistics.viewCount, // requires video fetch
-        // likes: i.statistics.likeCount, // requires video fetch
-        // dislikes: i.statistics.dislikeCount // requires video fetch
-      })),
+      items: uploadedVideos.map(
+        (i) =>
+          ({
+            sourceId: i.id,
+            entryType: GalleryEntryTypes.YouTube,
+            genericType: 'video',
+            title: i.snippet.title,
+            description: i.snippet.description,
+            images: [i.snippet.thumbnails.high.url],
+            url: `https://youtube.com/video/${i.contentDetails.videoId}`,
+            date: new Date(i.contentDetails.videoPublishedAt),
+            videoId: i.contentDetails.videoId,
+            // kind: i.kind,
+            // channelId: i.snippet.channelId,
+            // channelTitle: i.snippet.channelTitle,
+            // duration: i.contentDetails.duration, // requires video fetch
+            // definition: i.contentDetails.definition, // requires video fetch
+            // tags: (i.snippet.tags || []).join('||'), // requires video fetch
+            // views: i.statistics.viewCount, // requires video fetch
+            // likes: i.statistics.likeCount, // requires video fetch
+            // dislikes: i.statistics.dislikeCount // requires video fetch
+          } as GalleryEntryItem),
+      ),
       publishedAt: channel.snippet.publishedAt,
       uploadsPlaylistId,
       imageWidth: img.width,

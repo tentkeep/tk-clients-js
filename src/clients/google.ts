@@ -1,5 +1,6 @@
 import { GalleryEntryPlace } from '@tentkeep/tentkeep'
 import api, { ApiStatusError } from '../api.js'
+import { TentkeepClient } from './tentkeep-client.js'
 
 const raw = {
   places: {
@@ -12,7 +13,7 @@ const raw = {
   },
 }
 
-async function searchPlaces(query: string): Promise<GalleryEntryPlace[]> {
+async function search(query: string): Promise<GalleryEntryPlace[]> {
   return (await raw.places.search(query)).candidates.map(mapPlace)
 }
 
@@ -20,10 +21,20 @@ async function placeDetails(placeId: string): Promise<GalleryEntryPlace> {
   return mapPlace((await raw.places.details(placeId)).result)
 }
 
-export default {
-  raw,
-  searchPlaces,
+const contentClient = {
+  search,
+  summarize: (sourceId: string) => {
+    return placeDetails(sourceId).then((place: any) => {
+      place.items = []
+      return place
+    })
+  },
   placeDetails,
+} as TentkeepClient
+
+export default {
+  ...contentClient,
+  raw,
 }
 
 const searchFields =

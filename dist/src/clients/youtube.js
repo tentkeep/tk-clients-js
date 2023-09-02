@@ -1,3 +1,4 @@
+import { GalleryEntryTypes, } from '@tentkeep/tentkeep';
 import { api, ApiStatusError } from '../api.js';
 import { forKey } from '../shareable/common.js';
 const host = 'https://www.googleapis.com/youtube/v3';
@@ -57,17 +58,11 @@ const allVideosForPlaylist = async (playlistId) => {
 };
 export default {
     ...resourcesApi,
-    channelSummary: async ({ username, channelId, }) => {
-        let channelResponse;
-        if (username) {
-            channelResponse = await channelForUser(username);
-        }
-        else {
-            channelResponse = await resourcesApi.channels({
-                id: channelId,
-                part: 'snippet,contentDetails',
-            });
-        }
+    summarize: async (channelId) => {
+        const channelResponse = await resourcesApi.channels({
+            id: channelId,
+            part: 'snippet,contentDetails',
+        });
         if (!channelResponse.items || channelResponse.items.length !== 1) {
             throw new Error('404');
         }
@@ -85,11 +80,13 @@ export default {
             url: `https://youtube.com/channel/${channel.id}`,
             items: uploadedVideos.map((i) => ({
                 sourceId: i.id,
+                entryType: GalleryEntryTypes.YouTube,
+                genericType: 'video',
                 title: i.snippet.title,
                 description: i.snippet.description,
-                image: i.snippet.thumbnails.high.url,
+                images: [i.snippet.thumbnails.high.url],
                 url: `https://youtube.com/video/${i.contentDetails.videoId}`,
-                date: new Date(i.contentDetails.videoPublishedAt).toISOString(),
+                date: new Date(i.contentDetails.videoPublishedAt),
                 videoId: i.contentDetails.videoId,
             })),
             publishedAt: channel.snippet.publishedAt,

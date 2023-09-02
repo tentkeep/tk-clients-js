@@ -1,3 +1,4 @@
+import { GalleryEntryTypes, } from '@tentkeep/tentkeep';
 import { api } from '../api.js';
 import { tryGet } from '../shareable/common.js';
 const host = 'https://openapi.etsy.com/v3';
@@ -16,27 +17,32 @@ const allShopListings = async (shopId) => {
     return listings;
 };
 const listingImages = (listingId) => etsy(`${host}/v2/listings/${listingId}/images`);
-export default {
-    listing: (listingId) => etsy(`${host}/v2/listings/${listingId}`),
-    listingImages,
-    searchShops: (name) => etsy(`${host}/application/shops?shop_name=${name}`),
-    getShop,
-    getShopWithListings,
-    shopListings,
-    allShopListings,
-    shopSummary: async (shopId) => {
-        const shop = (await getShop(shopId)).results[0];
+const searchShops = (name) => etsy(`${host}/application/shops?shop_name=${name}`);
+const contentClient = {
+    search: async (query) => {
+        return (await searchShops(query)).results.map((shop) => ({
+            sourceId: shop.shop_id.toString(),
+            entryType: GalleryEntryTypes.Etsy,
+            genericType: 'shop',
+            title: shop.shop_name,
+            description: shop.title,
+            image: shop.icon_url_fullxfull,
+            url: shop.url,
+        }));
+    },
+    summarize: async (sourceId) => {
+        const shop = (await getShop(sourceId)).results[0];
         if (!shop) {
             throw new Error('Shop not found');
         }
-        const listings = await allShopListings(shopId);
+        const listings = await allShopListings(sourceId);
         const fromEpoch = (epochSeconds) => {
             var d = new Date(0);
             d.setUTCSeconds(epochSeconds);
-            return d.toISOString();
+            return d;
         };
         return {
-            sourceId: shopId,
+            sourceId: sourceId,
             title: shop.shop_name,
             description: shop.title,
             image: shop.icon_url_fullxfull,
@@ -44,21 +50,35 @@ export default {
             userId: shop.user_id,
             items: listings.results.map((l) => ({
                 sourceId: l.listing_id,
+                entryType: GalleryEntryTypes.Etsy,
+                genericType: 'shop',
                 title: l.title,
                 description: l.description,
                 image: tryGet(() => l.Images[0].url_570xN),
+                images: l.Images,
                 url: l.url,
                 date: fromEpoch(l.last_modified_tsz),
-                price: l.price,
-                currency: l.currency_code,
-                tags: (l.tags || []).join('||'),
-                views: l.views,
-                customizable: l.is_customizable,
-                digital: l.is_digital,
-                images: l.Images,
+                detail: {
+                    price: l.price,
+                    currency: l.currency_code,
+                    tags: (l.tags || []).join('||'),
+                    views: l.views,
+                    customizable: l.is_customizable,
+                    digital: l.is_digital,
+                },
             })),
         };
     },
+};
+export default {
+    listing: (listingId) => etsy(`${host}/v2/listings/${listingId}`),
+    listingImages,
+    searchShops,
+    getShop,
+    getShopWithListings,
+    shopListings,
+    allShopListings,
+    ...contentClient,
 };
 const etsy = (url, options = null) => {
     const apiKey = process.env.CLIENTS_ETSY_API_KEY;

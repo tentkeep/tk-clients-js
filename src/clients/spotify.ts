@@ -15,7 +15,7 @@ export default {
 
 var cachedToken = null
 
-const spotify = async (url, options) => {
+const spotify = async (url: string, options?) => {
   if (!cachedToken) {
     cachedToken = await token()
   }

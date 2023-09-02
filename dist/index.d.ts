@@ -16,22 +16,66 @@ export declare const clients: {
         user: <T extends string | number>(user: T) => Promise<T extends number ? import("./src/clients/discourse.js").DiscourseUser : import("./src/clients/discourse.js").DiscourseUserPlus>;
     };
     etsy: {
+        search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry>;
+        summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
         listing: (listingId: any) => Promise<any>;
         listingImages: (listingId: any) => Promise<any>;
-        searchShops: (name: any) => Promise<any>;
+        searchShops: (name: any) => Promise<{
+            count: number;
+            results: {
+                shop_id: number;
+                shop_name: string;
+                user_id: number;
+                create_date: number;
+                created_timestamp: number;
+                title?: string | undefined;
+                announcement?: string | undefined;
+                currency_code: string;
+                is_vacation: boolean;
+                vacation_message?: string | undefined;
+                sale_message?: string | undefined;
+                digital_sale_message?: string | undefined;
+                update_date: number;
+                updated_timestamp: number;
+                listing_active_count: number;
+                digital_listing_count: number;
+                login_name: string;
+                accepts_custom_requests: boolean;
+                vacation_autoreply?: string | undefined;
+                url: string;
+                image_url_760x100?: string | undefined;
+                num_favorers: number;
+                languages: string[];
+                icon_url_fullxfull?: string | undefined;
+                is_using_structured_policies: boolean;
+                has_onboarded_structured_policies: boolean;
+                include_dispute_form_link: boolean;
+                is_direct_checkout_onboarded: boolean;
+                is_etsy_payments_onboarded: boolean;
+                is_opted_in_to_buyer_promise: boolean;
+                is_calculated_eligible: boolean;
+                is_shop_us_based: boolean;
+                transaction_sold_count: number;
+                shipping_from_country_iso?: string | undefined;
+                shop_location_country_iso?: string | undefined;
+                policy_welcome?: string | undefined;
+                policy_payment?: string | undefined;
+                policy_shipping?: string | undefined;
+                policy_refunds?: string | undefined;
+                policy_additional?: string | undefined;
+                policy_seller_info?: string | undefined;
+                policy_update_date: number;
+                policy_has_private_receipt_info: boolean;
+                has_unstructured_policies: boolean;
+                policy_privacy?: string | undefined;
+                review_average?: string | undefined;
+                review_count?: string | undefined;
+            }[];
+        }>;
         getShop: (shopId: any) => Promise<any>;
         getShopWithListings: (shopId: any) => Promise<any>;
         shopListings: (shopId: any, page?: number) => Promise<any>;
         allShopListings: (shopId: any) => Promise<any>;
-        shopSummary: (shopId: any) => Promise<{
-            sourceId: any;
-            title: any;
-            description: any;
-            image: any;
-            url: any;
-            userId: any;
-            items: any;
-        }>;
     };
     google: {
         raw: {
@@ -44,41 +88,61 @@ export declare const clients: {
                 }>;
             };
         };
-        searchPlaces: (query: string) => Promise<import("@tentkeep/tentkeep").GalleryEntryPlace[]>;
-        placeDetails: (placeId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntryPlace>;
+        search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry>;
+        summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
     };
     itunes: {
-        podcasts: (query: any) => Promise<any>;
-    };
-    musickit: {
-        searchArtists: (term: any) => Promise<any>;
-        getArtist: (artistId: any) => Promise<any>;
-        getArtistAlbums: (artistId: any) => Promise<any>;
-        getAlbum: (albumId: any) => Promise<any>;
-        getAlbums: (albumIds: any) => Promise<any>;
-        artistSummary: (artistId: any) => Promise<{
-            sourceId: any;
-            title: any;
-            image: any;
-            items: any;
+        search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry>;
+        summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
+        podcasts: (query: any) => Promise<{
+            resultCount: number;
+            results: [{
+                wrapperType: "track";
+                kind: "podcast";
+                collectionId: number;
+                trackId: number;
+                artistName: string;
+                collectionName: string;
+                trackName: string;
+                collectionCensoredName: string;
+                trackCensoredName: string;
+                collectionViewUrl: string;
+                feedUrl: string;
+                trackViewUrl: string;
+                artworkUrl30: string;
+                artworkUrl60: string;
+                artworkUrl100: string;
+                collectionPrice: number;
+                trackPrice: number;
+                collectionHdPrice: number;
+                releaseDate: string;
+                collectionExplicitness: "notExplicit";
+                trackExplicitness: "cleaned";
+                trackCount: number;
+                trackTimeMillis: number;
+                country: string;
+                currency: string;
+                primaryGenreName: string;
+                contentAdvisoryRating: "Clean";
+                artworkUrl600: string;
+                genreIds: string[];
+                genres: string[];
+            }];
         }>;
     };
+    musickit: import("./src/clients/tentkeep-client.js").TentkeepClient;
     page: {
         info: (url: string) => Promise<import("@tentkeep/tentkeep").PageInfo>;
         summary: (url: string) => Promise<import("@tentkeep/tentkeep").PageSummary>;
     };
     rss: {
+        search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry>;
+        summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
         feed: (feedUrl: any) => Promise<any>;
-        podcastSummary: (feedUrl: any) => Promise<{
-            sourceId: string;
-            title: any;
-            description: any;
-            image: any;
-            url: any;
-            items: any;
-        }>;
     };
     shopify: {
+        search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry>;
+        summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
         raw: {
             products: (url: string, limit?: number) => Promise<{
                 products: import("./src/clients/shopify.js").ShopifyProduct[];
@@ -86,21 +150,6 @@ export declare const clients: {
             collections: (url: string) => Promise<any>;
             collectionProducts: (url: string, collectionHandle: string) => Promise<any>;
         };
-        productsSummary: (url: string, limit?: number) => Promise<import("@tentkeep/tentkeep").Entity & {
-            id?: number | undefined;
-            galleryId?: number | undefined;
-            createdBy?: number | undefined;
-            entryType?: import("@tentkeep/tentkeep").GalleryEntryTypes | undefined;
-            genericType?: import("@tentkeep/tentkeep").GalleryEntryGenericTypes | undefined;
-            sourceId?: string | undefined;
-            title?: string | undefined;
-            description?: string | undefined;
-            image?: string | undefined;
-            url?: string | undefined;
-            detail?: any;
-        } & {
-            items: import("@tentkeep/tentkeep").GalleryEntryItemProduct[];
-        }>;
     };
     spotify: {
         searchArtists: (query: any) => any;
@@ -291,7 +340,7 @@ export declare const clients: {
         saveUserItemActivity: (token: string, itemActivity: any) => Promise<any>;
         findOrCreateStoreForGallery: (token: string, galleryId: number) => Promise<any>;
     };
-    wordpress: {
+    wordpress: import("./src/clients/tentkeep-client.js").TentkeepClient & {
         host: (_host: string) => {
             isWordpress(): Promise<boolean>;
             summary(limit?: number): Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
@@ -319,10 +368,7 @@ export declare const clients: {
         };
     };
     youtube: {
-        channelSummary: ({ username, channelId, }: {
-            username: any;
-            channelId: any;
-        }) => Promise<import("@tentkeep/tentkeep").Entity & {
+        summarize: (channelId: string) => Promise<import("@tentkeep/tentkeep").Entity & {
             id?: number | undefined;
             galleryId?: number | undefined;
             createdBy?: number | undefined;

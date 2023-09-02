@@ -1,4 +1,4 @@
-import { GalleryEntryItemProduct, GalleryEntryTypes } from '@tentkeep/tentkeep';
+import { GalleryEntry } from '@tentkeep/tentkeep';
 export declare type ShopifyProduct = {
     id: number;
     title: string;
@@ -49,6 +49,8 @@ export declare type ShopifyProduct = {
     }[];
 };
 declare const _default: {
+    search: (query: string, options?: Record<string, any> | undefined) => Promise<GalleryEntry>;
+    summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
     raw: {
         products: (url: string, limit?: number) => Promise<{
             products: ShopifyProduct[];
@@ -56,20 +58,5 @@ declare const _default: {
         collections: (url: string) => Promise<any>;
         collectionProducts: (url: string, collectionHandle: string) => Promise<any>;
     };
-    productsSummary: (url: string, limit?: number) => Promise<import("@tentkeep/tentkeep").Entity & {
-        id?: number | undefined;
-        galleryId?: number | undefined;
-        createdBy?: number | undefined;
-        entryType?: GalleryEntryTypes | undefined;
-        genericType?: import("@tentkeep/tentkeep").GalleryEntryGenericTypes | undefined;
-        sourceId?: string | undefined;
-        title?: string | undefined;
-        description?: string | undefined;
-        image?: string | undefined;
-        url?: string | undefined;
-        detail?: any;
-    } & {
-        items: GalleryEntryItemProduct[];
-    }>;
 };
 export default _default;

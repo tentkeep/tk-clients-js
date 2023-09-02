@@ -5,16 +5,25 @@ const raw = {
         details: (placeId) => google(`/details/json?place_id=${placeId}`),
     },
 };
-async function searchPlaces(query) {
+async function search(query) {
     return (await raw.places.search(query)).candidates.map(mapPlace);
 }
 async function placeDetails(placeId) {
     return mapPlace((await raw.places.details(placeId)).result);
 }
-export default {
-    raw,
-    searchPlaces,
+const contentClient = {
+    search,
+    summarize: (sourceId) => {
+        return placeDetails(sourceId).then((place) => {
+            place.items = [];
+            return place;
+        });
+    },
     placeDetails,
+};
+export default {
+    ...contentClient,
+    raw,
 };
 const searchFields = 'place_id,formatted_address,name,rating,opening_hours,geometry,types';
 function google(path) {

@@ -3,7 +3,7 @@ import X2JS from 'x2js'
 import { sanitizeUrl } from '../shareable/common.js'
 import api, { ApiStatusError } from '../api.js'
 import clients from '../../index.js'
-import { PageInfo, PageSummary, PageInfoFeatures } from 'tentkeep'
+import { PageInfo, PageSummary, PageInfoFeatures } from '@tentkeep/tentkeep'
 
 /**
  * PageSummary requires scraping the site with phantom = time

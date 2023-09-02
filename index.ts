@@ -10,8 +10,8 @@ import spotify from './src/clients/spotify.js'
 import wordpress from './src/clients/wordpress.js'
 import youtube from './src/clients/youtube.js'
 
-import tentkeep from 'tentkeep'
-import { logic as tentkeepLogic } from 'tentkeep'
+import tentkeep from '@tentkeep/tentkeep'
+import { logic as tentkeepLogic } from '@tentkeep/tentkeep'
 
 export const clients = {
   discourse,

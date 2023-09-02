@@ -1,4 +1,4 @@
-import { GalleryEntryTypes, } from 'tentkeep';
+import { GalleryEntryTypes, } from '@tentkeep/tentkeep';
 import { sanitizeUrl } from '../shareable/common.js';
 import api from '../api.js';
 const raw = {
@@ -14,7 +14,7 @@ const productsSummary = async (url, limit = 25) => {
             sourceId: product.id.toString(),
             title: product.title,
             description: product.body_html?.replace(/\s\s\s+/, ' '),
-            image: product.images[0]?.src,
+            images: product.images.map((i) => i.src),
             url: `${sanitizeUrl(url)}/products/${product.handle}`,
             date: product.updated_at,
             detail: {

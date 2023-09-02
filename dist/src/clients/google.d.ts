@@ -1,4 +1,4 @@
-import { GalleryEntryPlace } from 'tentkeep';
+import { GalleryEntryPlace } from '@tentkeep/tentkeep';
 declare function searchPlaces(query: string): Promise<GalleryEntryPlace[]>;
 declare function placeDetails(placeId: string): Promise<GalleryEntryPlace>;
 declare const _default: {

@@ -1,4 +1,4 @@
-import { GalleryEntry, GalleryEntryItemProduct } from 'tentkeep';
+import { GalleryEntryItemProduct, GalleryEntryTypes } from '@tentkeep/tentkeep';
 export declare type ShopifyProduct = {
     id: number;
     title: string;
@@ -56,7 +56,19 @@ declare const _default: {
         collections: (url: string) => Promise<any>;
         collectionProducts: (url: string, collectionHandle: string) => Promise<any>;
     };
-    productsSummary: (url: string, limit?: number) => Promise<GalleryEntry & {
+    productsSummary: (url: string, limit?: number) => Promise<import("@tentkeep/tentkeep").Entity & {
+        id?: number | undefined;
+        galleryId?: number | undefined;
+        createdBy?: number | undefined;
+        entryType?: GalleryEntryTypes | undefined;
+        genericType?: import("@tentkeep/tentkeep").GalleryEntryGenericTypes | undefined;
+        sourceId?: string | undefined;
+        title?: string | undefined;
+        description?: string | undefined;
+        image?: string | undefined;
+        url?: string | undefined;
+        detail?: any;
+    } & {
         items: GalleryEntryItemProduct[];
     }>;
 };

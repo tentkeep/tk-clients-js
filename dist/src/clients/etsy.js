@@ -1,9 +1,9 @@
 import { api } from '../api.js';
 import { tryGet } from '../shareable/common.js';
-const host = 'https://openapi.etsy.com';
-const getShop = (shopId) => etsy(`${host}/v2/shops/${shopId}`);
-const getShopWithListings = (shopId) => etsy(`${host}/v2/shops/${shopId}?includes=Listings:200/Images(url_170x135,url_570xN)`);
-const shopListings = (shopId, page = 1) => etsy(`${host}/v2/shops/${shopId}/listings/active?limit=100&includes=Images(url_170x135,url_570xN)&page=${page}`);
+const host = 'https://openapi.etsy.com/v3';
+const getShop = (shopId) => etsy(`${host}/application/shops/${shopId}`);
+const getShopWithListings = (shopId) => etsy(`${host}/application/shops/${shopId}?includes=Listings:200/Images(url_170x135,url_570xN)`);
+const shopListings = (shopId, page = 1) => etsy(`${host}/application/shops/${shopId}/listings/active?limit=100&includes=Images(url_170x135,url_570xN)&page=${page}`);
 const allShopListings = async (shopId) => {
     const listings = await shopListings(shopId);
     let nextPage = listings.pagination.next_page;
@@ -17,11 +17,9 @@ const allShopListings = async (shopId) => {
 };
 const listingImages = (listingId) => etsy(`${host}/v2/listings/${listingId}/images`);
 export default {
-    favorites: (userId) => etsy(`${host}/v2/users/${userId}/favorites/listings`),
     listing: (listingId) => etsy(`${host}/v2/listings/${listingId}`),
     listingImages,
-    userShops: (userId) => etsy(`${host}/v2/users/${userId}/shops`),
-    searchShops: (name) => etsy(`${host}/v2/shops?shop_name=${name}`),
+    searchShops: (name) => etsy(`${host}/application/shops?shop_name=${name}`),
     getShop,
     getShopWithListings,
     shopListings,

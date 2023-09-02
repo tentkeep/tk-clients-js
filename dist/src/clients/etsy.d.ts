@@ -1,8 +1,6 @@
 declare const _default: {
-    favorites: (userId: any) => Promise<any>;
     listing: (listingId: any) => Promise<any>;
     listingImages: (listingId: any) => Promise<any>;
-    userShops: (userId: any) => Promise<any>;
     searchShops: (name: any) => Promise<any>;
     getShop: (shopId: any) => Promise<any>;
     getShopWithListings: (shopId: any) => Promise<any>;

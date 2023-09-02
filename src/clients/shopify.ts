@@ -2,10 +2,10 @@ import {
   GalleryEntry,
   GalleryEntryItemProduct,
   GalleryEntryTypes,
-} from 'tentkeep'
+} from '@tentkeep/tentkeep'
 import { sanitizeUrl } from '../shareable/common.js'
 import api from '../api.js'
-import { GalleryEntryItemProductVariant } from 'tentkeep/dist/src/types/tentkeep-types.js'
+import { GalleryEntryItemProductVariant } from '@tentkeep/tentkeep'
 
 const raw = {
   products: (
@@ -33,7 +33,7 @@ const productsSummary = async (
       sourceId: product.id.toString(),
       title: product.title,
       description: product.body_html?.replace(/\s\s\s+/, ' '),
-      image: product.images[0]?.src,
+      images: product.images.map((i) => i.src),
       url: `${sanitizeUrl(url)}/products/${product.handle}`,
       date: product.updated_at,
       detail: {

@@ -1,7 +1,7 @@
-import { GalleryEntryItem, GalleryEntrySummary } from 'tentkeep'
+import { GalleryEntryItem, GalleryEntrySummary } from '@tentkeep/tentkeep'
 import { api } from '../api.js'
 import { forKey, sanitizeUrl } from '../shareable/common.js'
-import { GalleryEntryItemTagSource } from 'tentkeep'
+import { GalleryEntryItemTagSource } from '@tentkeep/tentkeep'
 
 const resources = [
   'block-types',

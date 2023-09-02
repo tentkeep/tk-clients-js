@@ -1,4 +1,4 @@
-import { GalleryEntryPlace } from 'tentkeep'
+import { GalleryEntryPlace } from '@tentkeep/tentkeep'
 import api, { ApiStatusError } from '../api.js'
 
 const raw = {

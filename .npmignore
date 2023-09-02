@@ -1,0 +1,37 @@
+ignore
+
+# OS X
+.DS_Store*
+Icon?
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+.directory
+*~
+
+# npm
+node_modules
+*.log
+*.gz
+src/
+.prettierignore                      
+.prettierrc                          
+.vscode/settings.json
+eslintrc.cjs
+scripts/
+tests/
+
+# Coveralls
+coverage
+
+# Benchmarking
+benchmarks/graphs
+
+config/local.sh
+delete
+spike.js

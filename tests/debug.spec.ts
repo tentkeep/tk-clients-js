@@ -1,3 +1,4 @@
+import { describe, it } from 'vitest'
 import clients from '../index.js'
 
 const [_entryPoint, _file, arg] = process.argv
@@ -17,12 +18,16 @@ console.info(
 )
 console.log('ARG', arg)
 
-shopifyProductSummary()
+describe('debug', () => {
+  it('prints info', async () => {
+    await clients.google.search('donuts').then(print)
+  })
+})
 
 // OPTIONS BELOW
 
 function googlePlaces() {
-  clients.google.searchPlaces(arg as string).then((result) => {
+  clients.google.search(arg as string).then((result) => {
     print(result)
     if (result.length === 1) {
       console.log('Fetching Details...')
@@ -32,7 +37,7 @@ function googlePlaces() {
 }
 
 function musickit() {
-  clients.musickit.searchArtists('True Words').then(print)
+  return clients.musickit.search('True Words').then(print)
 }
 
 function pageSummary() {
@@ -56,7 +61,7 @@ function wordpress() {
 }
 
 function shopifyProductSummary() {
-  clients.shopify.productsSummary(arg as string, 250).then(print)
+  clients.shopify.summarize(arg as string).then(print)
 }
 function shopifyRaw() {
   clients.shopify.raw.products(arg as string, 250).then(print)

@@ -28,7 +28,8 @@ const resources = [
 const resourceMethods = (site) => resources.reduce((wordpress, resource) => {
     wordpress[toFunctionName(resource)] = (options) => {
         const id = typeof options === 'string' ? options : '';
-        const url = new URL(`${site}/wp-json/wp/v2/${resource}/${id}`);
+        const _url = site.startsWith('http') ? site : `https://${site}`;
+        const url = new URL(`${_url}/wp-json/wp/v2/${resource}/${id}`);
         if (typeof options === 'object') {
             forKey(options, (k) => url.searchParams.append(k, options[k]));
         }

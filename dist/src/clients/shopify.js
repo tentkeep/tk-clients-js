@@ -9,17 +9,20 @@ const raw = {
 const contentClient = {
     search: async (query) => {
         try {
-            const products = await raw.products(query, 1);
-            const product = products.products[0];
+            const { products } = await raw.products(query, 3);
+            const product = products[0];
             if (!product)
                 throw new Error('no products');
+            console.log('SSS', product.images);
             return {
                 sourceId: query,
                 entryType: GalleryEntryTypes.Shopify,
                 genericType: 'shop',
                 title: product?.vendor ?? 'Products',
                 url: productsUrl(query, 0),
-                image: product?.images[0]?.src,
+                image: product?.images[0]?.src ??
+                    products[1]?.images[0]?.src ??
+                    products[2]?.images[0]?.src,
             };
         }
         catch (err) {
@@ -67,7 +70,8 @@ export default {
     ...contentClient,
 };
 function productsUrl(url, limit) {
-    const _url = new URL(url);
+    const u = url.startsWith('http') ? url : `https://${url}`;
+    const _url = new URL(u);
     if (!_url.pathname.endsWith('/products.json')) {
         _url.pathname = '/products.json';
     }

@@ -20,29 +20,31 @@ const listingImages = (listingId) => etsy(`${host}/v2/listings/${listingId}/imag
 const searchShops = (name) => etsy(`${host}/application/shops?shop_name=${name}`);
 const contentClient = {
     search: async (query) => {
-        return (await searchShops(query)).results.map((shop) => ({
-            sourceId: shop.shop_id.toString(),
-            entryType: GalleryEntryTypes.Etsy,
-            genericType: 'shop',
-            title: shop.shop_name,
-            description: shop.title,
-            image: shop.icon_url_fullxfull,
-            url: shop.url,
-        }));
+        return searchShops(query).then((response) => {
+            return response.results.map((shop) => ({
+                sourceId: shop.shop_id.toString(),
+                entryType: GalleryEntryTypes.Etsy,
+                genericType: 'shop',
+                title: shop.shop_name,
+                description: shop.title,
+                image: shop.icon_url_fullxfull,
+                url: shop.url,
+            }));
+        });
     },
-    summarize: async (sourceId) => {
-        const shop = (await getShop(sourceId)).results[0];
+    summarize: async (shopId) => {
+        const shop = (await getShop(shopId)).results[0];
         if (!shop) {
             throw new Error('Shop not found');
         }
-        const listings = await allShopListings(sourceId);
+        const listings = await allShopListings(shopId);
         const fromEpoch = (epochSeconds) => {
             var d = new Date(0);
             d.setUTCSeconds(epochSeconds);
             return d;
         };
         return {
-            sourceId: sourceId,
+            sourceId: shopId,
             title: shop.shop_name,
             description: shop.title,
             image: shop.icon_url_fullxfull,
@@ -83,9 +85,11 @@ export default {
 const etsy = (url, options = null) => {
     const apiKey = process.env.CLIENTS_ETSY_API_KEY;
     const _url = url instanceof URL ? url : new URL(url);
+    const _options = options ?? {};
+    _options.headers = _options.headers ?? {};
     if (apiKey) {
-        _url.searchParams.append('api_key', apiKey);
+        _options.headers['x-api-key'] = apiKey;
     }
-    return api(_url, options);
+    return api(_url, _options);
 };
 //# sourceMappingURL=etsy.js.map

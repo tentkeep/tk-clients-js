@@ -19,11 +19,11 @@ const contentClient = {
             return place;
         });
     },
-    placeDetails,
 };
 export default {
     ...contentClient,
     raw,
+    placeDetails,
 };
 const searchFields = 'place_id,formatted_address,name,rating,opening_hours,geometry,types';
 function google(path) {

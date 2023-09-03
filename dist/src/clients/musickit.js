@@ -1,16 +1,17 @@
-import { GalleryEntryTypes } from '@tentkeep/tentkeep';
+import { GalleryEntryTypes, } from '@tentkeep/tentkeep';
 import { api } from '../api.js';
 import { tryGet } from '../shareable/common.js';
 const host = 'https://api.music.apple.com';
 const getArtistAlbums = (artistId) => music(`/v1/catalog/us/artists/${artistId}/albums?include=tracks`);
 const searchArtists = (term) => music(`/v1/catalog/us/search?term=${term}&limit=25&types=artists&include=albums`);
-export default {
-    searchArtists,
-    getArtist: (artistId) => music(`/v1/catalog/us/artists/${artistId}?include=albums,songs`),
-    getArtistAlbums,
-    getAlbum: (albumId) => music(`/v1/catalog/us/albums/${albumId}`),
-    getAlbums: (albumIds) => music(`/v1/catalog/us/albums?ids=${albumIds.join(',')}`),
-    search: async (query) => searchArtists(query).then((response) => response),
+const contentClient = {
+    search: async (query) => searchArtists(query).then((response) => response.results.artists.data.map((artist) => ({
+        sourceId: artist.id.toString(),
+        entryType: GalleryEntryTypes.Music,
+        genericType: 'music',
+        title: artist.attributes.name,
+        image: artist.attributes.artwork.url.replace(/{[wh]}/g, '600'),
+    }))),
     summarize: async (sourceId) => {
         const artistAlbums = await getArtistAlbums(sourceId);
         const albums = artistAlbums.data.map((a) => ({
@@ -54,12 +55,23 @@ export default {
         };
     },
 };
+export default {
+    searchArtists,
+    getArtist: (artistId) => music(`/v1/catalog/us/artists/${artistId}?include=albums,songs`),
+    getArtistAlbums,
+    getAlbum: (albumId) => music(`/v1/catalog/us/albums/${albumId}`),
+    getAlbums: (albumIds) => music(`/v1/catalog/us/albums?ids=${albumIds.join(',')}`),
+    ...contentClient,
+};
 const music = async (path) => {
     const _url = `${host}${path}`;
     const options = {
         headers: {},
     };
-    if (window === undefined) {
+    try {
+        window;
+    }
+    catch {
         const musickitToken = await token();
         options.headers.Authorization = `Bearer ${musickitToken}`;
     }

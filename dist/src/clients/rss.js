@@ -33,15 +33,17 @@ const feed = (feedUrl) => api(feedUrl)
 const contentClient = {
     search: async (query) => {
         const podcast = await feed(query);
-        return {
-            sourceId: query,
-            entryType: GalleryEntryTypes.Podcast,
-            genericType: 'podcast',
-            title: podcast.title,
-            description: podcast.description,
-            image: podcast.image,
-            url: query,
-        };
+        return [
+            {
+                sourceId: query,
+                entryType: GalleryEntryTypes.Podcast,
+                genericType: 'podcast',
+                title: podcast.title,
+                description: podcast.description,
+                image: podcast.image.url,
+                url: query,
+            },
+        ];
     },
     summarize: (feedUrl) => feed(feedUrl).then((podcast) => {
         const { title, description, image, item } = podcast;

@@ -16,7 +16,7 @@ export declare const clients: {
         user: <T extends string | number>(user: T) => Promise<T extends number ? import("./src/clients/discourse.js").DiscourseUser : import("./src/clients/discourse.js").DiscourseUserPlus>;
     };
     etsy: {
-        search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry>;
+        search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry[]>;
         summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
         listing: (listingId: any) => Promise<any>;
         listingImages: (listingId: any) => Promise<any>;
@@ -88,11 +88,12 @@ export declare const clients: {
                 }>;
             };
         };
-        search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry>;
+        placeDetails: (placeId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntryPlace>;
+        search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry[]>;
         summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
     };
     itunes: {
-        search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry>;
+        search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry[]>;
         summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
         podcasts: (query: any) => Promise<{
             resultCount: number;
@@ -130,18 +131,157 @@ export declare const clients: {
             }];
         }>;
     };
-    musickit: import("./src/clients/tentkeep-client.js").TentkeepClient;
+    musickit: {
+        search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry[]>;
+        summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
+        searchArtists: (term: string) => Promise<{
+            results: {
+                artists: {
+                    href: string;
+                    next: string;
+                    data: [{
+                        id: string;
+                        type: string;
+                        href: string;
+                        attributes: {
+                            name: string;
+                            genreNames: string[];
+                            artwork: {
+                                width: number;
+                                height: number;
+                                url: string;
+                                bgColor: string;
+                                textColor1: string;
+                                textColor2: string;
+                                textColor3: string;
+                                textColor4: string;
+                            };
+                            url: string;
+                        };
+                        relationships: {
+                            albums: {
+                                href: string;
+                                data: [{
+                                    id: string;
+                                    type: string;
+                                    href: string;
+                                    attributes: {
+                                        copyright: string;
+                                        genreNames: string[];
+                                        releaseDate: string;
+                                        upc: string;
+                                        isMasteredForItunes: false;
+                                        artwork: {
+                                            width: number;
+                                            height: number;
+                                            url: string;
+                                            bgColor: string;
+                                            textColor1: string;
+                                            textColor2: string;
+                                            textColor3: string;
+                                            textColor4: string;
+                                        };
+                                        url: string;
+                                        playParams: {
+                                            id: string;
+                                            kind: string;
+                                        };
+                                        recordLabel: string;
+                                        isCompilation: false;
+                                        trackCount: number;
+                                        isSingle: false;
+                                        name: string;
+                                        artistName: string;
+                                        isComplete: true;
+                                    };
+                                }];
+                            };
+                        };
+                    }];
+                };
+            };
+            meta: {
+                results: {
+                    order: [string];
+                    rawOrder: [string];
+                };
+            };
+        }>;
+        getArtist: (artistId: any) => Promise<any>;
+        getArtistAlbums: (artistId: any) => Promise<any>;
+        getAlbum: (albumId: any) => Promise<any>;
+        getAlbums: (albumIds: any) => Promise<any>;
+    };
     page: {
         info: (url: string) => Promise<import("@tentkeep/tentkeep").PageInfo>;
         summary: (url: string) => Promise<import("@tentkeep/tentkeep").PageSummary>;
     };
     rss: {
-        search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry>;
+        search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry[]>;
         summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
-        feed: (feedUrl: any) => Promise<any>;
+        feed: (feedUrl: any) => Promise<{
+            title: string;
+            description: string;
+            link: string;
+            image: {
+                url: string;
+                title: string;
+                link: string;
+            };
+            generator: string;
+            lastBuildDate: string;
+            'atom:link': {
+                $href: string;
+                $rel: string;
+                $type: string;
+            };
+            author: string;
+            copyright: string;
+            language: string;
+            'anchor:support': string;
+            'anchor:station': string;
+            'itunes:author': string;
+            'itunes:summary': string;
+            'itunes:type': string;
+            'itunes:owner': {
+                'itunes:name': string;
+                'itunes:email': string;
+            };
+            'itunes:explicit': string;
+            'itunes:category': {
+                $text: string;
+            };
+            'itunes:image': {
+                $href: string;
+            };
+            item: [{
+                title: string;
+                description: string;
+                link: string;
+                guid: {
+                    _: string;
+                };
+                'dc:creator': string;
+                pubDate: string;
+                enclosure: {
+                    $url: string;
+                    $length: string;
+                    $type: string;
+                };
+                'itunes:summary': string;
+                'itunes:explicit': string;
+                'itunes:duration': string;
+                'itunes:image': {
+                    $href: string;
+                };
+                'itunes:season': string;
+                'itunes:episode': string;
+                'itunes:episodeType': string;
+            }];
+        }>;
     };
     shopify: {
-        search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry>;
+        search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry[]>;
         summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
         raw: {
             products: (url: string, limit?: number) => Promise<{
@@ -368,6 +508,8 @@ export declare const clients: {
         };
     };
     youtube: {
+        searchYouTube: import("./src/clients/youtube.js").YoutubeResourceAPI;
+        search: (query: string) => Promise<import("@tentkeep/tentkeep").GalleryEntry[]>;
         summarize: (channelId: string) => Promise<import("@tentkeep/tentkeep").Entity & {
             id?: number | undefined;
             galleryId?: number | undefined;
@@ -401,7 +543,6 @@ export declare const clients: {
         comments: import("./src/clients/youtube.js").YoutubeResourceAPI;
         playlists: import("./src/clients/youtube.js").YoutubeResourceAPI;
         playlistItems: import("./src/clients/youtube.js").YoutubeResourceAPI;
-        search: import("./src/clients/youtube.js").YoutubeResourceAPI;
         videos: import("./src/clients/youtube.js").YoutubeResourceAPI;
         videoCategories: import("./src/clients/youtube.js").YoutubeResourceAPI;
     };

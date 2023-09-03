@@ -29,12 +29,12 @@ const contentClient = {
       return place
     })
   },
-  placeDetails,
 } as TentkeepClient
 
 export default {
   ...contentClient,
   raw,
+  placeDetails,
 }
 
 const searchFields =

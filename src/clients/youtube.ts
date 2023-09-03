@@ -1,4 +1,5 @@
 import {
+  GalleryEntry,
   GalleryEntryItem,
   GalleryEntrySummary,
   GalleryEntryTypes,
@@ -96,6 +97,30 @@ type YoutubeEntry = {
 
 export default {
   ...resourcesApi,
+  searchYouTube: resourcesApi.search,
+  search: (query: string) => {
+    return resourcesApi
+      .search({
+        part: 'snippet',
+        maxResults: 25,
+        q: query,
+        type: 'channel',
+      })
+      .then((response: SearchResponse) =>
+        response.items.map(
+          (item) =>
+            ({
+              sourceId: item.snippet.channelId,
+              entryType: GalleryEntryTypes.YouTube,
+              genericType: 'video',
+              title: item.snippet.title,
+              description: item.snippet.description,
+              url: `https://youtube.com/channel/${item.snippet.channelId}`,
+              image: item.snippet.thumbnails.high.url,
+            } as GalleryEntry),
+        ),
+      )
+  },
   summarize: async (
     channelId: string,
   ): Promise<GalleryEntrySummary & YoutubeEntry> => {
@@ -170,4 +195,45 @@ const youtube: API = (url, options) => {
   const _url = url instanceof URL ? url : new URL(url)
   _url.searchParams.append('key', apiKey)
   return api(_url, options)
+}
+
+type SearchResponse = {
+  kind: 'youtube#searchListResponse'
+  etag: string
+  nextPageToken: string
+  regionCode: string
+  pageInfo: {
+    totalResults: number
+    resultsPerPage: number
+  }
+  items: [
+    {
+      kind: string
+      etag: string
+      id: {
+        kind: string
+        channelId: string
+      }
+      snippet: {
+        publishedAt: string
+        channelId: string
+        title: string
+        description: string
+        thumbnails: {
+          default: {
+            url: string
+          }
+          medium: {
+            url: string
+          }
+          high: {
+            url: string
+          }
+        }
+        channelTitle: string
+        liveBroadcastContent: string
+        publishTime: string
+      }
+    },
+  ]
 }

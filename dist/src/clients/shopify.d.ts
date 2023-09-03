@@ -49,7 +49,7 @@ export declare type ShopifyProduct = {
     }[];
 };
 declare const _default: {
-    search: (query: string, options?: Record<string, any> | undefined) => Promise<GalleryEntry>;
+    search: (query: string, options?: Record<string, any> | undefined) => Promise<GalleryEntry[]>;
     summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
     raw: {
         products: (url: string, limit?: number) => Promise<{

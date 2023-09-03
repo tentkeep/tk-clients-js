@@ -1,6 +1,6 @@
 import { GalleryEntry, GalleryEntrySummary } from '@tentkeep/tentkeep';
 declare const _default: {
-    search: (query: string, options?: Record<string, any> | undefined) => Promise<GalleryEntry>;
+    search: (query: string, options?: Record<string, any> | undefined) => Promise<GalleryEntry[]>;
     summarize: (sourceId: string) => Promise<GalleryEntrySummary>;
     podcasts: (query: any) => Promise<PodcastSearchResult>;
 };

@@ -4,6 +4,6 @@ export interface TentkeepClient {
   search: (
     query: string,
     options?: Record<string, any>,
-  ) => Promise<GalleryEntry>
+  ) => Promise<GalleryEntry[]>
   summarize: (sourceId: string) => Promise<GalleryEntrySummary>
 }

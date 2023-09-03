@@ -1,4 +1,4 @@
-import { GalleryEntrySummary } from '@tentkeep/tentkeep';
+import { GalleryEntry, GalleryEntrySummary } from '@tentkeep/tentkeep';
 export declare type YoutubeResourceParams = any & {
     part: string;
     maxResults: number;
@@ -22,6 +22,8 @@ declare type YoutubeEntry = {
     playlists: any;
 };
 declare const _default: {
+    searchYouTube: YoutubeResourceAPI;
+    search: (query: string) => Promise<GalleryEntry[]>;
     summarize: (channelId: string) => Promise<GalleryEntrySummary & YoutubeEntry>;
     channelForUser: (username: any) => Promise<any>;
     playlistsForChannel: (channelId: any) => Promise<any>;
@@ -35,7 +37,6 @@ declare const _default: {
     comments: YoutubeResourceAPI;
     playlists: YoutubeResourceAPI;
     playlistItems: YoutubeResourceAPI;
-    search: YoutubeResourceAPI;
     videos: YoutubeResourceAPI;
     videoCategories: YoutubeResourceAPI;
 };

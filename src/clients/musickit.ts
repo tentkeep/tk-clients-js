@@ -1,4 +1,8 @@
-import { GalleryEntryItem, GalleryEntryTypes } from '@tentkeep/tentkeep'
+import {
+  GalleryEntry,
+  GalleryEntryItem,
+  GalleryEntryTypes,
+} from '@tentkeep/tentkeep'
 import { api } from '../api.js'
 import { tryGet } from '../shareable/common.js'
 import { TentkeepClient } from './tentkeep-client.js'
@@ -11,16 +15,20 @@ const searchArtists = (term: string) =>
     `/v1/catalog/us/search?term=${term}&limit=25&types=artists&include=albums`,
   ) as Promise<SearchArtistsResponse>
 
-export default {
-  searchArtists,
-  getArtist: (artistId) =>
-    music(`/v1/catalog/us/artists/${artistId}?include=albums,songs`),
-  getArtistAlbums,
-  getAlbum: (albumId) => music(`/v1/catalog/us/albums/${albumId}`),
-  getAlbums: (albumIds) =>
-    music(`/v1/catalog/us/albums?ids=${albumIds.join(',')}`),
+const contentClient = {
   search: async (query: string) =>
-    searchArtists(query).then((response) => response),
+    searchArtists(query).then((response) =>
+      response.results.artists.data.map(
+        (artist) =>
+          ({
+            sourceId: artist.id.toString(),
+            entryType: GalleryEntryTypes.Music,
+            genericType: 'music',
+            title: artist.attributes.name,
+            image: artist.attributes.artwork.url.replace(/{[wh]}/g, '600'),
+          } as GalleryEntry),
+      ),
+    ),
   summarize: async (sourceId: string) => {
     const artistAlbums = await getArtistAlbums(sourceId)
     const albums = artistAlbums.data.map(
@@ -71,13 +79,26 @@ export default {
   },
 } as TentkeepClient
 
+export default {
+  searchArtists,
+  getArtist: (artistId) =>
+    music(`/v1/catalog/us/artists/${artistId}?include=albums,songs`),
+  getArtistAlbums,
+  getAlbum: (albumId) => music(`/v1/catalog/us/albums/${albumId}`),
+  getAlbums: (albumIds) =>
+    music(`/v1/catalog/us/albums?ids=${albumIds.join(',')}`),
+  ...contentClient,
+}
+
 const music = async (path) => {
   const _url = `${host}${path}`
   const options = {
     headers: {} as Record<string, string>,
   }
-  // @ts-ignore
-  if (window === undefined) {
+  try {
+    // @ts-ignore
+    window
+  } catch {
     const musickitToken = await token()
     options.headers.Authorization = `Bearer ${musickitToken}`
   }
@@ -103,4 +124,80 @@ const token = async () => {
   })
 }
 
-type SearchArtistsResponse = {}
+type SearchArtistsResponse = {
+  results: {
+    artists: {
+      href: string
+      next: string
+      data: [
+        {
+          id: string
+          type: string
+          href: string
+          attributes: {
+            name: string
+            genreNames: string[]
+            artwork: {
+              width: number
+              height: number
+              url: string
+              bgColor: string
+              textColor1: string
+              textColor2: string
+              textColor3: string
+              textColor4: string
+            }
+            url: string
+          }
+          relationships: {
+            albums: {
+              href: string
+              data: [
+                {
+                  id: string
+                  type: string
+                  href: string
+                  attributes: {
+                    copyright: string
+                    genreNames: string[]
+                    releaseDate: string
+                    upc: string
+                    isMasteredForItunes: false
+                    artwork: {
+                      width: number
+                      height: number
+                      url: string
+                      bgColor: string
+                      textColor1: string
+                      textColor2: string
+                      textColor3: string
+                      textColor4: string
+                    }
+                    url: string
+                    playParams: {
+                      id: string
+                      kind: string
+                    }
+                    recordLabel: string
+                    isCompilation: false
+                    trackCount: number
+                    isSingle: false
+                    name: string
+                    artistName: string
+                    isComplete: true
+                  }
+                },
+              ]
+            }
+          }
+        },
+      ]
+    }
+  }
+  meta: {
+    results: {
+      order: [string]
+      rawOrder: [string]
+    }
+  }
+}

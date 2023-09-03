@@ -58,6 +58,25 @@ const allVideosForPlaylist = async (playlistId) => {
 };
 export default {
     ...resourcesApi,
+    searchYouTube: resourcesApi.search,
+    search: (query) => {
+        return resourcesApi
+            .search({
+            part: 'snippet',
+            maxResults: 25,
+            q: query,
+            type: 'channel',
+        })
+            .then((response) => response.items.map((item) => ({
+            sourceId: item.snippet.channelId,
+            entryType: GalleryEntryTypes.YouTube,
+            genericType: 'video',
+            title: item.snippet.title,
+            description: item.snippet.description,
+            url: `https://youtube.com/channel/${item.snippet.channelId}`,
+            image: item.snippet.thumbnails.high.url,
+        })));
+    },
     summarize: async (channelId) => {
         const channelResponse = await resourcesApi.channels({
             id: channelId,

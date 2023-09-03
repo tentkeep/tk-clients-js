@@ -1,3 +1,5 @@
+import { GalleryEntryPlace } from '@tentkeep/tentkeep';
+declare function placeDetails(placeId: string): Promise<GalleryEntryPlace>;
 declare const _default: {
     raw: {
         places: {
@@ -7,7 +9,8 @@ declare const _default: {
             }>;
         };
     };
-    search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry>;
+    placeDetails: typeof placeDetails;
+    search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry[]>;
     summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
 };
 export default _default;

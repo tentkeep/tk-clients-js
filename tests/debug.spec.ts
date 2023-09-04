@@ -19,9 +19,13 @@ console.info(
 console.log('ARG', arg)
 
 describe('debug', () => {
-  it('prints info', async () => {
-    await clients.etsy.search('farmhouse').then(print)
-  })
+  it(
+    'prints info',
+    async () => {
+      await clients.etsy.summarize('33557158').then(print)
+    },
+    { timeout: 15000 },
+  )
 })
 
 // OPTIONS BELOW

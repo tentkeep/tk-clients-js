@@ -1,18 +1,19 @@
 import { GalleryEntryTypes, } from '@tentkeep/tentkeep';
 import { api } from '../api.js';
-import { tryGet } from '../shareable/common.js';
 const host = 'https://openapi.etsy.com/v3';
 const getShop = (shopId) => etsy(`${host}/application/shops/${shopId}`);
 const getShopWithListings = (shopId) => etsy(`${host}/application/shops/${shopId}?includes=Listings:200/Images(url_170x135,url_570xN)`);
-const shopListings = (shopId, page = 1) => etsy(`${host}/application/shops/${shopId}/listings/active?limit=100&includes=Images(url_170x135,url_570xN)&page=${page}`);
+const shopListings = (shopId, offset = 0) => etsy(`${host}/application/shops/${shopId}/listings/active?limit=100&offset=${offset}&includes=Images(url_170x135,url_570xN)`);
 const allShopListings = async (shopId) => {
-    const listings = await shopListings(shopId);
-    let nextPage = listings.pagination.next_page;
-    while (nextPage) {
-        const next = await shopListings(shopId, nextPage);
+    let offset = 0;
+    const listings = await shopListings(shopId, offset);
+    const total = listings.count;
+    offset += 100;
+    while (offset < total && offset < 501) {
+        const next = await shopListings(shopId, offset);
         listings.results.push(...next.results);
-        nextPage = next.pagination.next_page;
-        console.log(nextPage);
+        offset += 100;
+        console.log('Etsy product offset', offset);
     }
     return listings;
 };
@@ -33,7 +34,7 @@ const contentClient = {
         });
     },
     summarize: async (shopId) => {
-        const shop = (await getShop(shopId)).results[0];
+        const shop = await getShop(shopId);
         if (!shop) {
             throw new Error('Shop not found');
         }
@@ -51,22 +52,18 @@ const contentClient = {
             url: shop.url,
             userId: shop.user_id,
             items: listings.results.map((l) => ({
-                sourceId: l.listing_id,
+                sourceId: l.listing_id.toString(),
                 entryType: GalleryEntryTypes.Etsy,
                 genericType: 'shop',
                 title: l.title,
                 description: l.description,
-                image: tryGet(() => l.Images[0].url_570xN),
-                images: l.Images,
                 url: l.url,
-                date: fromEpoch(l.last_modified_tsz),
+                date: fromEpoch(l.last_modified_timestamp),
                 detail: {
                     price: l.price,
-                    currency: l.currency_code,
                     tags: (l.tags || []).join('||'),
                     views: l.views,
                     customizable: l.is_customizable,
-                    digital: l.is_digital,
                 },
             })),
         };

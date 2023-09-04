@@ -20,7 +20,7 @@ console.log('ARG', arg)
 
 describe('debug', () => {
   it('prints info', async () => {
-    await clients.google.search('donuts').then(print)
+    await clients.etsy.search('farmhouse').then(print)
   })
 })
 

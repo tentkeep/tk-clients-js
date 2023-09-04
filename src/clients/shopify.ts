@@ -29,18 +29,19 @@ const contentClient = {
       const { products } = await raw.products(query, 3)
       const product = products[0]
       if (!product) throw new Error('no products')
-      console.log('SSS', product.images)
-      return {
-        sourceId: query,
-        entryType: GalleryEntryTypes.Shopify,
-        genericType: 'shop',
-        title: product?.vendor ?? 'Products',
-        url: productsUrl(query, 0),
-        image:
-          product?.images[0]?.src ??
-          products[1]?.images[0]?.src ??
-          products[2]?.images[0]?.src,
-      }
+      return [
+        {
+          sourceId: query,
+          entryType: GalleryEntryTypes.Shopify,
+          genericType: 'shop',
+          title: product?.vendor ?? 'Products',
+          url: productsUrl(query, 0),
+          image:
+            product?.images[0]?.src ??
+            products[1]?.images[0]?.src ??
+            products[2]?.images[0]?.src,
+        },
+      ]
     } catch (err) {
       return []
     }

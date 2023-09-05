@@ -14,19 +14,23 @@ const getShop = (shopId) =>
 const shopListings = (shopId, offset = 0) =>
   etsy(
     `${host}/application/shops/${shopId}/listings/active?limit=100&offset=${offset}&includes=Images(url_170x135,url_570xN)`,
-  ) as Promise<ShopListings>
+  ) as Promise<ShopListingsResponse>
 const allShopListings = async (shopId) => {
   let offset = 0
-  const listings = await shopListings(shopId, offset)
-  const total = listings.count
-  offset += 100
+  let total = 1
+  const allListings: EtsyShopListing[] = []
   while (offset < total && offset < 501) {
-    const next = await shopListings(shopId, offset)
-    listings.results.push(...next.results)
+    const response = await shopListings(shopId, offset)
+    total = response.count
+    const listings = await getListingsWith(
+      response.results.map((l) => l.listing_id),
+      ['Images'],
+    )
+    allListings.push(...listings.results)
     offset += 100
     console.log('Etsy product offset', offset)
   }
-  return listings
+  return allListings
 }
 const getListingsWith = (
   listingIds: number[],
@@ -44,7 +48,7 @@ const getListingsWith = (
     `${host}/application/listings/batch?listing_ids=${listingIds.join(
       ',',
     )}&includes=${includes.join(',')}`,
-  ) as Promise<ShopListings>
+  ) as Promise<ShopListingsResponse>
 
 const listingImages = (listingId) =>
   etsy(
@@ -79,10 +83,6 @@ const contentClient = {
       throw new Error('Shop not found')
     }
     let listings = await allShopListings(shopId)
-    listings = await getListingsWith(
-      listings.results.map((l) => l.listing_id),
-      ['Images'],
-    )
     const fromEpoch = (epochSeconds) => {
       var d = new Date(0)
       d.setUTCSeconds(epochSeconds)
@@ -95,7 +95,7 @@ const contentClient = {
       image: shop.icon_url_fullxfull,
       url: shop.url,
       userId: shop.user_id,
-      items: listings.results.map(
+      items: listings.map(
         (l) =>
           ({
             sourceId: l.listing_id.toString(),
@@ -197,69 +197,69 @@ type EtsyShop = {
   review_count?: string
 }
 
-type ShopListings = {
+type ShopListingsResponse = {
   count: number
-  results: [
-    {
-      listing_id: number
-      user_id: number
-      shop_id: number
-      title: string
-      description: string
-      state: string
-      creation_timestamp: number
-      created_timestamp: number
-      ending_timestamp: number
-      original_creation_timestamp: number
-      last_modified_timestamp: number
-      updated_timestamp: number
-      state_timestamp: number
-      quantity: number
-      shop_section_id?: string
-      featured_rank: number
-      url: string
-      num_favorers: number
-      non_taxable: boolean
-      is_taxable: boolean
-      is_customizable: boolean
-      is_personalizable: boolean
-      personalization_is_required: boolean
-      personalization_char_count_max?: string
-      personalization_instructions?: string
-      listing_type: string
-      tags: string[]
-      materials: string[]
-      shipping_profile_id: number
-      return_policy_id?: string
-      processing_min: number
-      processing_max: number
-      who_made: string
-      when_made: string
-      is_supply: boolean
-      item_weight?: string
-      item_weight_unit?: string
-      item_length?: string
-      item_width?: string
-      item_height?: string
-      item_dimensions_unit?: string
-      is_private: boolean
-      style: string[]
-      file_data: string
-      has_variations: boolean
-      should_auto_renew: boolean
-      language: string
-      price: {
-        amount: number
-        divisor: number
-        currency_code: string
-      }
-      taxonomy_id: number
-      production_partners: string[]
-      skus: string[]
-      views: number
-      images?: EtsyListingImage[]
-    },
-  ]
+  results: EtsyShopListing[]
+}
+
+type EtsyShopListing = {
+  listing_id: number
+  user_id: number
+  shop_id: number
+  title: string
+  description: string
+  state: string
+  creation_timestamp: number
+  created_timestamp: number
+  ending_timestamp: number
+  original_creation_timestamp: number
+  last_modified_timestamp: number
+  updated_timestamp: number
+  state_timestamp: number
+  quantity: number
+  shop_section_id?: string
+  featured_rank: number
+  url: string
+  num_favorers: number
+  non_taxable: boolean
+  is_taxable: boolean
+  is_customizable: boolean
+  is_personalizable: boolean
+  personalization_is_required: boolean
+  personalization_char_count_max?: string
+  personalization_instructions?: string
+  listing_type: string
+  tags: string[]
+  materials: string[]
+  shipping_profile_id: number
+  return_policy_id?: string
+  processing_min: number
+  processing_max: number
+  who_made: string
+  when_made: string
+  is_supply: boolean
+  item_weight?: string
+  item_weight_unit?: string
+  item_length?: string
+  item_width?: string
+  item_height?: string
+  item_dimensions_unit?: string
+  is_private: boolean
+  style: string[]
+  file_data: string
+  has_variations: boolean
+  should_auto_renew: boolean
+  language: string
+  price: {
+    amount: number
+    divisor: number
+    currency_code: string
+  }
+  taxonomy_id: number
+  production_partners: string[]
+  skus: string[]
+  views: number
+  images?: EtsyListingImage[]
 }
 
 type EtsyListingImagesResponse = {

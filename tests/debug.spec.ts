@@ -22,9 +22,9 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      const listings = await clients.etsy.summarize('6053427').then(print)
+      const listings = await clients.etsy.summarize('5884183').then(print)
     },
-    { timeout: 15000 },
+    { timeout: 35000 },
   )
 })
 

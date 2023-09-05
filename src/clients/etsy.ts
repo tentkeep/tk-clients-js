@@ -11,10 +11,6 @@ const host = 'https://openapi.etsy.com/v3'
 
 const getShop = (shopId) =>
   etsy(`${host}/application/shops/${shopId}`) as Promise<EtsyShop>
-const getShopWithListings = (shopId) =>
-  etsy(
-    `${host}/application/shops/${shopId}?includes=Listings:200/Images(url_170x135,url_570xN)`,
-  )
 const shopListings = (shopId, offset = 0) =>
   etsy(
     `${host}/application/shops/${shopId}/listings/active?limit=100&offset=${offset}&includes=Images(url_170x135,url_570xN)`,
@@ -34,7 +30,9 @@ const allShopListings = async (shopId) => {
 }
 
 const listingImages = (listingId) =>
-  etsy(`${host}/v2/listings/${listingId}/images`)
+  etsy(
+    `${host}/application/listings/${listingId}/images`,
+  ) as Promise<EtsyListingImagesResponse>
 
 const searchShops = (name) =>
   etsy(
@@ -106,7 +104,6 @@ export default {
   // userShops: (userId) => etsy(`${host}/v2/users/${userId}/shops`),
   searchShops,
   getShop,
-  getShopWithListings,
   shopListings,
   allShopListings,
   ...contentClient,
@@ -238,6 +235,34 @@ type ShopListings = {
       production_partners: string[]
       skus: string[]
       views: number
+    },
+  ]
+}
+
+type EtsyListingImagesResponse = {
+  count: number
+  results: [
+    {
+      listing_id: number
+      listing_image_id: number
+      hex_code: string
+      red: number
+      green: number
+      blue: number
+      hue: number
+      saturation: number
+      brightness: number
+      is_black_and_white: boolean
+      creation_tsz: number
+      created_timestamp: number
+      rank: number
+      url_75x75: string
+      url_170x135: string
+      url_570xN: string
+      url_fullxfull: string
+      full_height: number
+      full_width: number
+      alt_text?: string
     },
   ]
 }

@@ -2,7 +2,6 @@ import { GalleryEntryTypes, } from '@tentkeep/tentkeep';
 import { api } from '../api.js';
 const host = 'https://openapi.etsy.com/v3';
 const getShop = (shopId) => etsy(`${host}/application/shops/${shopId}`);
-const getShopWithListings = (shopId) => etsy(`${host}/application/shops/${shopId}?includes=Listings:200/Images(url_170x135,url_570xN)`);
 const shopListings = (shopId, offset = 0) => etsy(`${host}/application/shops/${shopId}/listings/active?limit=100&offset=${offset}&includes=Images(url_170x135,url_570xN)`);
 const allShopListings = async (shopId) => {
     let offset = 0;
@@ -17,7 +16,7 @@ const allShopListings = async (shopId) => {
     }
     return listings;
 };
-const listingImages = (listingId) => etsy(`${host}/v2/listings/${listingId}/images`);
+const listingImages = (listingId) => etsy(`${host}/application/listings/${listingId}/images`);
 const searchShops = (name) => etsy(`${host}/application/shops?shop_name=${name}`);
 const contentClient = {
     search: async (query) => {
@@ -74,7 +73,6 @@ export default {
     listingImages,
     searchShops,
     getShop,
-    getShopWithListings,
     shopListings,
     allShopListings,
     ...contentClient,

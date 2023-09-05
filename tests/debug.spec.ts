@@ -22,7 +22,7 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      await clients.etsy.summarize('33557158').then(print)
+      await clients.etsy.listingImages('1151999710').then(print)
     },
     { timeout: 15000 },
   )

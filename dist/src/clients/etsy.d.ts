@@ -3,10 +3,9 @@ declare const _default: {
     search: (query: string, options?: Record<string, any> | undefined) => Promise<GalleryEntry[]>;
     summarize: (sourceId: string) => Promise<GalleryEntrySummary>;
     listing: (listingId: any) => Promise<any>;
-    listingImages: (listingId: any) => Promise<any>;
+    listingImages: (listingId: any) => Promise<EtsyListingImagesResponse>;
     searchShops: (name: any) => Promise<ShopSearchResult>;
     getShop: (shopId: any) => Promise<EtsyShop>;
-    getShopWithListings: (shopId: any) => Promise<any>;
     shopListings: (shopId: any, offset?: number) => Promise<ShopListings>;
     allShopListings: (shopId: any) => Promise<ShopListings>;
 };
@@ -124,6 +123,33 @@ declare type ShopListings = {
             production_partners: string[];
             skus: string[];
             views: number;
+        }
+    ];
+};
+declare type EtsyListingImagesResponse = {
+    count: number;
+    results: [
+        {
+            listing_id: number;
+            listing_image_id: number;
+            hex_code: string;
+            red: number;
+            green: number;
+            blue: number;
+            hue: number;
+            saturation: number;
+            brightness: number;
+            is_black_and_white: boolean;
+            creation_tsz: number;
+            created_timestamp: number;
+            rank: number;
+            url_75x75: string;
+            url_170x135: string;
+            url_570xN: string;
+            url_fullxfull: string;
+            full_height: number;
+            full_width: number;
+            alt_text?: string;
         }
     ];
 };

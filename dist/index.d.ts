@@ -19,7 +19,31 @@ export declare const clients: {
         search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry[]>;
         summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
         listing: (listingId: any) => Promise<any>;
-        listingImages: (listingId: any) => Promise<any>;
+        listingImages: (listingId: any) => Promise<{
+            count: number;
+            results: [{
+                listing_id: number;
+                listing_image_id: number;
+                hex_code: string;
+                red: number;
+                green: number;
+                blue: number;
+                hue: number;
+                saturation: number;
+                brightness: number;
+                is_black_and_white: boolean;
+                creation_tsz: number;
+                created_timestamp: number;
+                rank: number;
+                url_75x75: string;
+                url_170x135: string;
+                url_570xN: string;
+                url_fullxfull: string;
+                full_height: number;
+                full_width: number;
+                alt_text?: string | undefined;
+            }];
+        }>;
         searchShops: (name: any) => Promise<{
             count: number;
             results: {
@@ -121,7 +145,6 @@ export declare const clients: {
             review_average?: string | undefined;
             review_count?: string | undefined;
         }>;
-        getShopWithListings: (shopId: any) => Promise<any>;
         shopListings: (shopId: any, offset?: number) => Promise<{
             count: number;
             results: [{

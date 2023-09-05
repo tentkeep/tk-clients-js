@@ -16,6 +16,7 @@ const allShopListings = async (shopId) => {
     }
     return listings;
 };
+const getListingsWith = (listingIds, includes) => etsy(`${host}/application/listings/batch?listing_ids=${listingIds.join(',')}&includes=${includes.join(',')}`);
 const listingImages = (listingId) => etsy(`${host}/application/listings/${listingId}/images`);
 const searchShops = (name) => etsy(`${host}/application/shops?shop_name=${name}`);
 const contentClient = {
@@ -37,7 +38,8 @@ const contentClient = {
         if (!shop) {
             throw new Error('Shop not found');
         }
-        const listings = await allShopListings(shopId);
+        let listings = await allShopListings(shopId);
+        listings = await getListingsWith(listings.results.map((l) => l.listing_id), ['Images']);
         const fromEpoch = (epochSeconds) => {
             var d = new Date(0);
             d.setUTCSeconds(epochSeconds);
@@ -56,6 +58,7 @@ const contentClient = {
                 genericType: 'shop',
                 title: l.title,
                 description: l.description,
+                images: l.images?.map((i) => i.url_570xN),
                 url: l.url,
                 date: fromEpoch(l.last_modified_timestamp),
                 detail: {
@@ -75,6 +78,7 @@ export default {
     getShop,
     shopListings,
     allShopListings,
+    getListingsWith,
     ...contentClient,
 };
 const etsy = (url, options = null) => {

@@ -28,6 +28,23 @@ const allShopListings = async (shopId) => {
   }
   return listings
 }
+const getListingsWith = (
+  listingIds: number[],
+  includes: (
+    | 'Shipping'
+    | 'Images'
+    | 'Shop'
+    | 'User'
+    | 'Translations'
+    | 'Inventory'
+    | 'Videos'
+  )[],
+) =>
+  etsy(
+    `${host}/application/listings/batch?listing_ids=${listingIds.join(
+      ',',
+    )}&includes=${includes.join(',')}`,
+  ) as Promise<ShopListings>
 
 const listingImages = (listingId) =>
   etsy(
@@ -61,7 +78,11 @@ const contentClient = {
     if (!shop) {
       throw new Error('Shop not found')
     }
-    const listings = await allShopListings(shopId)
+    let listings = await allShopListings(shopId)
+    listings = await getListingsWith(
+      listings.results.map((l) => l.listing_id),
+      ['Images'],
+    )
     const fromEpoch = (epochSeconds) => {
       var d = new Date(0)
       d.setUTCSeconds(epochSeconds)
@@ -82,7 +103,7 @@ const contentClient = {
             genericType: 'shop',
             title: l.title,
             description: l.description,
-            // images: l.Images,
+            images: l.images?.map((i) => i.url_570xN),
             url: l.url,
             date: fromEpoch(l.last_modified_timestamp),
             detail: {
@@ -106,6 +127,7 @@ export default {
   getShop,
   shopListings,
   allShopListings,
+  getListingsWith,
   ...contentClient,
 }
 
@@ -235,34 +257,35 @@ type ShopListings = {
       production_partners: string[]
       skus: string[]
       views: number
+      images?: EtsyListingImage[]
     },
   ]
 }
 
 type EtsyListingImagesResponse = {
   count: number
-  results: [
-    {
-      listing_id: number
-      listing_image_id: number
-      hex_code: string
-      red: number
-      green: number
-      blue: number
-      hue: number
-      saturation: number
-      brightness: number
-      is_black_and_white: boolean
-      creation_tsz: number
-      created_timestamp: number
-      rank: number
-      url_75x75: string
-      url_170x135: string
-      url_570xN: string
-      url_fullxfull: string
-      full_height: number
-      full_width: number
-      alt_text?: string
-    },
-  ]
+  results: EtsyListingImage[]
+}
+
+type EtsyListingImage = {
+  listing_id: number
+  listing_image_id: number
+  hex_code: string
+  red: number
+  green: number
+  blue: number
+  hue: number
+  saturation: number
+  brightness: number
+  is_black_and_white: boolean
+  creation_tsz: number
+  created_timestamp: number
+  rank: number
+  url_75x75: string
+  url_170x135: string
+  url_570xN: string
+  url_fullxfull: string
+  full_height: number
+  full_width: number
+  alt_text?: string
 }

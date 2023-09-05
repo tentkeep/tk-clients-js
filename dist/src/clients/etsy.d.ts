@@ -8,6 +8,7 @@ declare const _default: {
     getShop: (shopId: any) => Promise<EtsyShop>;
     shopListings: (shopId: any, offset?: number) => Promise<ShopListings>;
     allShopListings: (shopId: any) => Promise<ShopListings>;
+    getListingsWith: (listingIds: number[], includes: ("Shipping" | "Images" | "Shop" | "User" | "Translations" | "Inventory" | "Videos")[]) => Promise<ShopListings>;
 };
 export default _default;
 declare type ShopSearchResult = {
@@ -123,33 +124,33 @@ declare type ShopListings = {
             production_partners: string[];
             skus: string[];
             views: number;
+            images?: EtsyListingImage[];
         }
     ];
 };
 declare type EtsyListingImagesResponse = {
     count: number;
-    results: [
-        {
-            listing_id: number;
-            listing_image_id: number;
-            hex_code: string;
-            red: number;
-            green: number;
-            blue: number;
-            hue: number;
-            saturation: number;
-            brightness: number;
-            is_black_and_white: boolean;
-            creation_tsz: number;
-            created_timestamp: number;
-            rank: number;
-            url_75x75: string;
-            url_170x135: string;
-            url_570xN: string;
-            url_fullxfull: string;
-            full_height: number;
-            full_width: number;
-            alt_text?: string;
-        }
-    ];
+    results: EtsyListingImage[];
+};
+declare type EtsyListingImage = {
+    listing_id: number;
+    listing_image_id: number;
+    hex_code: string;
+    red: number;
+    green: number;
+    blue: number;
+    hue: number;
+    saturation: number;
+    brightness: number;
+    is_black_and_white: boolean;
+    creation_tsz: number;
+    created_timestamp: number;
+    rank: number;
+    url_75x75: string;
+    url_170x135: string;
+    url_570xN: string;
+    url_fullxfull: string;
+    full_height: number;
+    full_width: number;
+    alt_text?: string;
 };

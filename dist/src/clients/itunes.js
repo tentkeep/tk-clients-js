@@ -6,7 +6,7 @@ const contentClient = {
     search: (query) => podcasts(query).then((result) => result.results.map((r) => ({
         sourceId: r.feedUrl,
         entryType: GalleryEntryTypes.Podcast,
-        genericType: 'podcast',
+        genericType: 'audio',
         title: r.collectionName,
         description: r.genres.join(', '),
         url: r.feedUrl,

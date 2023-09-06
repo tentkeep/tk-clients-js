@@ -21,7 +21,7 @@ const contentClient = {
           ({
             sourceId: r.feedUrl,
             entryType: GalleryEntryTypes.Podcast,
-            genericType: 'podcast',
+            genericType: 'audio',
             title: r.collectionName,
             description: r.genres.join(', '),
             url: r.feedUrl,

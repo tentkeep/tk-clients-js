@@ -46,7 +46,7 @@ const contentClient = {
       {
         sourceId: query,
         entryType: GalleryEntryTypes.Podcast,
-        genericType: 'podcast',
+        genericType: 'audio',
         title: podcast.title,
         description: podcast.description,
         image: podcast.image.url,
@@ -77,7 +77,7 @@ const contentClient = {
             ({
               sourceId: Buffer.from(i.enclosure.$url).toString('base64'),
               entryType: GalleryEntryTypes.Podcast,
-              genericType: 'podcast',
+              genericType: 'audio',
               title: i.title,
               description: i.description,
               url: i.enclosure.$url,

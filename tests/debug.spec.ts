@@ -22,7 +22,7 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      const listings = await clients.etsy.summarize('5884183').then(print)
+      await clients.page.summary('farmhouseonboone.com').then(print)
     },
     { timeout: 35000 },
   )

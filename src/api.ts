@@ -1,3 +1,4 @@
+// @ts-nocheck
 const got = async (url: any, options: any) => {
   try {
     return (await import('got')).default(url, options).then((response: any) => {
@@ -8,7 +9,6 @@ const got = async (url: any, options: any) => {
       return response
     })
   } catch {
-    // @ts-ignore
     return fetch(url, options).then(async (response) => {
       response.statusCode = response.status
       response.bodyString = await response.text()

@@ -1,4 +1,3 @@
-/// <reference types="node" resolution-mode="require"/>
 export declare const sanitizeOptions: (options: any | null) => any;
 export declare class ApiStatusError extends Error {
     status: number;

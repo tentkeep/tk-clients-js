@@ -6,8 +6,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "rm -rf dist && npm i && tsc --project tsconfig.json && npm run copy-dist-files && node scripts/cleanup-dist.js",
-    "copy-dist-files": "cp -rL page-phantomjs-meta-grabber.js dist/",
+    "build": "rm -rf dist && npm i && tsc --project tsconfig.json && node scripts/cleanup-dist.js",
     "debug": ". config/local.sh && ts-node --esm --project tsconfig.json ./tests/debug.ts",
     "test": "vitest run",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
@@ -29,11 +28,13 @@
   "dependencies": {
     "@tentkeep/tentkeep": "^0.4.4",
     "got": "^12.4.1",
+    "jsdom": "^22.1.0",
     "jsonwebtoken": "^9.0.0",
     "x2js": "^3.4.3",
     "xml2js": "^0.5.0"
   },
   "devDependencies": {
+    "@types/jsdom": "^21.1.2",
     "@types/node": "^18.8.4",
     "eslint": "^8.21.0",
     "prettier": "^2.7.1",

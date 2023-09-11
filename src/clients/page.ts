@@ -1,13 +1,10 @@
-import childProcess from 'child_process'
 import X2JS from 'x2js'
 import { sanitizeUrl } from '../shareable/common.js'
 import api, { ApiStatusError } from '../api.js'
 import clients from '../../index.js'
 import { PageInfo, PageSummary, PageInfoFeatures } from '@tentkeep/tentkeep'
+import * as jsdom from 'jsdom'
 
-/**
- * PageSummary requires scraping the site with phantom = time
- */
 const summary = async (url: string): Promise<PageSummary> => {
   let _url = sanitizeUrl(url)
 
@@ -54,7 +51,7 @@ const summary = async (url: string): Promise<PageSummary> => {
 }
 
 /**
- * PageInfo does NOT require scraping the site with phantom = faster
+ * PageInfo does NOT require scraping the site
  */
 const info = async (url: string): Promise<PageInfo> => {
   let _url = sanitizeUrl(url)
@@ -91,33 +88,10 @@ export default {
   summary,
 }
 
-function phantomjs(): string {
-  return process.env.PHANTOMJS_PATH ?? 'phantomjs'
-}
-
-function scriptPath(): string {
-  return (
-    process.env.PHANTOMJS_SCRIPT_PATH ??
-    './node_modules/tk-clients/dist/page-phantomjs-meta-grabber.js'
-  )
-}
-
-function captureUrl(url: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const command = `${phantomjs()} --ssl-protocol=any --ignore-ssl-errors=true ${scriptPath()} ${url}`
-    console.log('[page cmd]', command)
-    childProcess.exec(command, (err, stdout: string, stderr: string) => {
-      if (err) {
-        console.log('[page err]', err)
-        return reject(err)
-      }
-      if (stderr.length) {
-        console.log('[page stderr]', stderr)
-        return reject(stderr)
-      }
-      resolve(stdout)
-    })
-  })
+async function captureUrl(url: string): Promise<string> {
+  const dom = await jsdom.JSDOM.fromURL(url)
+  const html = dom.serialize()
+  return html
 }
 
 function findDescription(meta: any[] | undefined): string | undefined {

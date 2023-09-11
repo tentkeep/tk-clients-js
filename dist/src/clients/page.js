@@ -1,8 +1,8 @@
-import childProcess from 'child_process';
 import X2JS from 'x2js';
 import { sanitizeUrl } from '../shareable/common.js';
 import api, { ApiStatusError } from '../api.js';
 import clients from '../../index.js';
+import * as jsdom from 'jsdom';
 const summary = async (url) => {
     let _url = sanitizeUrl(url);
     const page = await captureUrl(_url);
@@ -74,29 +74,10 @@ export default {
     info,
     summary,
 };
-function phantomjs() {
-    return process.env.PHANTOMJS_PATH ?? 'phantomjs';
-}
-function scriptPath() {
-    return (process.env.PHANTOMJS_SCRIPT_PATH ??
-        './node_modules/tk-clients/dist/page-phantomjs-meta-grabber.js');
-}
-function captureUrl(url) {
-    return new Promise((resolve, reject) => {
-        const command = `${phantomjs()} --ssl-protocol=any --ignore-ssl-errors=true ${scriptPath()} ${url}`;
-        console.log('[page cmd]', command);
-        childProcess.exec(command, (err, stdout, stderr) => {
-            if (err) {
-                console.log('[page err]', err);
-                return reject(err);
-            }
-            if (stderr.length) {
-                console.log('[page stderr]', stderr);
-                return reject(stderr);
-            }
-            resolve(stdout);
-        });
-    });
+async function captureUrl(url) {
+    const dom = await jsdom.JSDOM.fromURL(url);
+    const html = dom.serialize();
+    return html;
 }
 function findDescription(meta) {
     return (meta?.find((m) => m.name === 'description')?.content ??

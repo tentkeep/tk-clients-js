@@ -8,7 +8,8 @@ import * as jsdom from 'jsdom'
 const summary = async (url: string): Promise<PageSummary> => {
   let _url = sanitizeUrl(url)
 
-  const page = await captureUrl(_url)
+  const dom = await jsdom.JSDOM.fromURL(url)
+  const page = dom.serialize()
 
   if (page.length < 100) {
     console.log('[page.summary] Unexpectedly short page:', page)
@@ -20,7 +21,7 @@ const summary = async (url: string): Promise<PageSummary> => {
   const xmlParser = (xml) => x2js.xml2js(xml) as any
   const meta = page.match(/<meta[^>]+>/g)?.map(xmlParser)
   const links = page.match(/<link[^>]+>/g)?.map(xmlParser)
-  const title = page.match(/<title.*<\/title>/g)?.map(xmlParser)
+  const title = dom.window.document.head.querySelector('title')?.text ?? ''
   const images: string[] = [
     ...new Set(
       page.match(/[^("']*(jpg|jpeg|png)[^)"']*/g)?.map((img) => {
@@ -34,9 +35,7 @@ const summary = async (url: string): Promise<PageSummary> => {
 
   return {
     url: _url,
-    title:
-      meta?.find((m) => m.property === 'og:site_name')?.content ??
-      title?.[title.length - 1]['__text'],
+    title: meta?.find((m) => m.property === 'og:site_name')?.content ?? title, //?.[title.length - 1]['__text'],
     description: findDescription(meta),
     image: findImage(meta, _url),
     images,
@@ -86,12 +85,6 @@ const info = async (url: string): Promise<PageInfo> => {
 export default {
   info,
   summary,
-}
-
-async function captureUrl(url: string): Promise<string> {
-  const dom = await jsdom.JSDOM.fromURL(url)
-  const html = dom.serialize()
-  return html
 }
 
 function findDescription(meta: any[] | undefined): string | undefined {

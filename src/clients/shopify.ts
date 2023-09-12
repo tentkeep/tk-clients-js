@@ -56,6 +56,8 @@ const contentClient = {
       return {
         sourceId: product.id.toString(),
         title: product.title,
+        entryType: GalleryEntryTypes.Shopify,
+        genericType: 'shop',
         description: product.body_html?.replace(/\s\s\s+/, ' '),
         images: product.images.map((i) => i.src),
         url: `${sanitizeUrl(url)}/products/${product.handle}`,

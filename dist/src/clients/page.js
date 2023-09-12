@@ -5,7 +5,8 @@ import clients from '../../index.js';
 import * as jsdom from 'jsdom';
 const summary = async (url) => {
     let _url = sanitizeUrl(url);
-    const page = await captureUrl(_url);
+    const dom = await jsdom.JSDOM.fromURL(url);
+    const page = dom.serialize();
     if (page.length < 100) {
         console.log('[page.summary] Unexpectedly short page:', page);
     }
@@ -16,7 +17,7 @@ const summary = async (url) => {
     const xmlParser = (xml) => x2js.xml2js(xml);
     const meta = page.match(/<meta[^>]+>/g)?.map(xmlParser);
     const links = page.match(/<link[^>]+>/g)?.map(xmlParser);
-    const title = page.match(/<title.*<\/title>/g)?.map(xmlParser);
+    const title = dom.window.document.head.querySelector('title')?.text ?? '';
     const images = [
         ...new Set(page.match(/[^("']*(jpg|jpeg|png)[^)"']*/g)?.map((img) => {
             img = img.split('?')[0] ?? '';
@@ -27,8 +28,7 @@ const summary = async (url) => {
     ].filter((img) => img.startsWith('http'));
     return {
         url: _url,
-        title: meta?.find((m) => m.property === 'og:site_name')?.content ??
-            title?.[title.length - 1]['__text'],
+        title: meta?.find((m) => m.property === 'og:site_name')?.content ?? title,
         description: findDescription(meta),
         image: findImage(meta, _url),
         images,
@@ -74,11 +74,6 @@ export default {
     info,
     summary,
 };
-async function captureUrl(url) {
-    const dom = await jsdom.JSDOM.fromURL(url);
-    const html = dom.serialize();
-    return html;
-}
 function findDescription(meta) {
     return (meta?.find((m) => m.name === 'description')?.content ??
         meta?.find((m) => m.property === 'og:description')?.content);

@@ -22,7 +22,9 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      await clients.page.summary('farmhouseonboone.com').then(print)
+      await clients.shopify
+        .summarize('https://alexandrefamilyfarm.com')
+        .then(print)
     },
     { timeout: 35000 },
   )

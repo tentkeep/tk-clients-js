@@ -95,18 +95,36 @@ const host = (_host: string) => {
         categoryRefs.push(...(p.categories || []))
         tagRefs.push(...(p.tags || []))
       })
-      const categoriesPromise = resources.categories({
-        per_page: 100,
-        include: categoryRefs.join(','),
-      })
-      const tagsPromise = resources.tags({
-        per_page: 100,
-        include: tagRefs.join(','),
-      })
-      const [categories, tags] = await Promise.all([
-        categoriesPromise,
-        tagsPromise,
-      ])
+      const categoriesPromise = resources
+        .categories({
+          per_page: 100,
+          include: categoryRefs.join(','),
+        })
+        .catch((e) => {
+          console.error('Failed to fetch Wordpress categories', url, e.message)
+          return []
+        })
+      const tagsPromise = resources
+        .tags({
+          per_page: 100,
+          include: tagRefs.join(','),
+        })
+        .catch((e) => {
+          console.error('Failed to fetch Wordpress tags', url, e.message)
+          return []
+        })
+      let categories: any[] = [],
+        tags: any[] = []
+      try {
+        const [_categories, _tags] = await Promise.all([
+          categoriesPromise,
+          tagsPromise,
+        ])
+        categories = _categories
+        tags = _tags
+      } catch (err) {
+        console.error('Failed to fetch Wordpress categories or tags', err)
+      }
 
       return {
         sourceId: url,
@@ -118,7 +136,7 @@ const host = (_host: string) => {
               sourceId: post.id.toString(),
               title: extractPostTitle(post),
               description: extractPostDescription(post),
-              entryType: 'wordpress',
+              entryType: GalleryEntryTypes.Wordpress,
               genericType: 'page',
               images: [extractImageLink(post)],
               url: post.link,

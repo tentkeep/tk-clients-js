@@ -22,9 +22,12 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      await clients.shopify
-        .summarize('https://alexandrefamilyfarm.com')
+      await clients.wordpress
+        .summarize('https://www.thrivingfarmerpodcast.com')
         .then(print)
+        .catch((err) => {
+          console.error(err.message)
+        })
     },
     { timeout: 35000 },
   )

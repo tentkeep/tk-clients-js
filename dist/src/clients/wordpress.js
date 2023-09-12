@@ -58,18 +58,36 @@ const host = (_host) => {
                 categoryRefs.push(...(p.categories || []));
                 tagRefs.push(...(p.tags || []));
             });
-            const categoriesPromise = resources.categories({
+            const categoriesPromise = resources
+                .categories({
                 per_page: 100,
                 include: categoryRefs.join(','),
+            })
+                .catch((e) => {
+                console.error('Failed to fetch Wordpress categories', url, e.message);
+                return [];
             });
-            const tagsPromise = resources.tags({
+            const tagsPromise = resources
+                .tags({
                 per_page: 100,
                 include: tagRefs.join(','),
+            })
+                .catch((e) => {
+                console.error('Failed to fetch Wordpress tags', url, e.message);
+                return [];
             });
-            const [categories, tags] = await Promise.all([
-                categoriesPromise,
-                tagsPromise,
-            ]);
+            let categories = [], tags = [];
+            try {
+                const [_categories, _tags] = await Promise.all([
+                    categoriesPromise,
+                    tagsPromise,
+                ]);
+                categories = _categories;
+                tags = _tags;
+            }
+            catch (err) {
+                console.error('Failed to fetch Wordpress categories or tags', err);
+            }
             return {
                 sourceId: url,
                 title: posts[0]?.yoast_head_json?.og_site_name || url,
@@ -78,7 +96,7 @@ const host = (_host) => {
                     sourceId: post.id.toString(),
                     title: extractPostTitle(post),
                     description: extractPostDescription(post),
-                    entryType: 'wordpress',
+                    entryType: GalleryEntryTypes.Wordpress,
                     genericType: 'page',
                     images: [extractImageLink(post)],
                     url: post.link,

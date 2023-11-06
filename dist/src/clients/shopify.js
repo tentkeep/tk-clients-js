@@ -69,6 +69,13 @@ function productsUrl(url, limit, page = 1) {
     _url.searchParams.append('page', page.toString());
     return _url.toString();
 }
+function productUrl(url, product) {
+    let _url = url;
+    if (url.includes('/products.json')) {
+        _url = url.split('/products.json')[0];
+    }
+    return `${sanitizeUrl(_url)}/products/${product.handle}`;
+}
 const mapToGalleryEntryItem = (product, url, _url) => {
     return {
         sourceId: product.id.toString(),
@@ -77,7 +84,7 @@ const mapToGalleryEntryItem = (product, url, _url) => {
         genericType: 'shop',
         description: product.body_html?.replace(/\s\s\s+/, ' '),
         images: product.images.map((i) => i.src),
-        url: `${sanitizeUrl(url)}/products/${product.handle}`,
+        url: productUrl(url, product),
         date: product.updated_at,
         detail: {
             variants: product.variants.map((variant) => {

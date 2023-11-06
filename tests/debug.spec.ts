@@ -24,11 +24,8 @@ describe('debug', () => {
     'prints info',
     async () => {
       await clients.shopify
-        .summarize('https://grocefamilyfarm.com')
-        .then((response) =>
-          console.log('RESPONSE LENGTH:', response.items.length),
-        )
-        // .then(print)
+        .summarize('https://grocefamilyfarm.com/products.json?limit=25')
+        .then(print)
         .catch((err) => {
           console.error(err.message)
         })

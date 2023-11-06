@@ -148,6 +148,14 @@ function productsUrl(url: string, limit: number, page: number = 1): string {
   return _url.toString()
 }
 
+function productUrl(url: string, product: ShopifyProduct) {
+  let _url = url
+  if (url.includes('/products.json')) {
+    _url = url.split('/products.json')[0] as string
+  }
+  return `${sanitizeUrl(_url)}/products/${product.handle}`
+}
+
 const mapToGalleryEntryItem = (
   product: ShopifyProduct,
   url: string,
@@ -160,7 +168,7 @@ const mapToGalleryEntryItem = (
     genericType: 'shop',
     description: product.body_html?.replace(/\s\s\s+/, ' '),
     images: product.images.map((i) => i.src),
-    url: `${sanitizeUrl(url)}/products/${product.handle}`,
+    url: productUrl(url, product),
     date: product.updated_at,
     detail: {
       variants: product.variants.map((variant) => {

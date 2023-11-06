@@ -720,6 +720,12 @@ export declare const clients: {
             deleteProductSplitClaims: (token: string, ordersBundle: import("@tentkeep/tentkeep").OrdersBundle, productSplit: import("@tentkeep/tentkeep").AnyProductSplit, splitId: string) => Promise<boolean>;
         };
         onUnauthorized: (callback: () => void) => void;
+        getComposition: (token: string | undefined, compositionId: number) => Promise<{
+            composition: import("@tentkeep/tentkeep/dist/src/composition/composition-types.js").Composition;
+        }>;
+        saveComposition: (token: string, composition: import("@tentkeep/tentkeep/dist/src/composition/composition-types.js").Composition) => Promise<{
+            composition: import("@tentkeep/tentkeep/dist/src/composition/composition-types.js").Composition;
+        }>;
         search: (query: string, options?: import("@tentkeep/tentkeep").SearchOptions | undefined) => Promise<import("@tentkeep/tentkeep").SearchResponse>;
         searchUsers: (token: string, query: string, options?: import("@tentkeep/tentkeep").SearchOptions | undefined) => Promise<import("@tentkeep/tentkeep").SearchResponse>;
         getUser: (token: string, username: string) => Promise<{
@@ -736,7 +742,7 @@ export declare const clients: {
         getGalleries: (options?: import("@tentkeep/tentkeep").SearchOptions | undefined) => Promise<import("@tentkeep/tentkeep").TKResponse | import("@tentkeep/tentkeep").Gallery>;
         searchGalleries: (query: string, options?: import("@tentkeep/tentkeep").SearchOptions | undefined) => Promise<import("@tentkeep/tentkeep").SearchResponse>;
         searchGalleryEntryItems: (query: string, options?: import("@tentkeep/tentkeep").SearchOptions | undefined) => Promise<import("@tentkeep/tentkeep").SearchResponse>;
-        getGalleriesNearby: (location: import("@tentkeep/tentkeep").Location, options: {
+        getGalleriesNearby: (location: import("@tentkeep/tentkeep").LocationSearch, options: {
             miles: number;
             limit: number;
         }) => Promise<import("@tentkeep/tentkeep").GalleryPlace[]>;
@@ -765,6 +771,7 @@ export declare const clients: {
             createdBy?: number | undefined;
             url?: string | undefined;
             images?: import("@tentkeep/tentkeep").EntityImage[] | undefined;
+            compositionId?: number | undefined;
             attributes?: import("@tentkeep/tentkeep").GalleryAttribute[] | undefined;
         } & {
             title: string;
@@ -776,10 +783,12 @@ export declare const clients: {
             createdBy?: number | undefined;
             url?: string | undefined;
             images?: import("@tentkeep/tentkeep").EntityImage[] | undefined;
+            compositionId?: number | undefined;
             attributes?: import("@tentkeep/tentkeep").GalleryAttribute[] | undefined;
         } & {
             id: number;
         }) => Promise<import("@tentkeep/tentkeep").Gallery>;
+        deleteGallery: (token: string, galleryId: number) => Promise<any>;
         addGalleryAdmin: (token: string, galleryId: number, users: ({
             id: number;
         } | {

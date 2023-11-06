@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/tentkeep/clients#readme",
   "dependencies": {
-    "@tentkeep/tentkeep": "^0.4.4",
+    "@tentkeep/tentkeep": "^0.4.41",
     "got": "^12.4.1",
     "jsdom": "^22.1.0",
     "jsonwebtoken": "^9.0.0",

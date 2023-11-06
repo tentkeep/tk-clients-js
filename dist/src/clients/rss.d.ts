@@ -1,11 +1,11 @@
 import { GalleryEntrySummary } from '@tentkeep/tentkeep';
 declare const _default: {
     search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry[]>;
-    summarize: (sourceId: string) => Promise<GalleryEntrySummary>;
+    summarize: (sourceId: string, options?: undefined) => Promise<GalleryEntrySummary>;
     feed: (feedUrl: any) => Promise<RSS>;
 };
 export default _default;
-declare type RSS = {
+type RSS = {
     title: string;
     description: string;
     link: string;

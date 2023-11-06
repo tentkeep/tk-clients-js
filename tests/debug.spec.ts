@@ -1,5 +1,6 @@
 import { describe, it } from 'vitest'
 import clients from '../index.js'
+import shopifyFixture from './fixtures/shopify-products.json'
 
 const [_entryPoint, _file, arg] = process.argv
 console.info(
@@ -22,9 +23,12 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      await clients.wordpress
-        .summarize('https://www.thrivingfarmerpodcast.com')
-        .then(print)
+      await clients.shopify
+        .summarize('https://grocefamilyfarm.com')
+        .then((response) =>
+          console.log('RESPONSE LENGTH:', response.items.length),
+        )
+        // .then(print)
         .catch((err) => {
           console.error(err.message)
         })

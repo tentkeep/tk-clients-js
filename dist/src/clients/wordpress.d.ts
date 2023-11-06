@@ -1,10 +1,10 @@
 import { GalleryEntrySummary } from '@tentkeep/tentkeep';
 import { TentkeepClient } from './tentkeep-client.js';
-export declare type WordpressOptions = {
+export type WordpressOptions = {
     per_page?: number;
     include?: string;
 };
-export declare type WordpressResourceAPI = (options: WordpressOptions) => Promise<any>;
+export type WordpressResourceAPI = (options: WordpressOptions) => Promise<any>;
 export interface WordpressResources {
     blockTypes: WordpressResourceAPI;
     blocks: WordpressResourceAPI;
@@ -53,7 +53,7 @@ declare const host: (_host: string) => {
     users: WordpressResourceAPI;
     plugins: WordpressResourceAPI;
 };
-declare const _default: TentkeepClient & {
+declare const _default: TentkeepClient<undefined> & {
     host: typeof host;
 };
 export default _default;

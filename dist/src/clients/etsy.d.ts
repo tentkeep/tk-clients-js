@@ -1,7 +1,7 @@
 import { GalleryEntry, GalleryEntrySummary } from '@tentkeep/tentkeep';
 declare const _default: {
     search: (query: string, options?: Record<string, any> | undefined) => Promise<GalleryEntry[]>;
-    summarize: (sourceId: string) => Promise<GalleryEntrySummary>;
+    summarize: (sourceId: string, options?: undefined) => Promise<GalleryEntrySummary>;
     listing: (listingId: any) => Promise<any>;
     listingImages: (listingId: any) => Promise<EtsyListingImagesResponse>;
     searchShops: (name: any) => Promise<ShopSearchResult>;
@@ -11,11 +11,11 @@ declare const _default: {
     getListingsWith: (listingIds: number[], includes: ("Shipping" | "Images" | "Shop" | "User" | "Translations" | "Inventory" | "Videos")[]) => Promise<ShopListingsResponse>;
 };
 export default _default;
-declare type ShopSearchResult = {
+type ShopSearchResult = {
     count: number;
     results: EtsyShop[];
 };
-declare type EtsyShop = {
+type EtsyShop = {
     shop_id: number;
     shop_name: string;
     user_id: number;
@@ -64,11 +64,11 @@ declare type EtsyShop = {
     review_average?: string;
     review_count?: string;
 };
-declare type ShopListingsResponse = {
+type ShopListingsResponse = {
     count: number;
     results: EtsyShopListing[];
 };
-declare type EtsyShopListing = {
+type EtsyShopListing = {
     listing_id: number;
     user_id: number;
     shop_id: number;
@@ -127,11 +127,11 @@ declare type EtsyShopListing = {
     views: number;
     images?: EtsyListingImage[];
 };
-declare type EtsyListingImagesResponse = {
+type EtsyListingImagesResponse = {
     count: number;
     results: EtsyListingImage[];
 };
-declare type EtsyListingImage = {
+type EtsyListingImage = {
     listing_id: number;
     listing_image_id: number;
     hex_code: string;

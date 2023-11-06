@@ -12,7 +12,9 @@ const raw = {
   products: (
     url: string,
     limit: number = 250,
-  ): Promise<{ products: ShopifyProduct[] }> => api(productsUrl(url, limit)),
+    page: number = 1,
+  ): Promise<{ products: ShopifyProduct[] }> =>
+    api(productsUrl(url, limit, page)),
   collections: (url: string): Promise<any> =>
     api(`${sanitizeUrl(url)}/collections.json?limit=250`),
   collectionProducts: (url: string, collectionHandle: string): Promise<any> =>
@@ -48,47 +50,36 @@ const contentClient = {
   },
   summarize: async (
     url: string,
-    limit: number = 25,
   ): Promise<GalleryEntry & { items: GalleryEntryItemProduct[] }> => {
-    const products = await raw.products(url, limit)
+    const limit = 250
     const _url = new URL(url)
-    const productItems = products.products.map((product: ShopifyProduct) => {
-      return {
-        sourceId: product.id.toString(),
-        title: product.title,
-        entryType: GalleryEntryTypes.Shopify,
-        genericType: 'shop',
-        description: product.body_html?.replace(/\s\s\s+/, ' '),
-        images: product.images.map((i) => i.src),
-        url: `${sanitizeUrl(url)}/products/${product.handle}`,
-        date: product.updated_at,
-        detail: {
-          variants: product.variants.map((variant) => {
-            return {
-              id: `${_url.hostname}-${product.id}-${variant.id}`,
-              sourceId: `${variant.id}`,
-              title: variant.title,
-              url: `${sanitizeUrl(url)}/products/${product.handle}?variant=${
-                variant.id
-              }`,
-              date: variant.updated_at,
-              price: parseFloat(variant.price),
-              available: variant.available,
-            } as GalleryEntryItemProductVariant
-          }),
-        },
-      } as GalleryEntryItemProduct
-    })
+    let title = _url.host
+    const items: GalleryEntryItemProduct[] = []
+
+    let page = 1
+    while (page > 0) {
+      await raw.products(url, limit, page).then((response) => {
+        page = response.products.length === 0 ? -1 : page + 1
+
+        title = response.products[0]?.vendor ?? 'Products'
+
+        const mappedItems = response.products.map((product) =>
+          mapToGalleryEntryItem(product, url, _url),
+        )
+        items.push(...mappedItems)
+      })
+    }
+
     return {
       sourceId: url,
-      title: products.products[0]?.vendor ?? 'Products',
+      title,
       url: productsUrl(url, limit),
       entryType: GalleryEntryTypes.Shopify,
       genericType: 'shop',
-      items: productItems,
+      items,
     }
   },
-} as TentkeepClient
+} as TentkeepClient<{ limit: number }>
 
 export type ShopifyProduct = {
   id: number
@@ -146,12 +137,45 @@ export default {
   ...contentClient,
 }
 
-function productsUrl(url: string, limit: number): string {
+function productsUrl(url: string, limit: number, page: number = 1): string {
   const u = url.startsWith('http') ? url : `https://${url}`
   const _url = new URL(u)
   if (!_url.pathname.endsWith('/products.json')) {
     _url.pathname = '/products.json'
   }
   if (limit) _url.searchParams.append('limit', limit.toString())
+  _url.searchParams.append('page', page.toString())
   return _url.toString()
+}
+
+const mapToGalleryEntryItem = (
+  product: ShopifyProduct,
+  url: string,
+  _url: URL,
+) => {
+  return {
+    sourceId: product.id.toString(),
+    title: product.title,
+    entryType: GalleryEntryTypes.Shopify,
+    genericType: 'shop',
+    description: product.body_html?.replace(/\s\s\s+/, ' '),
+    images: product.images.map((i) => i.src),
+    url: `${sanitizeUrl(url)}/products/${product.handle}`,
+    date: product.updated_at,
+    detail: {
+      variants: product.variants.map((variant) => {
+        return {
+          id: `${_url.hostname}-${product.id}-${variant.id}`,
+          sourceId: `${variant.id}`,
+          title: variant.title,
+          url: `${sanitizeUrl(url)}/products/${product.handle}?variant=${
+            variant.id
+          }`,
+          date: variant.updated_at,
+          price: parseFloat(variant.price),
+          available: variant.available,
+        } as GalleryEntryItemProductVariant
+      }),
+    },
+  } as GalleryEntryItemProduct
 }

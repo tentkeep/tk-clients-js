@@ -17,7 +17,7 @@ export declare const clients: {
     };
     etsy: {
         search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry[]>;
-        summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
+        summarize: (sourceId: string, options?: undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
         listing: (listingId: any) => Promise<any>;
         listingImages: (listingId: any) => Promise<{
             count: number;
@@ -405,11 +405,11 @@ export declare const clients: {
         };
         placeDetails: (placeId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntryPlace>;
         search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry[]>;
-        summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
+        summarize: (sourceId: string, options?: undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
     };
     itunes: {
         search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry[]>;
-        summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
+        summarize: (sourceId: string, options?: undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
         podcasts: (query: any) => Promise<{
             resultCount: number;
             results: [{
@@ -448,7 +448,7 @@ export declare const clients: {
     };
     musickit: {
         search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry[]>;
-        summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
+        summarize: (sourceId: string, options?: undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
         searchArtists: (term: string) => Promise<{
             results: {
                 artists: {
@@ -533,7 +533,7 @@ export declare const clients: {
     };
     rss: {
         search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry[]>;
-        summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
+        summarize: (sourceId: string, options?: undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
         feed: (feedUrl: any) => Promise<{
             title: string;
             description: string;
@@ -597,9 +597,11 @@ export declare const clients: {
     };
     shopify: {
         search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry[]>;
-        summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
+        summarize: (sourceId: string, options?: {
+            limit: number;
+        } | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
         raw: {
-            products: (url: string, limit?: number) => Promise<{
+            products: (url: string, limit?: number, page?: number) => Promise<{
                 products: import("./src/clients/shopify.js").ShopifyProduct[];
             }>;
             collections: (url: string) => Promise<any>;
@@ -802,7 +804,7 @@ export declare const clients: {
         saveUserItemActivity: (token: string, itemActivity: any) => Promise<any>;
         findOrCreateStoreForGallery: (token: string, galleryId: number) => Promise<any>;
     };
-    wordpress: import("./src/clients/tentkeep-client.js").TentkeepClient & {
+    wordpress: import("./src/clients/tentkeep-client.js").TentkeepClient<undefined> & {
         host: (_host: string) => {
             isWordpress(): Promise<boolean>;
             summary(limit?: number): Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;

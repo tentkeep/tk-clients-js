@@ -1,9 +1,9 @@
 import { GalleryEntry, GalleryEntrySummary } from '@tentkeep/tentkeep';
-export declare type YoutubeResourceParams = any & {
+export type YoutubeResourceParams = any & {
     part: string;
     maxResults: number;
 };
-export declare type YoutubeResourceAPI = (params: YoutubeResourceParams) => Promise<any>;
+export type YoutubeResourceAPI = (params: YoutubeResourceParams) => Promise<any>;
 export interface YoutubeResources {
     activities: YoutubeResourceAPI;
     channels: YoutubeResourceAPI;
@@ -14,7 +14,7 @@ export interface YoutubeResources {
     videos: YoutubeResourceAPI;
     videoCategories: YoutubeResourceAPI;
 }
-declare type YoutubeEntry = {
+type YoutubeEntry = {
     publishedAt: Date;
     uploadsPlaylistId: any;
     imageWidth: string;

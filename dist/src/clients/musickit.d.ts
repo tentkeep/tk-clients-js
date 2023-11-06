@@ -1,7 +1,7 @@
 import { GalleryEntry } from '@tentkeep/tentkeep';
 declare const _default: {
     search: (query: string, options?: Record<string, any> | undefined) => Promise<GalleryEntry[]>;
-    summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
+    summarize: (sourceId: string, options?: undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
     searchArtists: (term: string) => Promise<SearchArtistsResponse>;
     getArtist: (artistId: any) => Promise<any>;
     getArtistAlbums: (artistId: any) => Promise<any>;
@@ -9,7 +9,7 @@ declare const _default: {
     getAlbums: (albumIds: any) => Promise<any>;
 };
 export default _default;
-declare type SearchArtistsResponse = {
+type SearchArtistsResponse = {
     results: {
         artists: {
             href: string;

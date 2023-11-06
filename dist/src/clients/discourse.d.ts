@@ -15,7 +15,7 @@ declare const _default: (host: string) => {
     user: <T extends string | number>(user: T) => Promise<T extends number ? DiscourseUser : DiscourseUserPlus>;
 };
 export default _default;
-export declare type SearchResponse = {
+export type SearchResponse = {
     posts: {
         id: number;
         name: string;
@@ -78,7 +78,7 @@ export declare type SearchResponse = {
         group_ids: number[];
     };
 };
-export declare type DiscourseUser = {
+export type DiscourseUser = {
     id: number;
     username: string;
     name: string;
@@ -153,7 +153,7 @@ export declare type DiscourseUser = {
     groups: Group[];
     external_ids: any;
 };
-export declare type DiscourseUserPlus = {
+export type DiscourseUserPlus = {
     user_badges: any[];
     badges: any[];
     badge_types: any[];
@@ -176,7 +176,7 @@ export declare type DiscourseUserPlus = {
         user_option: any;
     };
 };
-export declare type Group = {
+export type Group = {
     id?: number;
     name: string;
     full_name?: string;
@@ -215,7 +215,7 @@ export declare enum MessageableLevel {
     AdminsModeratorsOwners = 4,
     Everyone = 99
 }
-export declare type GroupMembers = {
+export type GroupMembers = {
     members: UserMember[];
     owners: UserMember[];
     meta: {
@@ -224,7 +224,7 @@ export declare type GroupMembers = {
         offset: number;
     };
 };
-export declare type UserMember = {
+export type UserMember = {
     id: number;
     username?: string;
     name?: string;
@@ -235,12 +235,12 @@ export declare type UserMember = {
     added_at?: string;
     timezone?: string;
 };
-export declare type AddGroupMembersResponse = {
+export type AddGroupMembersResponse = {
     success: 'OK' | string;
     usernames: string[];
     emails: string[];
 };
-export declare type NewPostResponse = {
+export type NewPostResponse = {
     id: number;
     name?: string;
     username?: string;

@@ -1,5 +1,5 @@
 import { GalleryEntry } from '@tentkeep/tentkeep';
-export declare type ShopifyProduct = {
+export type ShopifyProduct = {
     id: number;
     title: string;
     handle: string;
@@ -50,9 +50,11 @@ export declare type ShopifyProduct = {
 };
 declare const _default: {
     search: (query: string, options?: Record<string, any> | undefined) => Promise<GalleryEntry[]>;
-    summarize: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
+    summarize: (sourceId: string, options?: {
+        limit: number;
+    } | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
     raw: {
-        products: (url: string, limit?: number) => Promise<{
+        products: (url: string, limit?: number, page?: number) => Promise<{
             products: ShopifyProduct[];
         }>;
         collections: (url: string) => Promise<any>;

@@ -807,6 +807,7 @@ export declare const clients: {
     wordpress: import("./src/clients/tentkeep-client.js").TentkeepClient<undefined> & {
         host: (_host: string) => {
             isWordpress(): Promise<boolean>;
+            hasProducts(): Promise<boolean>;
             summary(limit?: number): Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
             blockTypes: import("./src/clients/wordpress.js").WordpressResourceAPI;
             blocks: import("./src/clients/wordpress.js").WordpressResourceAPI;
@@ -822,6 +823,7 @@ export declare const clients: {
             postRevisions: import("./src/clients/wordpress.js").WordpressResourceAPI;
             postStatuses: import("./src/clients/wordpress.js").WordpressResourceAPI;
             postTypes: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            product: import("./src/clients/wordpress.js").WordpressResourceAPI;
             searchResults: import("./src/clients/wordpress.js").WordpressResourceAPI;
             settings: import("./src/clients/wordpress.js").WordpressResourceAPI;
             tags: import("./src/clients/wordpress.js").WordpressResourceAPI;

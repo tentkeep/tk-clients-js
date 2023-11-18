@@ -20,6 +20,7 @@ export interface WordpressResources {
     postRevisions: WordpressResourceAPI;
     postStatuses: WordpressResourceAPI;
     postTypes: WordpressResourceAPI;
+    product: WordpressResourceAPI;
     searchResults: WordpressResourceAPI;
     settings: WordpressResourceAPI;
     tags: WordpressResourceAPI;
@@ -30,6 +31,7 @@ export interface WordpressResources {
 }
 declare const host: (_host: string) => {
     isWordpress(): Promise<boolean>;
+    hasProducts(): Promise<boolean>;
     summary(limit?: number): Promise<GalleryEntrySummary>;
     blockTypes: WordpressResourceAPI;
     blocks: WordpressResourceAPI;
@@ -45,6 +47,7 @@ declare const host: (_host: string) => {
     postRevisions: WordpressResourceAPI;
     postStatuses: WordpressResourceAPI;
     postTypes: WordpressResourceAPI;
+    product: WordpressResourceAPI;
     searchResults: WordpressResourceAPI;
     settings: WordpressResourceAPI;
     tags: WordpressResourceAPI;

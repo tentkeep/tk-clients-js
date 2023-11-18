@@ -17,6 +17,7 @@ const resources = [
     'post-revisions',
     'post-statuses',
     'post-types',
+    'product',
     'search-results',
     'settings',
     'tags',
@@ -45,6 +46,12 @@ const host = (_host) => {
         async isWordpress() {
             return resources
                 .posts({ per_page: 1 })
+                .then((posts) => posts.length === 1)
+                .catch((_err) => false);
+        },
+        hasProducts() {
+            return resources
+                .product({ per_page: 1 })
                 .then((posts) => posts.length === 1)
                 .catch((_err) => false);
         },

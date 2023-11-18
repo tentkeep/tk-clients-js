@@ -3,28 +3,14 @@ import clients from '../index.js'
 import shopifyFixture from './fixtures/shopify-products.json'
 
 const [_entryPoint, _file, arg] = process.argv
-console.info(
-  'OPTIONS',
-  googlePlaces,
-  musickit,
-  pageSummary,
-  pageInfo,
-  podcastSummary,
-  shopifyProductSummary,
-  shopifyRaw,
-  spotify,
-  tentkeep,
-  wordpress,
-  youtube,
-)
 console.log('ARG', arg)
 
 describe('debug', () => {
   it(
     'prints info',
     async () => {
-      await clients.shopify
-        .summarize('https://grocefamilyfarm.com/products.json?limit=25')
+      await clients.page
+        .summary('https://eatmyfish.com')
         .then(print)
         .catch((err) => {
           console.error(err.message)

@@ -23,6 +23,7 @@ const resources = [
   'post-revisions',
   'post-statuses',
   'post-types',
+  'product',
   'search-results',
   'settings',
   'tags',
@@ -50,6 +51,7 @@ export interface WordpressResources {
   postRevisions: WordpressResourceAPI
   postStatuses: WordpressResourceAPI
   postTypes: WordpressResourceAPI
+  product: WordpressResourceAPI
   searchResults: WordpressResourceAPI
   settings: WordpressResourceAPI
   tags: WordpressResourceAPI
@@ -82,6 +84,12 @@ const host = (_host: string) => {
     async isWordpress(): Promise<boolean> {
       return resources
         .posts({ per_page: 1 })
+        .then((posts) => posts.length === 1)
+        .catch((_err) => false)
+    },
+    hasProducts() {
+      return resources
+        .product({ per_page: 1 })
         .then((posts) => posts.length === 1)
         .catch((_err) => false)
     },

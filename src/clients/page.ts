@@ -1,27 +1,48 @@
-import X2JS from 'x2js'
 import { sanitizeUrl } from '../shareable/common.js'
 import api, { ApiStatusError } from '../api.js'
 import clients from '../../index.js'
 import { PageInfo, PageSummary, PageInfoFeatures } from '@tentkeep/tentkeep'
 import * as jsdom from 'jsdom'
 
-const summary = async (url: string): Promise<PageSummary> => {
+const summary = async (url: string) => {
   let _url = sanitizeUrl(url)
 
-  const dom = await jsdom.JSDOM.fromURL(url)
+  const pageSummary: PageSummary = {
+    url: _url,
+    title: '',
+    features: [] as PageInfoFeatures[],
+    headers: {},
+    allowsIFrame: false,
+  }
+
+  const [dom, pageInfo] = await Promise.all([
+    jsdom.JSDOM.fromURL(_url),
+    info(url),
+  ])
   const page = dom.serialize()
 
   if (page.length < 100) {
     console.log('[page.summary] Unexpectedly short page:', page)
   }
-  const x2js = new X2JS({
-    ignoreRoot: true,
-    attributePrefix: '',
-  })
-  const xmlParser = (xml) => x2js.xml2js(xml) as any
-  const meta = page.match(/<meta[^>]+>/g)?.map(xmlParser)
-  const links = page.match(/<link[^>]+>/g)?.map(xmlParser)
+
+  const attributeMapper = (m: HTMLElement) =>
+    Array.from(m.attributes).reduce((acc, cur) => {
+      acc[cur.nodeName] = cur.nodeValue
+      return acc
+    }, {} as Record<string, any>)
+
+  const meta = Array.from(
+    dom.window.document.head.querySelectorAll('meta'),
+  ).map(attributeMapper)
+
+  const links = Array.from(
+    dom.window.document.head.querySelectorAll('link'),
+  ).map(attributeMapper)
+
   const title = dom.window.document.head.querySelector('title')?.text ?? ''
+  const anchors = Array.from(
+    dom.window.document.body.querySelectorAll('a'),
+  ).map((a) => a.href)
   const images: string[] = [
     ...new Set(
       page.match(/[^("']*(jpg|jpeg|png)[^)"']*/g)?.map((img) => {
@@ -33,20 +54,38 @@ const summary = async (url: string): Promise<PageSummary> => {
     ),
   ].filter((img) => img.startsWith('http'))
 
-  return {
-    url: _url,
-    title: meta?.find((m) => m.property === 'og:site_name')?.content ?? title, //?.[title.length - 1]['__text'],
-    description: findDescription(meta),
-    image: findImage(meta, _url),
-    images,
-    icon: findIcon(links, _url),
+  pageSummary.title =
+    meta?.find((m) => m.property === 'og =site_name')?.content ?? title
+  pageSummary.description = findDescription(meta)
+  pageSummary.features?.push(...pageInfo.features)
+  pageSummary.headers = pageInfo.headers
+  pageSummary.allowsIFrame = pageInfo.allowsIFrame
+  pageSummary.image = findImage(meta, _url)
+  pageSummary.images = images
+  pageSummary.icon = findIcon(links, _url)
+  pageSummary.platforms = {
     twitter: meta?.find((m) => m.property === 'twitter:site')?.content,
-    elements: {
-      meta,
-      links,
-      title,
-    },
+    barn2door: anchors.find((a) => a.includes('app.barn2door')),
   }
+  pageSummary.elements = {
+    anchors,
+    meta,
+    links,
+    title,
+  } as any
+
+  if (pageSummary.platforms?.barn2door) {
+    pageSummary.features?.push('barn2door')
+  }
+  if (page.match('squarespace.com')) {
+    pageSummary.features?.push('squarespace')
+  }
+
+  for (const platform in pageSummary.platforms) {
+    if (!pageSummary.platforms[platform]) delete pageSummary.platforms[platform]
+  }
+
+  return pageSummary
 }
 
 /**
@@ -59,22 +98,9 @@ const info = async (url: string): Promise<PageInfo> => {
   if (!site.ok) {
     throw new ApiStatusError(404, 'Site not found')
   }
-  let features: PageInfoFeatures[] = []
-  const shopifyPromise = clients.shopify.raw
-    .products(_url, 1)
-    .then((r) => {
-      if (r.products !== undefined) features.push('shopify')
-    })
-    .catch((_e) => {})
-  const wordpressPromise = clients.wordpress
-    .host(_url)
-    .isWordpress()
-    .then((r) => {
-      if (r) features.push('wordpress')
-    })
-    .catch((_e) => {})
 
-  await Promise.allSettled([shopifyPromise, wordpressPromise])
+  const features: PageInfoFeatures[] = await detectFeatures(_url)
+
   return {
     allowsIFrame: !site.headers['x-frame-options'],
     headers: site.headers,
@@ -85,6 +111,39 @@ const info = async (url: string): Promise<PageInfo> => {
 export default {
   info,
   summary,
+}
+
+async function detectFeatures(_url: string) {
+  const features: PageInfoFeatures[] = []
+
+  const shopifyPromise = clients.shopify.raw
+    .products(_url, 1)
+    .then((r) => {
+      if (r.products !== undefined) features.push('shopify')
+    })
+    .catch((_e) => {})
+
+  const wordpressPromise = clients.wordpress
+    .host(_url)
+    .isWordpress()
+    .then((r) => {
+      if (r) features.push('wordpress')
+    })
+    .catch((_e) => {})
+  const wordpressCommercePromise = clients.wordpress
+    .host(_url)
+    .hasProducts()
+    .then((r) => {
+      if (r) features.push('wordpress-commerce')
+    })
+    .catch((_e) => {})
+
+  await Promise.allSettled([
+    shopifyPromise,
+    wordpressPromise,
+    wordpressCommercePromise,
+  ])
+  return features
 }
 
 function findDescription(meta: any[] | undefined): string | undefined {

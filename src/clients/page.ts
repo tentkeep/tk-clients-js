@@ -80,6 +80,13 @@ const summary = async (url: string) => {
   if (page.match('Drupal')) {
     pageSummary.features?.push('drupal')
   }
+  if (page.match('content="Square')) {
+    pageSummary.features?.push('square')
+  }
+  if (page.match('Wix.com')) {
+    pageSummary.features?.push('wix')
+  }
+
   if (pageSummary.elements?.meta.find((m) => m.content === 'GrazeCart')) {
     pageSummary.features?.push('grazecart')
   }
@@ -88,6 +95,9 @@ const summary = async (url: string) => {
   }
   if (page.match('localline')) {
     pageSummary.features?.push('localline')
+  }
+  if (page.match('localfoodmarketplace.com')) {
+    pageSummary.features?.push('localfoodmarketplace')
   }
 
   for (const platform in pageSummary.platforms) {

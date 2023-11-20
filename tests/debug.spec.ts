@@ -10,7 +10,7 @@ describe('debug', () => {
     'prints info',
     async () => {
       await clients.page
-        .summary('https://desertessence.com')
+        .summary('https://blackbarnfarms.ca')
         .then(print)
         .catch((err) => {
           console.error(err.message)

@@ -54,9 +54,6 @@ const summary = async (url) => {
         links,
         title,
     };
-    if (pageSummary.platforms?.barn2door) {
-        pageSummary.features?.push('barn2door');
-    }
     if (page.match('squarespace.com')) {
         pageSummary.features?.push('squarespace');
     }
@@ -65,6 +62,12 @@ const summary = async (url) => {
     }
     if (pageSummary.elements?.meta.find((m) => m.content === 'GrazeCart')) {
         pageSummary.features?.push('grazecart');
+    }
+    if (pageSummary.platforms?.barn2door) {
+        pageSummary.features?.push('barn2door');
+    }
+    if (page.match('localline')) {
+        pageSummary.features?.push('localline');
     }
     for (const platform in pageSummary.platforms) {
         if (!pageSummary.platforms[platform])

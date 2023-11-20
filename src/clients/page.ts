@@ -80,6 +80,12 @@ const summary = async (url: string) => {
   if (page.match('squarespace.com')) {
     pageSummary.features?.push('squarespace')
   }
+  if (page.match('Drupal')) {
+    pageSummary.features?.push('drupal')
+  }
+  if (pageSummary.elements?.meta.find((m) => m.content === 'GrazeCart')) {
+    pageSummary.features?.push('grazecart')
+  }
 
   for (const platform in pageSummary.platforms) {
     if (!pageSummary.platforms[platform]) delete pageSummary.platforms[platform]

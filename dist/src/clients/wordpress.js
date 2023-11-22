@@ -122,10 +122,7 @@ const commerce = {
     summarize: async (siteUrl) => {
         const url = sanitizeUrl(siteUrl);
         function mapProduct(product) {
-            const imageSizes = product?._embedded?.['wp:featuredmedia']?.[0]?.media_details?.sizes;
-            const image = imageSizes?.medium_large?.source_url ??
-                imageSizes?.large?.source_url ??
-                imageSizes?.full?.source_url;
+            const image = extractProductImage(product);
             return {
                 entryType: GalleryEntryTypes.WordpressCommerce,
                 genericType: 'shop',
@@ -140,12 +137,13 @@ const commerce = {
             };
         }
         const post = (await host(url).posts({ per_page: 1 }))[0];
+        const productOptions = { per_page: 100, _embed: 'wp:featuredmedia' };
         const products = await host(url)
-            .product({ per_page: 100, _embed: 'wp:featuredmedia' })
+            .product(productOptions)
             .then((products) => products.map(mapProduct));
         let page = products.length <= 100 ? -1 : 2;
         while (page > 0) {
-            const _products = await host(url).product({ per_page: 100 });
+            const _products = await host(url).product(productOptions);
             products.push(..._products.map(mapProduct));
             page = _products.length <= 100 ? -1 : 2;
         }
@@ -162,20 +160,45 @@ const commerce = {
 export default {
     search: async (query) => {
         try {
-            const posts = await resourceMethods(query).posts({
+            const url = sanitizeUrl(query);
+            const results = [];
+            const postsPromise = resourceMethods(url)
+                .posts({
                 per_page: 1,
+            })
+                .then((posts) => {
+                const post = posts[0];
+                if (!post)
+                    return;
+                results.push({
+                    sourceId: url,
+                    entryType: GalleryEntryTypes.Wordpress,
+                    genericType: 'page',
+                    title: (post?.yoast_head_json?.og_site_name || url) + ' - Posts',
+                    url: url,
+                    image: extractImageLink(post),
+                });
             });
-            const post = posts[0];
-            if (!post)
-                throw new Error('no content');
-            return {
-                sourceId: query,
-                entryType: GalleryEntryTypes.Wordpress,
-                genericType: 'page',
-                title: post?.yoast_head_json?.og_site_name || query,
-                url: query,
-                image: extractImageLink(post),
-            };
+            const productsPromise = resourceMethods(url)
+                .product({
+                per_page: 1,
+                _embed: 'wp:featuredmedia',
+            })
+                .then((products) => {
+                const product = products[0];
+                if (!product)
+                    return;
+                results.push({
+                    sourceId: url,
+                    entryType: GalleryEntryTypes.WordpressCommerce,
+                    genericType: 'shop',
+                    title: (product?.yoast_head_json?.og_site_name || url) + ' - Products',
+                    url: url,
+                    image: extractProductImage(product),
+                });
+            });
+            await Promise.all([postsPromise, productsPromise]);
+            return results;
         }
         catch (err) {
             return [];
@@ -186,6 +209,13 @@ export default {
     host,
 };
 const toFunctionName = (resource) => resource.replace(/-(.)/, (_, d) => d.toUpperCase());
+function extractProductImage(product) {
+    const imageSizes = product?._embedded?.['wp:featuredmedia']?.[0]?.media_details?.sizes;
+    const image = imageSizes?.medium_large?.source_url ??
+        imageSizes?.large?.source_url ??
+        imageSizes?.full?.source_url;
+    return image;
+}
 function extractTitle(resource) {
     return (resource.yoast_head_json?.title ||
         resource.yoast_head_json?.og_title ||

@@ -175,7 +175,8 @@ export default {
                     sourceId: url,
                     entryType: GalleryEntryTypes.Wordpress,
                     genericType: 'page',
-                    title: (post?.yoast_head_json?.og_site_name || url) + ' - Posts',
+                    title: (post?.yoast_head_json?.og_site_name || new URL(url).hostname) +
+                        ' - Posts',
                     url: url,
                     image: extractImageLink(post),
                 });
@@ -195,7 +196,8 @@ export default {
                     sourceId: _url.toString(),
                     entryType: GalleryEntryTypes.WordpressCommerce,
                     genericType: 'shop',
-                    title: (product?.yoast_head_json?.og_site_name || url) + ' - Products',
+                    title: (product?.yoast_head_json?.og_site_name ||
+                        new URL(url).hostname) + ' - Products',
                     url: _url.toString(),
                     image: extractProductImage(product),
                 });

@@ -76,7 +76,8 @@ const resourceMethods = (site: string) =>
       const id = typeof options === 'string' ? options : ''
 
       const _url = site.startsWith('http') ? site : `https://${site}`
-      const url = new URL(`${_url}/wp-json/wp/v2/${resource}/${id}`)
+      const url = new URL(_url)
+      url.pathname += `/wp-json/wp/v2/${resource}/${id}`
       if (typeof options === 'object') {
         forKey(options, (k) => url.searchParams.append(k, options[k]))
       }

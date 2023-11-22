@@ -9,8 +9,8 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      await clients.wordpress
-        .search('thousandhillslifetimegrazed.com')
+      await clients.wordpress.commerce
+        .summarize('https://thousandhillslifetimegrazed.com/?post_type=product')
         .then(print)
         .catch((err) => {
           console.error(err.message)

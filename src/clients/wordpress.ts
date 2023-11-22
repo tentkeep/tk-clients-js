@@ -1,5 +1,6 @@
 import {
   GalleryEntryItem,
+  GalleryEntryItemProduct,
   GalleryEntrySummary,
   GalleryEntryTypes,
 } from '@tentkeep/tentkeep'
@@ -33,8 +34,15 @@ const resources = [
   'plugins',
 ]
 
-export type WordpressOptions = { per_page?: number; include?: string }
-export type WordpressResourceAPI = (options: WordpressOptions) => Promise<any>
+export type WordpressOptions = {
+  per_page?: number
+  page?: number
+  include?: string
+  _embed?: string
+}
+export type WordpressResourceAPI<T = Record<string, any>> = (
+  options: WordpressOptions,
+) => Promise<T[]>
 
 export interface WordpressResources {
   blockTypes: WordpressResourceAPI
@@ -47,11 +55,11 @@ export interface WordpressResources {
   media: WordpressResourceAPI
   pages: WordpressResourceAPI
   pageRevisions: WordpressResourceAPI
-  posts: WordpressResourceAPI
+  posts: WordpressResourceAPI<WordpressPost>
   postRevisions: WordpressResourceAPI
   postStatuses: WordpressResourceAPI
   postTypes: WordpressResourceAPI
-  product: WordpressResourceAPI
+  product: WordpressResourceAPI<WordpressProduct>
   searchResults: WordpressResourceAPI
   settings: WordpressResourceAPI
   tags: WordpressResourceAPI
@@ -63,7 +71,7 @@ export interface WordpressResources {
 
 const resourceMethods = (site: string) =>
   resources.reduce((wordpress, resource) => {
-    wordpress[toFunctionName(resource)] = (options: WordpressOptions) => {
+    wordpress[toFunctionName(resource)] = (options?: WordpressOptions) => {
       const id = typeof options === 'string' ? options : ''
 
       const _url = site.startsWith('http') ? site : `https://${site}`
@@ -95,11 +103,11 @@ const host = (_host: string) => {
     },
     async summary(limit: number = 100): Promise<GalleryEntrySummary> {
       const posts = await resources.posts({ per_page: limit })
-      const authorRefs: string[] = []
-      const categoryRefs: string[] = []
+      const authorRefs: number[] = []
+      const categoryRefs: number[] = []
       const tagRefs: string[] = []
       posts.forEach((p) => {
-        authorRefs.push(p.author)
+        if (p.author) authorRefs.push(p.author)
         categoryRefs.push(...(p.categories || []))
         tagRefs.push(...(p.tags || []))
       })
@@ -142,13 +150,13 @@ const host = (_host: string) => {
           (post) =>
             ({
               sourceId: post.id.toString(),
-              title: extractPostTitle(post),
-              description: extractPostDescription(post),
+              title: extractTitle(post),
+              description: extractDescription(post),
               entryType: GalleryEntryTypes.Wordpress,
               genericType: 'page',
               images: [extractImageLink(post)],
               url: post.link,
-              date: new Date(post.date),
+              date: post.date ? new Date(post.date) : undefined,
               postId: post.id,
               postDate: post.date,
               author: extractPostAuthor(post),
@@ -159,6 +167,57 @@ const host = (_host: string) => {
     },
   }
 }
+
+const commerce = {
+  summarize: async (siteUrl: string): Promise<GalleryEntrySummary> => {
+    const url = sanitizeUrl(siteUrl)
+
+    function mapProduct(product: WordpressProduct): GalleryEntryItemProduct {
+      const imageSizes =
+        product?._embedded?.['wp:featuredmedia']?.[0]?.media_details?.sizes
+      const image =
+        imageSizes?.medium_large?.source_url ??
+        imageSizes?.large?.source_url ??
+        imageSizes?.full?.source_url
+
+      return {
+        entryType: GalleryEntryTypes.WordpressCommerce,
+        genericType: 'shop',
+        sourceId: product.id.toString(),
+        title: extractTitle(product),
+        url: product.link ?? '',
+        description: extractDescription(product),
+        images: image ? [image] : [],
+        detail: {
+          variants: [],
+        },
+      }
+    }
+
+    const post = (await host(url).posts({ per_page: 1 }))[0]
+
+    const products = await host(url)
+      .product({ per_page: 100, _embed: 'wp:featuredmedia' })
+      .then((products) => products.map(mapProduct))
+
+    let page = products.length <= 100 ? -1 : 2
+    while (page > 0) {
+      const _products = await host(url).product({ per_page: 100 })
+      products.push(..._products.map(mapProduct))
+      page = _products.length <= 100 ? -1 : 2
+    }
+
+    return {
+      sourceId: url,
+      title: post?.yoast_head_json?.og_site_name || url,
+      url: url,
+      entryType: GalleryEntryTypes.WordpressCommerce,
+      genericType: 'shop',
+      items: products,
+    }
+  },
+}
+
 export default {
   search: async (query: string) => {
     try {
@@ -180,25 +239,32 @@ export default {
     }
   },
   summarize: (siteUrl: string) => host(siteUrl).summary(),
+  commerce,
   host,
-} as TentkeepClient & { host: typeof host }
+} as TentkeepClient & { host: typeof host; commerce: typeof commerce }
 
 const toFunctionName = (resource) =>
   resource.replace(/-(.)/, (_, d) => d.toUpperCase())
 
-function extractPostTitle(post: WordpressPost) {
+function extractTitle(resource: {
+  yoast_head_json?: { title?; og_title? }
+  title?
+}) {
   return (
-    post.yoast_head_json?.title ||
-    post.yoast_head_json?.og_title ||
-    post.title?.rendered
+    resource.yoast_head_json?.title ||
+    resource.yoast_head_json?.og_title ||
+    resource.title?.rendered
   )
 }
 
-function extractPostDescription(post: WordpressPost) {
+function extractDescription(resource: {
+  yoast_head_json?: { description?; og_description? }
+  excerpt?: { rendered? }
+}) {
   return (
-    post.yoast_head_json?.description ||
-    post.yoast_head_json?.og_description ||
-    post.excerpt?.rendered
+    resource.yoast_head_json?.description ||
+    resource.yoast_head_json?.og_description ||
+    resource.excerpt?.rendered
   )
 }
 
@@ -237,7 +303,9 @@ function extractPostTags(
   return tags
 }
 
-type WordpressPost = {
+// TYPES -------
+
+type WordpressBase = WordpressEmbed & {
   id: number
   date?: Date
   date_gmt?: Date
@@ -261,6 +329,11 @@ type WordpressPost = {
     rendered?: string
     protected?: boolean
   }
+  yoast_head?: string
+  yoast_head_json?: Yoast
+}
+
+type WordpressPost = WordpressBase & {
   author?: number
   featured_media?: number
   comment_status?: string
@@ -299,41 +372,6 @@ type WordpressPost = {
     url?: string
   }
   comments_num?: string
-  yoast_head?: string
-  yoast_head_json?: {
-    title?: string
-    description?: string
-    robots?: {
-      index?: 'index'
-      follow?: 'follow'
-      'max-snippet'?: 'max-snippet?:-1'
-      'max-image-preview'?: 'max-image-preview?:large'
-      'max-video-preview'?: 'max-video-preview?:-1'
-    }
-    canonical?: string
-    og_locale?: string
-    og_type?: string
-    og_title?: string
-    og_description?: string
-    og_url?: string
-    og_site_name?: string
-    article_publisher?: string
-    article_published_time?: Date
-    article_modified_time?: Date
-    og_image?: [
-      {
-        width?: number
-        height?: number
-        url?: string
-        type?: string
-      },
-    ]
-    author?: string
-    twitter_card?: string
-    twitter_creator?: string
-    twitter_site?: string
-    twitter_misc?: Record<string, string>
-  }
 }
 
 type WordpressFeaturedImage = [
@@ -342,3 +380,139 @@ type WordpressFeaturedImage = [
   width?: number,
   unknown_field?: boolean,
 ]
+
+type MediaDetailSize = {
+  file: string
+  width: number
+  height: number
+  uncropped: boolean
+  mime_type: string
+  source_url: string
+}
+
+type WordpressMedia = {
+  id: number
+  date?: Date
+  slug?: string
+  type?: string
+  link?: string
+  title?: {
+    rendered?: string
+  }
+  author?: number
+  jetpack_sharing_enabled?: boolean
+  jetpack_shortlink?: string
+  caption?: { rendered?: string }
+  alt_text?: string
+  media_type?: string
+  mime_type?: string
+  media_details?: {
+    width?: number
+    height?: number
+    file?: string
+    sizes?: {
+      woocommerce_thumbnail?: MediaDetailSize
+      woocommerce_gallery_thumbnail?: MediaDetailSize
+      woocommerce_single?: MediaDetailSize
+      thumbnail?: MediaDetailSize
+      medium?: MediaDetailSize
+      medium_large?: MediaDetailSize
+      large?: MediaDetailSize
+      shop_catalog?: MediaDetailSize
+      shop_single?: MediaDetailSize
+      shop_thumbnail?: MediaDetailSize
+      full?: MediaDetailSize
+    }
+    image_meta?: {
+      aperture?: string
+      credit?: string
+      camera?: string
+      caption?: string
+      created_timestamp?: string
+      copyright?: string
+      focal_length?: string
+      iso?: string
+      shutter_speed?: string
+      title?: string
+      orientation?: string
+      keywords?: string[]
+    }
+  }
+  source_url?: string
+  _links?: {
+    self?: [{ href?: string }]
+    collection?: [{ href?: string }]
+    about?: [{ href?: string }]
+    author?: [{ embeddable?: boolean; href?: string }]
+    replies?: [{ embeddable?: boolean; href?: string }]
+  }
+}
+
+type WordpressEmbed = {
+  _embedded?: {
+    'wp:featuredmedia'?: WordpressMedia[]
+  }
+}
+
+type Yoast = {
+  title?: string
+  description?: string
+  robots?: {
+    index?: 'index'
+    follow?: 'follow'
+    'max-snippet'?: 'max-snippet?:-1'
+    'max-image-preview'?: 'max-image-preview?:large'
+    'max-video-preview'?: 'max-video-preview?:-1'
+  }
+  canonical?: string
+  og_locale?: string
+  og_type?: string
+  og_title?: string
+  og_description?: string
+  og_url?: string
+  og_site_name?: string
+  article_publisher?: string
+  article_published_time?: Date
+  article_modified_time?: Date
+  og_image?: [
+    {
+      width?: number
+      height?: number
+      url?: string
+      type?: string
+    },
+  ]
+  author?: string
+  twitter_card?: string
+  twitter_creator?: string
+  twitter_site?: string
+  twitter_misc?: Record<string, string>
+}
+
+type WordpressProduct = WordpressBase & {
+  featured_media: number
+  template: string
+  meta: {
+    jetpack_post_was_ever_published: boolean
+    jetpack_publicize_message: string
+    jetpack_is_tweetstorm: boolean
+    jetpack_publicize_feature_enabled: boolean
+    jetpack_social_post_already_shared: boolean
+    jetpack_social_options: {
+      image_generator_settings: { template: string; enabled: boolean }
+    }
+  }
+  product_cat: [number]
+  product_tag: [number]
+  jetpack_publicize_connections: []
+  jetpack_sharing_enabled: boolean
+  _links: {
+    self: [{ href: string }]
+    collection: [{ href: string }]
+    about: [{ href: string }]
+    'wp:featuredmedia': [{ embeddable: boolean; href: string }]
+    'wp:attachment': [{ href: string }]
+    'wp:term': { taxonomy: string; embeddable: boolean; href: string }[]
+    curies: { name: string; href: string; templated: boolean }[]
+  }
+}

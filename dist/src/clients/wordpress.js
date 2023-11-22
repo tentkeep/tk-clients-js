@@ -61,7 +61,8 @@ const host = (_host) => {
             const categoryRefs = [];
             const tagRefs = [];
             posts.forEach((p) => {
-                authorRefs.push(p.author);
+                if (p.author)
+                    authorRefs.push(p.author);
                 categoryRefs.push(...(p.categories || []));
                 tagRefs.push(...(p.tags || []));
             });
@@ -101,13 +102,13 @@ const host = (_host) => {
                 url: url,
                 items: posts.map((post) => ({
                     sourceId: post.id.toString(),
-                    title: extractPostTitle(post),
-                    description: extractPostDescription(post),
+                    title: extractTitle(post),
+                    description: extractDescription(post),
                     entryType: GalleryEntryTypes.Wordpress,
                     genericType: 'page',
                     images: [extractImageLink(post)],
                     url: post.link,
-                    date: new Date(post.date),
+                    date: post.date ? new Date(post.date) : undefined,
                     postId: post.id,
                     postDate: post.date,
                     author: extractPostAuthor(post),
@@ -116,6 +117,47 @@ const host = (_host) => {
             };
         },
     };
+};
+const commerce = {
+    summarize: async (siteUrl) => {
+        const url = sanitizeUrl(siteUrl);
+        function mapProduct(product) {
+            const imageSizes = product?._embedded?.['wp:featuredmedia']?.[0]?.media_details?.sizes;
+            const image = imageSizes?.medium_large?.source_url ??
+                imageSizes?.large?.source_url ??
+                imageSizes?.full?.source_url;
+            return {
+                entryType: GalleryEntryTypes.WordpressCommerce,
+                genericType: 'shop',
+                sourceId: product.id.toString(),
+                title: extractTitle(product),
+                url: product.link ?? '',
+                description: extractDescription(product),
+                images: image ? [image] : [],
+                detail: {
+                    variants: [],
+                },
+            };
+        }
+        const post = (await host(url).posts({ per_page: 1 }))[0];
+        const products = await host(url)
+            .product({ per_page: 100, _embed: 'wp:featuredmedia' })
+            .then((products) => products.map(mapProduct));
+        let page = products.length <= 100 ? -1 : 2;
+        while (page > 0) {
+            const _products = await host(url).product({ per_page: 100 });
+            products.push(..._products.map(mapProduct));
+            page = _products.length <= 100 ? -1 : 2;
+        }
+        return {
+            sourceId: url,
+            title: post?.yoast_head_json?.og_site_name || url,
+            url: url,
+            entryType: GalleryEntryTypes.WordpressCommerce,
+            genericType: 'shop',
+            items: products,
+        };
+    },
 };
 export default {
     search: async (query) => {
@@ -140,18 +182,19 @@ export default {
         }
     },
     summarize: (siteUrl) => host(siteUrl).summary(),
+    commerce,
     host,
 };
 const toFunctionName = (resource) => resource.replace(/-(.)/, (_, d) => d.toUpperCase());
-function extractPostTitle(post) {
-    return (post.yoast_head_json?.title ||
-        post.yoast_head_json?.og_title ||
-        post.title?.rendered);
+function extractTitle(resource) {
+    return (resource.yoast_head_json?.title ||
+        resource.yoast_head_json?.og_title ||
+        resource.title?.rendered);
 }
-function extractPostDescription(post) {
-    return (post.yoast_head_json?.description ||
-        post.yoast_head_json?.og_description ||
-        post.excerpt?.rendered);
+function extractDescription(resource) {
+    return (resource.yoast_head_json?.description ||
+        resource.yoast_head_json?.og_description ||
+        resource.excerpt?.rendered);
 }
 function extractImageLink(post) {
     return (post.yoast_head_json?.og_image?.[0].url ||

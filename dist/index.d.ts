@@ -809,28 +809,534 @@ export declare const clients: {
             isWordpress(): Promise<boolean>;
             hasProducts(): Promise<boolean>;
             summary(limit?: number): Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
-            blockTypes: import("./src/clients/wordpress.js").WordpressResourceAPI;
-            blocks: import("./src/clients/wordpress.js").WordpressResourceAPI;
-            blockRevisions: import("./src/clients/wordpress.js").WordpressResourceAPI;
-            renderedBlocks: import("./src/clients/wordpress.js").WordpressResourceAPI;
-            blockDirectoryItems: import("./src/clients/wordpress.js").WordpressResourceAPI;
-            categories: import("./src/clients/wordpress.js").WordpressResourceAPI;
-            comments: import("./src/clients/wordpress.js").WordpressResourceAPI;
-            media: import("./src/clients/wordpress.js").WordpressResourceAPI;
-            pages: import("./src/clients/wordpress.js").WordpressResourceAPI;
-            pageRevisions: import("./src/clients/wordpress.js").WordpressResourceAPI;
-            posts: import("./src/clients/wordpress.js").WordpressResourceAPI;
-            postRevisions: import("./src/clients/wordpress.js").WordpressResourceAPI;
-            postStatuses: import("./src/clients/wordpress.js").WordpressResourceAPI;
-            postTypes: import("./src/clients/wordpress.js").WordpressResourceAPI;
-            product: import("./src/clients/wordpress.js").WordpressResourceAPI;
-            searchResults: import("./src/clients/wordpress.js").WordpressResourceAPI;
-            settings: import("./src/clients/wordpress.js").WordpressResourceAPI;
-            tags: import("./src/clients/wordpress.js").WordpressResourceAPI;
-            taxonomies: import("./src/clients/wordpress.js").WordpressResourceAPI;
-            themes: import("./src/clients/wordpress.js").WordpressResourceAPI;
-            users: import("./src/clients/wordpress.js").WordpressResourceAPI;
-            plugins: import("./src/clients/wordpress.js").WordpressResourceAPI;
+            blockTypes: import("./src/clients/wordpress.js").WordpressResourceAPI<Record<string, any>>;
+            blocks: import("./src/clients/wordpress.js").WordpressResourceAPI<Record<string, any>>;
+            blockRevisions: import("./src/clients/wordpress.js").WordpressResourceAPI<Record<string, any>>;
+            renderedBlocks: import("./src/clients/wordpress.js").WordpressResourceAPI<Record<string, any>>;
+            blockDirectoryItems: import("./src/clients/wordpress.js").WordpressResourceAPI<Record<string, any>>;
+            categories: import("./src/clients/wordpress.js").WordpressResourceAPI<Record<string, any>>;
+            comments: import("./src/clients/wordpress.js").WordpressResourceAPI<Record<string, any>>;
+            media: import("./src/clients/wordpress.js").WordpressResourceAPI<Record<string, any>>;
+            pages: import("./src/clients/wordpress.js").WordpressResourceAPI<Record<string, any>>;
+            pageRevisions: import("./src/clients/wordpress.js").WordpressResourceAPI<Record<string, any>>;
+            posts: import("./src/clients/wordpress.js").WordpressResourceAPI<{
+                _embedded?: {
+                    'wp:featuredmedia'?: {
+                        id: number;
+                        date?: Date | undefined;
+                        slug?: string | undefined;
+                        type?: string | undefined;
+                        link?: string | undefined;
+                        title?: {
+                            rendered?: string | undefined;
+                        } | undefined;
+                        author?: number | undefined;
+                        jetpack_sharing_enabled?: boolean | undefined;
+                        jetpack_shortlink?: string | undefined;
+                        caption?: {
+                            rendered?: string | undefined;
+                        } | undefined;
+                        alt_text?: string | undefined;
+                        media_type?: string | undefined;
+                        mime_type?: string | undefined;
+                        media_details?: {
+                            width?: number | undefined;
+                            height?: number | undefined;
+                            file?: string | undefined;
+                            sizes?: {
+                                woocommerce_thumbnail?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                                woocommerce_gallery_thumbnail?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                                woocommerce_single?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                                thumbnail?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                                medium?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                                medium_large?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                                large?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                                shop_catalog?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                                shop_single?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                                shop_thumbnail?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                                full?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                            } | undefined;
+                            image_meta?: {
+                                aperture?: string | undefined;
+                                credit?: string | undefined;
+                                camera?: string | undefined;
+                                caption?: string | undefined;
+                                created_timestamp?: string | undefined;
+                                copyright?: string | undefined;
+                                focal_length?: string | undefined;
+                                iso?: string | undefined;
+                                shutter_speed?: string | undefined;
+                                title?: string | undefined;
+                                orientation?: string | undefined;
+                                keywords?: string[] | undefined;
+                            } | undefined;
+                        } | undefined;
+                        source_url?: string | undefined;
+                        _links?: {
+                            self?: [{
+                                href?: string | undefined;
+                            }] | undefined;
+                            collection?: [{
+                                href?: string | undefined;
+                            }] | undefined;
+                            about?: [{
+                                href?: string | undefined;
+                            }] | undefined;
+                            author?: [{
+                                embeddable?: boolean | undefined;
+                                href?: string | undefined;
+                            }] | undefined;
+                            replies?: [{
+                                embeddable?: boolean | undefined;
+                                href?: string | undefined;
+                            }] | undefined;
+                        } | undefined;
+                    }[] | undefined;
+                } | undefined;
+            } & {
+                id: number;
+                date?: Date | undefined;
+                date_gmt?: Date | undefined;
+                guid?: {
+                    rendered?: string | undefined;
+                } | undefined;
+                modified?: Date | undefined;
+                modified_gmt?: Date | undefined;
+                slug?: string | undefined;
+                status?: string | undefined;
+                type?: string | undefined;
+                link?: string | undefined;
+                title?: {
+                    rendered?: string | undefined;
+                } | undefined;
+                content?: {
+                    rendered?: string | undefined;
+                    protected?: boolean | undefined;
+                } | undefined;
+                excerpt?: {
+                    rendered?: string | undefined;
+                    protected?: boolean | undefined;
+                } | undefined;
+                yoast_head?: string | undefined;
+                yoast_head_json?: {
+                    title?: string | undefined;
+                    description?: string | undefined;
+                    robots?: {
+                        index?: "index" | undefined;
+                        follow?: "follow" | undefined;
+                        'max-snippet'?: "max-snippet?:-1" | undefined;
+                        'max-image-preview'?: "max-image-preview?:large" | undefined;
+                        'max-video-preview'?: "max-video-preview?:-1" | undefined;
+                    } | undefined;
+                    canonical?: string | undefined;
+                    og_locale?: string | undefined;
+                    og_type?: string | undefined;
+                    og_title?: string | undefined;
+                    og_description?: string | undefined;
+                    og_url?: string | undefined;
+                    og_site_name?: string | undefined;
+                    article_publisher?: string | undefined;
+                    article_published_time?: Date | undefined;
+                    article_modified_time?: Date | undefined;
+                    og_image?: [{
+                        width?: number | undefined;
+                        height?: number | undefined;
+                        url?: string | undefined;
+                        type?: string | undefined;
+                    }] | undefined;
+                    author?: string | undefined;
+                    twitter_card?: string | undefined;
+                    twitter_creator?: string | undefined;
+                    twitter_site?: string | undefined;
+                    twitter_misc?: Record<string, string> | undefined;
+                } | undefined;
+            } & {
+                author?: number | undefined;
+                featured_media?: number | undefined;
+                comment_status?: string | undefined;
+                ping_status?: string | undefined;
+                sticky?: boolean | undefined;
+                template?: string | undefined;
+                format?: string | undefined;
+                meta?: {
+                    _mo_disable_npp?: "" | undefined;
+                    'disable-jtr'?: false | undefined;
+                    _genesis_hide_title?: false | undefined;
+                    _genesis_hide_breadcrumbs?: false | undefined;
+                    _genesis_hide_singular_image?: false | undefined;
+                    _genesis_hide_footer_widgets?: false | undefined;
+                    _genesis_custom_body_class?: "" | undefined;
+                    _genesis_custom_post_class?: "" | undefined;
+                    _genesis_layout?: "" | undefined;
+                } | undefined;
+                categories?: number[] | undefined;
+                tags?: any[] | undefined;
+                acf?: any[] | undefined;
+                featured_image_urls?: {
+                    full?: [url?: string | undefined, height?: number | undefined, width?: number | undefined, unknown_field?: boolean | undefined] | undefined;
+                    thumbnail?: [url?: string | undefined, height?: number | undefined, width?: number | undefined, unknown_field?: boolean | undefined] | undefined;
+                    medium?: [url?: string | undefined, height?: number | undefined, width?: number | undefined, unknown_field?: boolean | undefined] | undefined;
+                    medium_large?: [url?: string | undefined, height?: number | undefined, width?: number | undefined, unknown_field?: boolean | undefined] | undefined;
+                    large?: [url?: string | undefined, height?: number | undefined, width?: number | undefined, unknown_field?: boolean | undefined] | undefined;
+                    '1536x1536'?: [url?: string | undefined, height?: number | undefined, width?: number | undefined, unknown_field?: boolean | undefined] | undefined;
+                    '2048x2048'?: [url?: string | undefined, height?: number | undefined, width?: number | undefined, unknown_field?: boolean | undefined] | undefined;
+                    'featured-thumb'?: [url?: string | undefined, height?: number | undefined, width?: number | undefined, unknown_field?: boolean | undefined] | undefined;
+                } | undefined;
+                post_excerpt_stackable?: string | undefined;
+                category_list?: string | undefined;
+                author_info?: {
+                    name?: string | undefined;
+                    url?: string | undefined;
+                } | undefined;
+                comments_num?: string | undefined;
+            }>;
+            postRevisions: import("./src/clients/wordpress.js").WordpressResourceAPI<Record<string, any>>;
+            postStatuses: import("./src/clients/wordpress.js").WordpressResourceAPI<Record<string, any>>;
+            postTypes: import("./src/clients/wordpress.js").WordpressResourceAPI<Record<string, any>>;
+            product: import("./src/clients/wordpress.js").WordpressResourceAPI<{
+                _embedded?: {
+                    'wp:featuredmedia'?: {
+                        id: number;
+                        date?: Date | undefined;
+                        slug?: string | undefined;
+                        type?: string | undefined;
+                        link?: string | undefined;
+                        title?: {
+                            rendered?: string | undefined;
+                        } | undefined;
+                        author?: number | undefined;
+                        jetpack_sharing_enabled?: boolean | undefined;
+                        jetpack_shortlink?: string | undefined;
+                        caption?: {
+                            rendered?: string | undefined;
+                        } | undefined;
+                        alt_text?: string | undefined;
+                        media_type?: string | undefined;
+                        mime_type?: string | undefined;
+                        media_details?: {
+                            width?: number | undefined;
+                            height?: number | undefined;
+                            file?: string | undefined;
+                            sizes?: {
+                                woocommerce_thumbnail?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                                woocommerce_gallery_thumbnail?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                                woocommerce_single?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                                thumbnail?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                                medium?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                                medium_large?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                                large?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                                shop_catalog?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                                shop_single?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                                shop_thumbnail?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                                full?: {
+                                    file: string;
+                                    width: number;
+                                    height: number;
+                                    uncropped: boolean;
+                                    mime_type: string;
+                                    source_url: string;
+                                } | undefined;
+                            } | undefined;
+                            image_meta?: {
+                                aperture?: string | undefined;
+                                credit?: string | undefined;
+                                camera?: string | undefined;
+                                caption?: string | undefined;
+                                created_timestamp?: string | undefined;
+                                copyright?: string | undefined;
+                                focal_length?: string | undefined;
+                                iso?: string | undefined;
+                                shutter_speed?: string | undefined;
+                                title?: string | undefined;
+                                orientation?: string | undefined;
+                                keywords?: string[] | undefined;
+                            } | undefined;
+                        } | undefined;
+                        source_url?: string | undefined;
+                        _links?: {
+                            self?: [{
+                                href?: string | undefined;
+                            }] | undefined;
+                            collection?: [{
+                                href?: string | undefined;
+                            }] | undefined;
+                            about?: [{
+                                href?: string | undefined;
+                            }] | undefined;
+                            author?: [{
+                                embeddable?: boolean | undefined;
+                                href?: string | undefined;
+                            }] | undefined;
+                            replies?: [{
+                                embeddable?: boolean | undefined;
+                                href?: string | undefined;
+                            }] | undefined;
+                        } | undefined;
+                    }[] | undefined;
+                } | undefined;
+            } & {
+                id: number;
+                date?: Date | undefined;
+                date_gmt?: Date | undefined;
+                guid?: {
+                    rendered?: string | undefined;
+                } | undefined;
+                modified?: Date | undefined;
+                modified_gmt?: Date | undefined;
+                slug?: string | undefined;
+                status?: string | undefined;
+                type?: string | undefined;
+                link?: string | undefined;
+                title?: {
+                    rendered?: string | undefined;
+                } | undefined;
+                content?: {
+                    rendered?: string | undefined;
+                    protected?: boolean | undefined;
+                } | undefined;
+                excerpt?: {
+                    rendered?: string | undefined;
+                    protected?: boolean | undefined;
+                } | undefined;
+                yoast_head?: string | undefined;
+                yoast_head_json?: {
+                    title?: string | undefined;
+                    description?: string | undefined;
+                    robots?: {
+                        index?: "index" | undefined;
+                        follow?: "follow" | undefined;
+                        'max-snippet'?: "max-snippet?:-1" | undefined;
+                        'max-image-preview'?: "max-image-preview?:large" | undefined;
+                        'max-video-preview'?: "max-video-preview?:-1" | undefined;
+                    } | undefined;
+                    canonical?: string | undefined;
+                    og_locale?: string | undefined;
+                    og_type?: string | undefined;
+                    og_title?: string | undefined;
+                    og_description?: string | undefined;
+                    og_url?: string | undefined;
+                    og_site_name?: string | undefined;
+                    article_publisher?: string | undefined;
+                    article_published_time?: Date | undefined;
+                    article_modified_time?: Date | undefined;
+                    og_image?: [{
+                        width?: number | undefined;
+                        height?: number | undefined;
+                        url?: string | undefined;
+                        type?: string | undefined;
+                    }] | undefined;
+                    author?: string | undefined;
+                    twitter_card?: string | undefined;
+                    twitter_creator?: string | undefined;
+                    twitter_site?: string | undefined;
+                    twitter_misc?: Record<string, string> | undefined;
+                } | undefined;
+            } & {
+                featured_media: number;
+                template: string;
+                meta: {
+                    jetpack_post_was_ever_published: boolean;
+                    jetpack_publicize_message: string;
+                    jetpack_is_tweetstorm: boolean;
+                    jetpack_publicize_feature_enabled: boolean;
+                    jetpack_social_post_already_shared: boolean;
+                    jetpack_social_options: {
+                        image_generator_settings: {
+                            template: string;
+                            enabled: boolean;
+                        };
+                    };
+                };
+                product_cat: [number];
+                product_tag: [number];
+                jetpack_publicize_connections: [];
+                jetpack_sharing_enabled: boolean;
+                _links: {
+                    self: [{
+                        href: string;
+                    }];
+                    collection: [{
+                        href: string;
+                    }];
+                    about: [{
+                        href: string;
+                    }];
+                    'wp:featuredmedia': [{
+                        embeddable: boolean;
+                        href: string;
+                    }];
+                    'wp:attachment': [{
+                        href: string;
+                    }];
+                    'wp:term': {
+                        taxonomy: string;
+                        embeddable: boolean;
+                        href: string;
+                    }[];
+                    curies: {
+                        name: string;
+                        href: string;
+                        templated: boolean;
+                    }[];
+                };
+            }>;
+            searchResults: import("./src/clients/wordpress.js").WordpressResourceAPI<Record<string, any>>;
+            settings: import("./src/clients/wordpress.js").WordpressResourceAPI<Record<string, any>>;
+            tags: import("./src/clients/wordpress.js").WordpressResourceAPI<Record<string, any>>;
+            taxonomies: import("./src/clients/wordpress.js").WordpressResourceAPI<Record<string, any>>;
+            themes: import("./src/clients/wordpress.js").WordpressResourceAPI<Record<string, any>>;
+            users: import("./src/clients/wordpress.js").WordpressResourceAPI<Record<string, any>>;
+            plugins: import("./src/clients/wordpress.js").WordpressResourceAPI<Record<string, any>>;
+        };
+        commerce: {
+            summarize: (siteUrl: string) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
         };
     };
     youtube: {

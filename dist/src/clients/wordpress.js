@@ -188,12 +188,14 @@ export default {
                 const product = products[0];
                 if (!product)
                     return;
+                const _url = new URL(url);
+                _url.searchParams.append('post_type', 'product');
                 results.push({
-                    sourceId: url,
+                    sourceId: _url.toString(),
                     entryType: GalleryEntryTypes.WordpressCommerce,
                     genericType: 'shop',
                     title: (product?.yoast_head_json?.og_site_name || url) + ' - Products',
-                    url: url,
+                    url: _url.toString(),
                     image: extractProductImage(product),
                 });
             });

@@ -13,6 +13,7 @@ declare const _default: (host: string) => {
     replyToTopic: (topicId: number, message: string) => Promise<NewPostResponse>;
     search: (query: string) => Promise<SearchResponse>;
     user: <T extends string | number>(user: T) => Promise<T extends number ? DiscourseUser : DiscourseUserPlus>;
+    userEmails: (username: string) => Promise<DiscourseUserEmails>;
 };
 export default _default;
 export type SearchResponse = {
@@ -152,6 +153,15 @@ export type DiscourseUser = {
     tl3_requirements: any;
     groups: Group[];
     external_ids: any;
+};
+export type DiscourseUserEmails = {
+    email: string;
+    secondary_emails: string[];
+    unconfirmed_emails: string[];
+    associated_accounts?: {
+        name: string;
+        description: string;
+    }[];
 };
 export type DiscourseUserPlus = {
     user_badges: any[];

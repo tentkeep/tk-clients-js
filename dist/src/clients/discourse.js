@@ -64,6 +64,7 @@ export default (host) => ({
             ? discourse(`${host}/admin/users/${user}.json`)
             : discourse(`${host}/u/${user}.json`);
     },
+    userEmails: (username) => discourse(`${host}/u/${username}/emails.json`),
 });
 const discourse = (url, options = null) => {
     const apiKey = process.env.DISCOURSE_KEY;

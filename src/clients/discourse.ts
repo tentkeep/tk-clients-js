@@ -95,6 +95,8 @@ export default (host: string) => ({
       ? discourse(`${host}/admin/users/${user}.json`)
       : discourse(`${host}/u/${user}.json`)
   },
+  userEmails: (username: string): Promise<DiscourseUserEmails> =>
+    discourse(`${host}/u/${username}/emails.json`),
 })
 
 const discourse: API = (url, options = null) => {
@@ -250,6 +252,16 @@ export type DiscourseUser = {
   tl3_requirements: any
   groups: Group[]
   external_ids: any
+}
+
+export type DiscourseUserEmails = {
+  email: string
+  secondary_emails: string[]
+  unconfirmed_emails: string[]
+  associated_accounts?: {
+    name: string
+    description: string
+  }[]
 }
 
 export type DiscourseUserPlus = {

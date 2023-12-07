@@ -5,6 +5,7 @@ export declare const clients: {
         createGroup: (group: import("./src/clients/discourse.js").Group) => Promise<{
             basic_group: import("./src/clients/discourse.js").Group;
         }>;
+        createInvite: (invite: import("./src/clients/discourse.js").InviteRequest, fromUsername: string) => Promise<import("./src/clients/discourse.js").InviteResponse>;
         group: (groupName: string) => Promise<{
             group: import("./src/clients/discourse.js").Group;
         }>;

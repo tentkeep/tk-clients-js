@@ -11,7 +11,11 @@ describe('debug', () => {
     async () => {
       await clients
         .discourse('https://boards.thebootroots.com')
-        .userEmails('tentkeep')
+        .createInvite({
+          skip_email: false,
+          custom_message: 'Hey hey, wanna join my group?',
+          group_names: 'trust_level_0',
+        })
         .then(print)
         .catch((err) => {
           console.error(err.message)

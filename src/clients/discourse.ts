@@ -37,6 +37,15 @@ export default (host: string) => ({
       },
       body: { group },
     }) as Promise<{ basic_group: Group }>,
+  createInvite: (invite: InviteRequest, fromUsername: string) =>
+    discourse(`${host}/invites.json`, {
+      method: 'post',
+      headers: {
+        'Api-Username': fromUsername,
+        'Content-Type': 'application/json',
+      },
+      body: invite,
+    }) as Promise<InviteResponse>,
   group: (groupName: string) =>
     discourse(`${host}/groups/${groupName}.json`) as Promise<{ group: Group }>,
   groupMembers: (groupName: string) =>
@@ -68,7 +77,7 @@ export default (host: string) => ({
     actingUser: string | 'admin',
   ) =>
     discourse(`${host}/groups/${groupId}/members.json`, {
-      method: 'DELETE',
+      method: 'delete',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -99,7 +108,7 @@ export default (host: string) => ({
     discourse(`${host}/u/${username}/emails.json`),
 })
 
-const discourse: API = (url, options = null) => {
+const discourse: API = (url: string | URL, options = null) => {
   const apiKey = process.env.DISCOURSE_KEY
   const apiUsername = process.env.DISCOURSE_ADMIN_USERNAME
   const _options = options ?? {}
@@ -402,4 +411,27 @@ export type NewPostResponse = {
   reviewable_id?: null
   reviewable_score_count?: number
   reviewable_score_pending_count?: number
+}
+
+export type InviteRequest = {
+  skip_email?: boolean
+  custom_message?: string
+  max_redemptions_allowed?: number
+  group_ids?: string
+  group_names?: string
+}
+export type InviteResponse = {
+  id: number
+  invite_key: string
+  link: string
+  domain: any
+  can_delete_invite: boolean
+  max_redemptions_allowed: number
+  redemption_count: number
+  created_at: Date
+  updated_at: Date
+  expires_at: Date
+  expired: boolean
+  topics: any[]
+  groups: Group[]
 }

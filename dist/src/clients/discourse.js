@@ -25,6 +25,14 @@ export default (host) => ({
         },
         body: { group },
     }),
+    createInvite: (invite, fromUsername) => discourse(`${host}/invites.json`, {
+        method: 'post',
+        headers: {
+            'Api-Username': fromUsername,
+            'Content-Type': 'application/json',
+        },
+        body: invite,
+    }),
     group: (groupName) => discourse(`${host}/groups/${groupName}.json`),
     groupMembers: (groupName) => discourse(`${host}/groups/${groupName}/members.json`),
     privateMessage: (fromUsername, toUsername, subject, message) => discourse(`${host}/posts.json`, {
@@ -41,7 +49,7 @@ export default (host) => ({
         },
     }),
     removeGroupMembers: (groupId, usernames, actingUser) => discourse(`${host}/groups/${groupId}/members.json`, {
-        method: 'DELETE',
+        method: 'delete',
         headers: {
             'Content-Type': 'application/json',
             Accept: 'application/json',

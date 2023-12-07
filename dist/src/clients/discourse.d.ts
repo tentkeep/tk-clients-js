@@ -4,6 +4,7 @@ declare const _default: (host: string) => {
     createGroup: (group: Group) => Promise<{
         basic_group: Group;
     }>;
+    createInvite: (invite: InviteRequest, fromUsername: string) => Promise<InviteResponse>;
     group: (groupName: string) => Promise<{
         group: Group;
     }>;
@@ -299,4 +300,26 @@ export type NewPostResponse = {
     reviewable_id?: null;
     reviewable_score_count?: number;
     reviewable_score_pending_count?: number;
+};
+export type InviteRequest = {
+    skip_email?: boolean;
+    custom_message?: string;
+    max_redemptions_allowed?: number;
+    group_ids?: string;
+    group_names?: string;
+};
+export type InviteResponse = {
+    id: number;
+    invite_key: string;
+    link: string;
+    domain: any;
+    can_delete_invite: boolean;
+    max_redemptions_allowed: number;
+    redemption_count: number;
+    created_at: Date;
+    updated_at: Date;
+    expires_at: Date;
+    expired: boolean;
+    topics: any[];
+    groups: Group[];
 };

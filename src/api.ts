@@ -28,6 +28,12 @@ export const sanitizeOptions = (options: any | null) => {
   return _options
 }
 
+export type RequestOptions = {
+  method?: 'get' | 'post' | 'put' | 'delete'
+  headers?: Record<string, string | undefined>
+  body?: any
+}
+
 export class ApiStatusError extends Error {
   status: number
   bodyText: string
@@ -57,9 +63,15 @@ const parseContent = async (response: any) => {
   return response
 }
 
-export type API = (url: string | URL, options?: any | null) => Promise<any>
+export type API = (
+  url: string | URL,
+  options?: RequestOptions | null,
+) => Promise<any>
 
-export const api: API = (url: string | URL, options: any | null = null) => {
+export const api: API = (
+  url: string | URL,
+  options: RequestOptions | null = null,
+) => {
   return got(url, sanitizeOptions(options))
     .then(statusChecker)
     .then(parseContent)

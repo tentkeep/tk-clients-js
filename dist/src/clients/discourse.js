@@ -57,6 +57,19 @@ export default (host) => ({
         },
         body: { usernames: usernames.join(',') },
     }),
+    removeGroupOwnerRole: (groupId, usernames, actingUser) => discourse(`${host}/admin/groups/${groupId}/owners.json`, {
+        method: 'delete',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            'Api-Username': actingUser === 'admin' ? undefined : actingUser,
+        },
+        body: {
+            group: {
+                usernames: usernames.join(','),
+            },
+        },
+    }),
     replyToTopic: (topicId, message) => discourse(`${host}/groups/posts.json`, {
         method: 'post',
         body: {

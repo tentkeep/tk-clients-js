@@ -12,6 +12,7 @@ export declare const clients: {
         groupMembers: (groupName: string) => Promise<import("./src/clients/discourse.js").GroupMembers>;
         privateMessage: (fromUsername: string, toUsername: string, subject: string, message: string) => Promise<import("./src/clients/discourse.js").NewPostResponse>;
         removeGroupMembers: (groupId: number, usernames: string[], actingUser: string) => Promise<import("./src/clients/discourse.js").AddGroupMembersResponse>;
+        removeGroupOwnerRole: (groupId: number, usernames: string[], actingUser: string) => Promise<any>;
         replyToTopic: (topicId: number, message: string) => Promise<import("./src/clients/discourse.js").NewPostResponse>;
         search: (query: string) => Promise<import("./src/clients/discourse.js").SearchResponse>;
         user: <T extends string | number>(user: T) => Promise<T extends number ? import("./src/clients/discourse.js").DiscourseUser : import("./src/clients/discourse.js").DiscourseUserPlus>;

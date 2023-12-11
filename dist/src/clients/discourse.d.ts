@@ -11,6 +11,7 @@ declare const _default: (host: string) => {
     groupMembers: (groupName: string) => Promise<GroupMembers>;
     privateMessage: (fromUsername: string, toUsername: string, subject: string, message: string) => Promise<NewPostResponse>;
     removeGroupMembers: (groupId: number, usernames: string[], actingUser: string | 'admin') => Promise<AddGroupMembersResponse>;
+    removeGroupOwnerRole: (groupId: number, usernames: string[], actingUser: string) => Promise<any>;
     replyToTopic: (topicId: number, message: string) => Promise<NewPostResponse>;
     search: (query: string) => Promise<SearchResponse>;
     user: <T extends string | number>(user: T) => Promise<T extends number ? DiscourseUser : DiscourseUserPlus>;

@@ -64,7 +64,7 @@ export type SearchResponse = {
     }[];
     categories: any[];
     tags: any[];
-    groups: any[];
+    groups: Group[];
     grouped_search_result: {
         more_posts: null;
         more_users: null;

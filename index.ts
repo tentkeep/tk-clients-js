@@ -13,6 +13,8 @@ import youtube from './src/clients/youtube.js'
 import tentkeep from '@tentkeep/tentkeep'
 import { logic as tentkeepLogic } from '@tentkeep/tentkeep'
 
+export * as Discourse from './src/clients/discourse.js'
+
 export const clients = {
   discourse,
   etsy,

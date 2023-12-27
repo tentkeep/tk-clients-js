@@ -1,3 +1,4 @@
+export * as Discourse from './src/clients/discourse.js';
 export declare const clients: {
     discourse: (host: string) => {
         addGroupMembers: (groupId: number, usernames: string[], actingUser: string) => Promise<import("./src/clients/discourse.js").AddGroupMembersResponse>;

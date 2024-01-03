@@ -9,9 +9,8 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      await clients
-        .discourse('https://boards.thebootroots.com')
-        .removeGroupOwnerRole(70, ['thebootroots'], 'system')
+      await clients.wordpress.commerce
+        .summarize('https://eastwardgardens.com')
         .then(print)
         .catch((err) => {
           console.error(err.message)

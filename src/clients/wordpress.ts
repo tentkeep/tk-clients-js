@@ -300,7 +300,7 @@ function extractTitle(resource: {
     resource.yoast_head_json?.title ||
     resource.yoast_head_json?.og_title ||
     resource.title?.rendered
-  )
+  ).replace('&#8217;', `'`)
 }
 
 function extractDescription(resource: {

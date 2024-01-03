@@ -224,7 +224,7 @@ function extractProductImage(product) {
 function extractTitle(resource) {
     return (resource.yoast_head_json?.title ||
         resource.yoast_head_json?.og_title ||
-        resource.title?.rendered);
+        resource.title?.rendered).replace('&#8217;', `'`);
 }
 function extractDescription(resource) {
     return (resource.yoast_head_json?.description ||

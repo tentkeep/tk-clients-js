@@ -1,4 +1,4 @@
-import { GalleryEntryTypes, } from '@tentkeep/tentkeep';
+import { GalleryEntryItemTagSource, GalleryEntryTypes, } from '@tentkeep/tentkeep';
 import { sanitizeUrl } from '../shareable/common.js';
 import api from '../api.js';
 const raw = {
@@ -86,6 +86,10 @@ const mapToGalleryEntryItem = (product, url, _url) => {
         images: product.images.map((i) => i.src),
         url: productUrl(url, product),
         date: product.updated_at,
+        tags: product.tags.reduce((acc, cur) => {
+            acc[cur] = GalleryEntryItemTagSource.Source;
+            return acc;
+        }, {}),
         detail: {
             variants: product.variants.map((variant) => {
                 return {

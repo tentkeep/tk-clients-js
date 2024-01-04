@@ -9,10 +9,8 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      await clients.google
-        .search(
-          'Cotton Cattle Company, 10 Cornfield Lane, Asbury, NJ 08802 United States',
-        )
+      await clients.page
+        .summary('www.cottoncattleco.com')
         .then(print)
         .catch((err) => {
           console.error(err.message)

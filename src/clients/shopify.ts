@@ -1,7 +1,7 @@
 import {
   GalleryEntry,
   GalleryEntryItemProduct,
-  GalleryEntryItemTagSource,
+  TagSource,
   GalleryEntryTypes,
 } from '@tentkeep/tentkeep'
 import { sanitizeUrl } from '../shareable/common.js'
@@ -171,10 +171,10 @@ const mapToGalleryEntryItem = (
     images: product.images.map((i) => i.src),
     url: productUrl(url, product),
     date: product.updated_at,
-    tags: product.tags.reduce((acc, cur) => {
-      acc[cur] = GalleryEntryItemTagSource.Source
-      return acc
-    }, {} as Record<string, GalleryEntryItemTagSource>),
+    tags: product.tags.map((_tag) => ({
+      label: _tag,
+      source: TagSource.Source,
+    })),
     detail: {
       variants: product.variants.map((variant) => {
         return {

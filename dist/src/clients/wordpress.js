@@ -1,7 +1,6 @@
-import { GalleryEntryTypes, } from '@tentkeep/tentkeep';
+import { GalleryEntryTypes, TagSource, } from '@tentkeep/tentkeep';
 import { api } from '../api.js';
 import { forKey, sanitizeUrl } from '../shareable/common.js';
-import { GalleryEntryItemTagSource } from '@tentkeep/tentkeep';
 const resources = [
     'block-types',
     'blocks',
@@ -242,20 +241,20 @@ function extractPostAuthor(post) {
     return post.yoast_head_json?.author || post.author_info?.name || '';
 }
 function extractPostTags(post, categories, wTags) {
-    let tags = {};
+    let tags = [];
     post.categories?.forEach((c) => {
         const tag = categories
             .find((cat) => cat.id === c)
             ?.name?.toLowerCase();
         if (tag)
-            tags[tag] = GalleryEntryItemTagSource.Source;
+            tags.push({ label: tag, source: TagSource.Source });
     });
     post.tags?.forEach((t) => {
         const tag = wTags
             .find((tag) => tag.id === t)
             ?.name?.toLowerCase();
         if (tag)
-            tags[tag] = GalleryEntryItemTagSource.Source;
+            tags.push({ label: tag, source: TagSource.Source });
     });
     return tags;
 }

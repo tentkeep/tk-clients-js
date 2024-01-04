@@ -637,7 +637,7 @@ export declare const clients: {
         playlist: (playlistId: any) => any;
         playlistTracks: (playlistId: any) => any;
     };
-    tentkeep: (dataDomain: import("@tentkeep/tentkeep").TKDataDomain, key: string, config?: import("@tentkeep/tentkeep/dist/src/tentkeep.js").TKConfig | undefined) => {
+    tentkeep: (config: import("@tentkeep/tentkeep/dist/src/tentkeep.js").TKConfig) => {
         setApiKey: (key: string) => void;
         auth: {
             authSignIn: (strategy: string, redirect: string, options: import("@tentkeep/tentkeep").AuthOptions) => void | Promise<import("@tentkeep/tentkeep").Token>;
@@ -662,6 +662,7 @@ export declare const clients: {
             getPageSummary: (url: string) => Promise<import("@tentkeep/tentkeep").PageSummary>;
             getPlaces: (query: string) => Promise<import("@tentkeep/tentkeep").GalleryEntryPlace[]>;
             getPlaceDetail: (sourceId: string) => Promise<import("@tentkeep/tentkeep").GalleryEntryPlace>;
+            getShopifyItemsForCollection: (storeUrl: string, collectionHandle: string) => Promise<import("@tentkeep/tentkeep").EntitiesBundle<"galleryEntryItems">>;
         };
         session: {
             getEnv: () => Promise<any>;
@@ -712,17 +713,15 @@ export declare const clients: {
             checkout: (token: string | undefined, orders: {
                 orders: number[];
             }) => Promise<import("@tentkeep/tentkeep").CheckoutSession>;
+            getMembershipOptions: (token: string) => Promise<{
+                items: import("@tentkeep/tentkeep").GalleryEntryItemProduct[];
+            }>;
+            checkoutMembership: (token: string, variantId: string) => Promise<import("@tentkeep/tentkeep").CheckoutSession>;
             getCheckoutRedirectUrl: () => string;
-            getOrdersBundles: (token: string) => Promise<{
+            getGroupOrders: (token: string) => Promise<{
                 ordersBundles: import("@tentkeep/tentkeep").OrdersBundle[];
             }>;
             getOrdersBundle: (token: string, ordersBundleId: number) => Promise<{
-                ordersBundle: import("@tentkeep/tentkeep").OrdersBundle;
-            }>;
-            getOrdersBundlesDrafting: (token: string) => Promise<{
-                ordersBundles: import("@tentkeep/tentkeep").OrdersBundle[];
-            }>;
-            getLatestOpenOrdersBundle: (token: string) => Promise<{
                 ordersBundle: import("@tentkeep/tentkeep").OrdersBundle;
             }>;
             saveOrders: (token: string | undefined, orders: import("@tentkeep/tentkeep").Order[]) => Promise<{
@@ -731,9 +730,10 @@ export declare const clients: {
             saveOrdersBundle: (token: string | undefined, ordersBundle: import("@tentkeep/tentkeep").OrdersBundle) => Promise<{
                 ordersBundle: import("@tentkeep/tentkeep").OrdersBundle;
             }>;
-            startGroupOrdersBundle: (token: string, ordersBundleId: number) => Promise<{
+            transferOrdersBundle: (token: string, ordersBundleId: number, toUserId: number) => Promise<{
                 ordersBundle: import("@tentkeep/tentkeep").OrdersBundle;
             }>;
+            createGroupOrder: (token: string, options: import("@tentkeep/tentkeep/dist/src/types/request-types.js").CreateGroupOrderRequest) => Promise<import("@tentkeep/tentkeep").EntityBundle<"ordersBundle">>;
             getProductSplitClaims: (token: string, ordersBundleId: number) => Promise<{
                 productSplitClaims: import("@tentkeep/tentkeep").ProductSplitClaim[];
             }>;
@@ -741,8 +741,50 @@ export declare const clients: {
                 productSplitClaims: import("@tentkeep/tentkeep").ProductSplitClaim[];
             }>;
             deleteProductSplitClaims: (token: string, ordersBundle: import("@tentkeep/tentkeep").OrdersBundle, productSplit: import("@tentkeep/tentkeep").AnyProductSplit, splitId: string) => Promise<boolean>;
+            getSubscriptions: (token: string) => Promise<{
+                items: import("@tentkeep/tentkeep").GalleryEntryItem[];
+            }>;
+            deleteSubscription: (token: string, subscriptionId: string) => Promise<any>;
         };
         onUnauthorized: (callback: () => void) => void;
+        findEntities: (entity: string, token?: string | undefined, query?: any) => Promise<Partial<import("@tentkeep/tentkeep").AllEntitiesBundle>>;
+        getEntity: (entity: string, token: string | undefined, id: string | number) => Promise<Partial<import("@tentkeep/tentkeep").AllEntityBundle>>;
+        saveEntities: (entity: string, token: string, payload: Partial<import("@tentkeep/tentkeep").AllEntitiesBundle>) => Promise<Partial<import("@tentkeep/tentkeep").AllEntitiesBundle>>;
+        Discounts: {
+            find: (token: string, query: import("@tentkeep/tentkeep").SearchQuery<import("@tentkeep/tentkeep").Discount>) => Promise<import("@tentkeep/tentkeep").EntitiesBundle<"discounts">>;
+            get: (token: string, id: string | number) => Promise<import("@tentkeep/tentkeep").EntityBundle<"discount">>;
+            save: (token: string, payload: Partial<import("@tentkeep/tentkeep").EntitiesBundle<"discounts">>) => Promise<import("@tentkeep/tentkeep").EntitiesBundle<"discounts">>;
+            delete: (token: string, id: string | number) => Promise<{
+                success: boolean;
+            }>;
+        };
+        Groups: {
+            find: (token: string, query: {
+                query?: string | undefined;
+                me?: boolean | undefined;
+            }) => Promise<import("@tentkeep/tentkeep").EntitiesBundle<"groups">>;
+            get: (token: string, id: string | number) => Promise<import("@tentkeep/tentkeep").EntityBundle<"group">>;
+            save: (token: string, payload: Partial<import("@tentkeep/tentkeep").EntitiesBundle<"groups">>) => Promise<import("@tentkeep/tentkeep").EntitiesBundle<"groups">>;
+            delete: (token: string, id: string | number) => Promise<{
+                success: boolean;
+            }>;
+        };
+        Orders: {
+            find: (token: string, query: import("@tentkeep/tentkeep").SearchQuery<import("@tentkeep/tentkeep").Order | import("@tentkeep/tentkeep").GalleryOrder>) => Promise<import("@tentkeep/tentkeep").EntitiesBundle<"galleryOrders" | "orders">>;
+            get: (token: string, id: string | number) => Promise<import("@tentkeep/tentkeep").EntityBundle<"galleryOrder" | "order">>;
+            save: (token: string, payload: Partial<import("@tentkeep/tentkeep").EntitiesBundle<"galleryOrders" | "orders">>) => Promise<import("@tentkeep/tentkeep").EntitiesBundle<"galleryOrders" | "orders">>;
+            delete: (token: string, id: string | number) => Promise<{
+                success: boolean;
+            }>;
+        };
+        OrdersBundles: {
+            find: (token: string, query: import("@tentkeep/tentkeep").SearchQuery<import("@tentkeep/tentkeep").OrdersBundle>) => Promise<import("@tentkeep/tentkeep").EntitiesBundle<"ordersBundles">>;
+            get: (token: string, id: string | number) => Promise<import("@tentkeep/tentkeep").EntityBundle<"ordersBundle">>;
+            save: (token: string, payload: Partial<import("@tentkeep/tentkeep").EntitiesBundle<"ordersBundles">>) => Promise<import("@tentkeep/tentkeep").EntitiesBundle<"ordersBundles">>;
+            delete: (token: string, id: string | number) => Promise<{
+                success: boolean;
+            }>;
+        };
         getComposition: (token: string | undefined, compositionId: number) => Promise<{
             composition: import("@tentkeep/tentkeep/dist/src/composition/composition-types.js").Composition;
         }>;
@@ -754,13 +796,14 @@ export declare const clients: {
         getUser: (token: string, username: string) => Promise<{
             user: import("@tentkeep/tentkeep").User;
         }>;
-        getGroup: (token: string, groupName: string) => Promise<{
-            group: import("@tentkeep/tentkeep").Group;
-        }>;
+        getCart: (token: string) => Promise<import("@tentkeep/tentkeep").EntitiesBundle<"galleryOrders" | "orders">>;
+        getShareableLink: (token: string, request: import("@tentkeep/tentkeep/dist/src/types/request-types.js").ShareRequest) => Promise<any>;
+        sendMessageToSupport: (token: string, message: string) => Promise<any>;
         updateGroup: (token: string, groupId: number, changes: {
             members?: string[] | undefined;
             owners?: string[] | undefined;
             remove?: string[] | undefined;
+            removeOwners?: string[] | undefined;
         }) => Promise<any>;
         getGalleries: (options?: import("@tentkeep/tentkeep").SearchOptions | undefined) => Promise<import("@tentkeep/tentkeep").TKResponse | import("@tentkeep/tentkeep").Gallery>;
         searchGalleries: (query: string, options?: import("@tentkeep/tentkeep").SearchOptions | undefined) => Promise<import("@tentkeep/tentkeep").SearchResponse>;
@@ -774,6 +817,15 @@ export declare const clients: {
         getGalleryEntryItem: (galleryEntryItemId: number) => Promise<import("@tentkeep/tentkeep").GalleryEntryItem>;
         getRecentGalleryEntryItems: (genericType?: import("@tentkeep/tentkeep").GalleryEntryGenericTypes | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntryItem[]>;
         getTrendingGalleryEntryItemTopics: (limit?: number | undefined) => Promise<string[]>;
+        getMyScopes: (token: string) => Promise<{
+            scopes: string[];
+        }>;
+        getUserLocations: (token: string) => Promise<{
+            locations: import("@tentkeep/tentkeep").Location[];
+        }>;
+        saveUserLocation: (token: string, location: import("@tentkeep/tentkeep").Location) => Promise<{
+            location: import("@tentkeep/tentkeep").Location;
+        }>;
         getGalleriesForUser: (token: string) => Promise<import("@tentkeep/tentkeep").UserGallery[]>;
         getGalleryUsers: (token: string, galleryId: number) => Promise<import("@tentkeep/tentkeep").GalleryUsersSummary>;
         getGalleryImageUrl: (galleryId: number) => string;
@@ -787,6 +839,7 @@ export declare const clients: {
             galleryUsers: import("@tentkeep/tentkeep").GalleryUser[];
         }>;
         joinGallery: (token: string, galleryId: number) => Promise<import("@tentkeep/tentkeep").GalleryUser>;
+        saveUserItemActivity: (token: string, itemActivity: any) => Promise<any>;
         saveGallery: (token: string, gallery: import("@tentkeep/tentkeep").Entity & {
             id?: number | undefined;
             title?: string | undefined;
@@ -822,7 +875,6 @@ export declare const clients: {
             galleryEntry: import("@tentkeep/tentkeep").GalleryEntry;
             galleryEntryItems: import("@tentkeep/tentkeep").GalleryEntryItem[];
         }>;
-        saveUserItemActivity: (token: string, itemActivity: any) => Promise<any>;
         findOrCreateStoreForGallery: (token: string, galleryId: number) => Promise<any>;
     };
     wordpress: import("./src/clients/tentkeep-client.js").TentkeepClient<undefined> & {

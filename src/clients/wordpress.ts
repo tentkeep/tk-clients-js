@@ -4,10 +4,11 @@ import {
   GalleryEntryItemProduct,
   GalleryEntrySummary,
   GalleryEntryTypes,
+  Tag,
+  TagSource,
 } from '@tentkeep/tentkeep'
 import { api } from '../api.js'
 import { forKey, sanitizeUrl } from '../shareable/common.js'
-import { GalleryEntryItemTagSource } from '@tentkeep/tentkeep'
 import { TentkeepClient } from './tentkeep-client.js'
 
 const resources = [
@@ -332,19 +333,19 @@ function extractPostTags(
   post: WordpressPost,
   categories: any[],
   wTags: any[],
-): Record<string, GalleryEntryItemTagSource> {
-  let tags: Record<string, GalleryEntryItemTagSource> = {}
+): Tag[] {
+  let tags: Tag[] = []
   post.categories?.forEach((c) => {
     const tag: string | undefined = categories
       .find((cat) => cat.id === c)
       ?.name?.toLowerCase()
-    if (tag) tags[tag] = GalleryEntryItemTagSource.Source
+    if (tag) tags.push({ label: tag, source: TagSource.Source })
   })
   post.tags?.forEach((t) => {
     const tag: string | undefined = wTags
       .find((tag) => tag.id === t)
       ?.name?.toLowerCase()
-    if (tag) tags[tag] = GalleryEntryItemTagSource.Source
+    if (tag) tags.push({ label: tag, source: TagSource.Source })
   })
   return tags
 }

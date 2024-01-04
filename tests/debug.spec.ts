@@ -9,8 +9,10 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      await clients.wordpress.commerce
-        .summarize('https://eastwardgardens.com')
+      await clients.google
+        .search(
+          'Cotton Cattle Company, 10 Cornfield Lane, Asbury, NJ 08802 United States',
+        )
         .then(print)
         .catch((err) => {
           console.error(err.message)

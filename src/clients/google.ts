@@ -4,17 +4,28 @@ import { TentkeepClient } from './tentkeep-client.js'
 
 const raw = {
   places: {
-    search: (query: string): Promise<PlaceCandidates> =>
-      google(
-        `/findplacefromtext/json?fields=${searchFields}&input=${query}&inputtype=textquery`,
-      ),
-    details: (placeId: string): Promise<{ result: GooglePlace }> =>
+    search: (query: string): Promise<PlaceTextSearchResponse> => {
+      if (!process.env.CLIENTS_GCP_KEY) throw new Error('Missing API Key')
+      return api('https://places.googleapis.com/v1/places:searchText', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Goog-Api-Key': process.env.CLIENTS_GCP_KEY,
+          'X-Goog-FieldMask':
+            'places.id,places.name,places.addressComponents,places.displayName,places.formattedAddress,places.location,places.primaryType',
+        },
+        body: {
+          textQuery: query,
+        },
+      })
+    },
+    details: (placeId: string): Promise<{ result: OldGooglePlace }> =>
       google(`/details/json?place_id=${placeId}`),
   },
 }
 
 async function search(query: string): Promise<GalleryEntryPlace[]> {
-  return (await raw.places.search(query)).candidates.map(mapPlace)
+  return (await raw.places.search(query)).places.map(mapPlaceTextSearch)
 }
 
 async function placeDetails(placeId: string): Promise<GalleryEntryPlace> {
@@ -37,9 +48,6 @@ export default {
   placeDetails,
 }
 
-const searchFields =
-  'place_id,formatted_address,name,rating,opening_hours,geometry,types'
-
 type GooglePlaceTypes =
   | 'street_number'
   | 'route'
@@ -51,25 +59,7 @@ type GooglePlaceTypes =
   | 'postal_code'
   | 'political'
 
-type PlaceCandidates = { candidates: GooglePlace[] }
-export type GooglePlace = {
-  address_components: {
-    long_name: string
-    short_name: string
-    types: GooglePlaceTypes[]
-  }[]
-  place_id: string
-  name: string
-  website?: string
-  formatted_address: string
-  international_phone_number?: string
-  geometry?: {
-    location?: {
-      lat: number
-      lng: number
-    }
-  }
-}
+type PlaceTextSearchResponse = { places: GooglePlace[] }
 
 function google(path: string) {
   const url = new URL(`https://maps.googleapis.com/maps/api/place${path}`)
@@ -77,7 +67,7 @@ function google(path: string) {
   return api(url)
 }
 
-function mapPlace(place: GooglePlace): GalleryEntryPlace {
+function mapPlace(place: OldGooglePlace): GalleryEntryPlace {
   if (!place.place_id || !place.name) {
     throw new ApiStatusError(412, 'Missing sourceId or title')
   }
@@ -107,4 +97,183 @@ function mapPlace(place: GooglePlace): GalleryEntryPlace {
       longitude: place.geometry?.location?.lng as unknown as number,
     },
   } as GalleryEntryPlace
+}
+
+function mapPlaceTextSearch(place: GooglePlace): GalleryEntryPlace {
+  if (!place.id || !place.displayName?.text) {
+    throw new ApiStatusError(412, 'Missing sourceId or title')
+  }
+
+  function findComponent(type: GooglePlaceTypes) {
+    return (
+      place.addressComponents?.find((c) => c.types.includes(type))?.longText ??
+      ''
+    )
+  }
+
+  return {
+    sourceId: place.id!,
+    title: place.displayName?.text!,
+    url: place.websiteUri,
+    detail: {
+      address: place.formattedAddress,
+      streetNumber: findComponent('street_number'),
+      street: findComponent('route'),
+      city: findComponent('locality'),
+      county: findComponent('administrative_area_level_2'),
+      province: findComponent('administrative_area_level_1'),
+      country: findComponent('country'),
+      postalCode: findComponent('postal_code'),
+      phone: place.internationalPhoneNumber,
+      latitude: place.location?.latitude as unknown as number,
+      longitude: place.location?.longitude as unknown as number,
+    },
+  } as GalleryEntryPlace
+}
+
+export type GooglePlace = {
+  name: string
+  id: string
+  types?: string[]
+  nationalPhoneNumber?: string
+  internationalPhoneNumber?: string
+  formattedAddress?: string
+  addressComponents?: {
+    longText: string
+    shortText: string
+    types: string[]
+    languageCode: string
+  }[]
+  plusCode?: {
+    globalCode?: string
+    compoundCode?: string
+  }
+  location?: {
+    latitude?: number
+    longitude?: number
+  }
+  viewport?: {
+    low: {
+      latitude: number
+      longitude: number
+    }
+    high: {
+      latitude: number
+      longitude: number
+    }
+  }
+  rating?: number
+  googleMapsUri?: string
+  websiteUri?: string
+  regularOpeningHours?: {
+    openNow: boolean
+    periods: {
+      open: {
+        day: number
+        hour: number
+        minute: number
+      }
+      close: {
+        day: number
+        hour: number
+        minute: number
+      }
+    }[]
+    weekdayDescriptions?: string[]
+  }
+  utcOffsetMinutes?: number
+  adrFormatAddress?: string
+  businessStatus?: string
+  userRatingCount?: number
+  iconMaskBaseUri?: string
+  iconBackgroundColor?: string
+  displayName?: {
+    text: string
+    languageCode: string
+  }
+  primaryTypeDisplayName?: {
+    text: string
+    languageCode: string
+  }
+  currentOpeningHours?: {
+    openNow: boolean
+    periods: {
+      open: {
+        day: number
+        hour: number
+        minute: number
+        date: {
+          year: number
+          month: number
+          day: number
+        }
+      }
+      close: {
+        day: number
+        hour: number
+        minute: number
+        date: {
+          year: number
+          month: number
+          day: number
+        }
+      }
+    }[]
+    weekdayDescriptions: string[]
+  }
+  primaryType?: string
+  shortFormattedAddress?: string
+  reviews?: {
+    name: string
+    relativePublishTimeDescription: string
+    rating: 5
+    text: {
+      text: string
+      languageCode: string
+    }
+    originalText: {
+      text: string
+      languageCode: string
+    }
+    authorAttribution: {
+      displayName: string
+      uri: string
+      photoUri: string
+    }
+    publishTime: Date
+  }[]
+  photos?: {
+    name: string
+    widthPx: number
+    heightPx: number
+    authorAttributions: [
+      {
+        displayName: string
+        uri: string
+        photoUri: string
+      },
+    ]
+  }[]
+  accessibilityOptions?: {
+    wheelchairAccessibleParking: boolean
+  }
+}
+
+type OldGooglePlace = {
+  address_components: {
+    long_name: string
+    short_name: string
+    types: GooglePlaceTypes[]
+  }[]
+  place_id: string
+  name: string
+  website?: string
+  formatted_address: string
+  international_phone_number?: string
+  geometry?: {
+    location?: {
+      lat: number
+      lng: number
+    }
+  }
 }

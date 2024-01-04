@@ -400,10 +400,27 @@ export declare const clients: {
         raw: {
             places: {
                 search: (query: string) => Promise<{
-                    candidates: import("./src/clients/google.js").GooglePlace[];
+                    places: import("./src/clients/google.js").GooglePlace[];
                 }>;
                 details: (placeId: string) => Promise<{
-                    result: import("./src/clients/google.js").GooglePlace;
+                    result: {
+                        address_components: {
+                            long_name: string;
+                            short_name: string;
+                            types: ("street_number" | "route" | "locality" | "administrative_area_level_1" | "administrative_area_level_2" | "administrative_area_level_3" | "country" | "postal_code" | "political")[];
+                        }[];
+                        place_id: string;
+                        name: string;
+                        website?: string | undefined;
+                        formatted_address: string;
+                        international_phone_number?: string | undefined;
+                        geometry?: {
+                            location?: {
+                                lat: number;
+                                lng: number;
+                            } | undefined;
+                        } | undefined;
+                    };
                 }>;
             };
         };

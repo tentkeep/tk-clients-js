@@ -15,7 +15,7 @@ declare const _default: {
     summarize: (sourceId: string, options?: undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntrySummary>;
 };
 export default _default;
-type GooglePlaceTypes = 'street_number' | 'route' | 'locality' | 'administrative_area_level_1' | 'administrative_area_level_2' | 'administrative_area_level_3' | 'country' | 'postal_code' | 'political';
+type GooglePlaceTypes = 'street_number' | 'subpremise' | 'route' | 'locality' | 'administrative_area_level_1' | 'administrative_area_level_2' | 'administrative_area_level_3' | 'country' | 'postal_code' | 'political';
 type PlaceTextSearchResponse = {
     places?: GooglePlace[];
 };

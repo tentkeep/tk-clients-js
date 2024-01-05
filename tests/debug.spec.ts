@@ -10,7 +10,9 @@ describe('debug', () => {
     'prints info',
     async () => {
       await clients.google
-        .search('https://www.Venturabrushgoats.com')
+        .search(
+          'Ayers Valley Farm, 9551 State Route 353, Russellville, Ohio 45168 United States',
+        )
         .then(print)
         .catch((err) => {
           console.error(err.message)

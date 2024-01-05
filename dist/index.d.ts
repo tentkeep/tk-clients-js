@@ -403,7 +403,7 @@ export declare const clients: {
                     address_components: {
                         long_name: string;
                         short_name: string;
-                        types: ("street_number" | "route" | "locality" | "administrative_area_level_1" | "administrative_area_level_2" | "administrative_area_level_3" | "country" | "postal_code" | "political")[];
+                        types: ("street_number" | "subpremise" | "route" | "locality" | "administrative_area_level_1" | "administrative_area_level_2" | "administrative_area_level_3" | "country" | "postal_code" | "political")[];
                     }[];
                     place_id: string;
                     name: string;
@@ -425,7 +425,7 @@ export declare const clients: {
                         address_components: {
                             long_name: string;
                             short_name: string;
-                            types: ("street_number" | "route" | "locality" | "administrative_area_level_1" | "administrative_area_level_2" | "administrative_area_level_3" | "country" | "postal_code" | "political")[];
+                            types: ("street_number" | "subpremise" | "route" | "locality" | "administrative_area_level_1" | "administrative_area_level_2" | "administrative_area_level_3" | "country" | "postal_code" | "political")[];
                         }[];
                         place_id: string;
                         name: string;

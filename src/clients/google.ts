@@ -1,4 +1,8 @@
-import { GalleryEntryPlace } from '@tentkeep/tentkeep'
+import {
+  GalleryEntryPlace,
+  GalleryEntryTypes,
+  PlaceDetail,
+} from '@tentkeep/tentkeep'
 import api, { ApiStatusError } from '../api.js'
 import { TentkeepClient } from './tentkeep-client.js'
 
@@ -14,13 +18,16 @@ const raw = {
 
     search: (query: string): Promise<PlaceTextSearchResponse> => {
       if (!process.env.CLIENTS_GCP_KEY) throw new Error('Missing API Key')
+      const basicFields =
+        'places.id,places.name,places.addressComponents,places.displayName,places.formattedAddress,places.location,places.primaryType'
+      const advancedFields =
+        'places.internationalPhoneNumber,places.nationalPhoneNumber,places.regularOpeningHours,places.websiteUri'
       return api('https://places.googleapis.com/v1/places:searchText', {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
           'X-Goog-Api-Key': process.env.CLIENTS_GCP_KEY,
-          'X-Goog-FieldMask':
-            'places.id,places.name,places.addressComponents,places.displayName,places.formattedAddress,places.location,places.primaryType',
+          'X-Goog-FieldMask': `${basicFields},${advancedFields}`,
         },
         body: {
           textQuery: query,
@@ -59,6 +66,7 @@ export default {
 
 type GooglePlaceTypes =
   | 'street_number'
+  | 'subpremise'
   | 'route'
   | 'locality'
   | 'administrative_area_level_1'
@@ -88,23 +96,28 @@ function mapPlace(place: OldGooglePlace): GalleryEntryPlace {
     )
   }
 
+  const streetNumber = findComponent('street_number')
+  const streetName = findComponent('route')
+  const detail: PlaceDetail = {
+    sourceId: place.place_id,
+    addressLine1: [streetNumber, streetName].filter((c) => c).join(' '),
+    addressLine2: findComponent('subpremise'),
+    city: findComponent('locality'),
+    county: findComponent('administrative_area_level_2'),
+    province: findComponent('administrative_area_level_1'),
+    country: findComponent('country'),
+    postalCode: findComponent('postal_code'),
+    phone: place.international_phone_number,
+    latitude: place.geometry?.location?.lat as unknown as number,
+    longitude: place.geometry?.location?.lng as unknown as number,
+  }
   return {
     sourceId: place.place_id!,
+    entryType: GalleryEntryTypes.GooglePlace,
+    genericType: 'place',
     title: place.name!,
     url: place.website,
-    detail: {
-      address: place.formatted_address,
-      streetNumber: findComponent('street_number'),
-      street: findComponent('route'),
-      city: findComponent('locality'),
-      county: findComponent('administrative_area_level_2'),
-      province: findComponent('administrative_area_level_1'),
-      country: findComponent('country'),
-      postalCode: findComponent('postal_code'),
-      phone: place.international_phone_number,
-      latitude: place.geometry?.location?.lat as unknown as number,
-      longitude: place.geometry?.location?.lng as unknown as number,
-    },
+    detail,
   } as GalleryEntryPlace
 }
 
@@ -120,23 +133,50 @@ function mapPlaceTextSearch(place: GooglePlace): GalleryEntryPlace {
     )
   }
 
+  const streetNumber = findComponent('street_number')
+  const streetName = findComponent('route')
+
+  // 'places.nationalPhoneNumber,places.regularOpeningHours,places.websiteUri'
+  const detail: PlaceDetail = {
+    sourceId: place.id,
+    addressLine1: [streetNumber, streetName].filter((c) => c).join(' '),
+    addressLine2: findComponent('subpremise'),
+    city: findComponent('locality'),
+    county: findComponent('administrative_area_level_2'),
+    province: findComponent('administrative_area_level_1'),
+    country: findComponent('country'),
+    postalCode: findComponent('postal_code'),
+    phone: place.internationalPhoneNumber,
+    latitude: place.location?.latitude as unknown as number,
+    longitude: place.location?.longitude as unknown as number,
+    hours: place.regularOpeningHours?.periods?.map((period) => {
+      return {
+        open: {
+          day: period.open.day as any,
+          hours: period.open.hour,
+          minutes: period.open.minute,
+          time: `${period.open.hour}:${period.open.minute < 10 ? '0' : ''}${
+            period.open.minute
+          }` as any,
+        },
+        close: {
+          day: period.close.day as any,
+          hours: period.close.hour,
+          minutes: period.close.minute,
+          time: `${period.close.hour}:${period.close.minute < 10 ? '0' : ''}${
+            period.close.minute
+          }` as any,
+        },
+      }
+    }),
+  }
   return {
     sourceId: place.id!,
+    entryType: GalleryEntryTypes.GooglePlace,
+    genericType: 'place',
     title: place.displayName?.text!,
     url: place.websiteUri,
-    detail: {
-      address: place.formattedAddress,
-      streetNumber: findComponent('street_number'),
-      street: findComponent('route'),
-      city: findComponent('locality'),
-      county: findComponent('administrative_area_level_2'),
-      province: findComponent('administrative_area_level_1'),
-      country: findComponent('country'),
-      postalCode: findComponent('postal_code'),
-      phone: place.internationalPhoneNumber,
-      latitude: place.location?.latitude as unknown as number,
-      longitude: place.location?.longitude as unknown as number,
-    },
+    detail,
   } as GalleryEntryPlace
 }
 

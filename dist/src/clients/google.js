@@ -1,6 +1,8 @@
 import api, { ApiStatusError } from '../api.js';
+const searchFields = 'place_id,formatted_address,name,rating,opening_hours,geometry,types';
 const raw = {
     places: {
+        searchOld: (query) => google(`/findplacefromtext/json?fields=${searchFields}&input=${query}&inputtype=textquery`),
         search: (query) => {
             if (!process.env.CLIENTS_GCP_KEY)
                 throw new Error('Missing API Key');
@@ -20,7 +22,8 @@ const raw = {
     },
 };
 async function search(query) {
-    return (await raw.places.search(query)).places.map(mapPlaceTextSearch);
+    const result = await raw.places.search(query);
+    return result.places?.map(mapPlaceTextSearch) ?? [];
 }
 async function placeDetails(placeId) {
     return mapPlace((await raw.places.details(placeId)).result);

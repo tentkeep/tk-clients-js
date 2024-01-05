@@ -2,8 +2,16 @@ import { GalleryEntryPlace } from '@tentkeep/tentkeep'
 import api, { ApiStatusError } from '../api.js'
 import { TentkeepClient } from './tentkeep-client.js'
 
+const searchFields =
+  'place_id,formatted_address,name,rating,opening_hours,geometry,types'
+
 const raw = {
   places: {
+    searchOld: (query: string): Promise<OldGooglePlace> =>
+      google(
+        `/findplacefromtext/json?fields=${searchFields}&input=${query}&inputtype=textquery`,
+      ),
+
     search: (query: string): Promise<PlaceTextSearchResponse> => {
       if (!process.env.CLIENTS_GCP_KEY) throw new Error('Missing API Key')
       return api('https://places.googleapis.com/v1/places:searchText', {
@@ -25,7 +33,8 @@ const raw = {
 }
 
 async function search(query: string): Promise<GalleryEntryPlace[]> {
-  return (await raw.places.search(query)).places.map(mapPlaceTextSearch)
+  const result = await raw.places.search(query)
+  return result.places?.map(mapPlaceTextSearch) ?? []
 }
 
 async function placeDetails(placeId: string): Promise<GalleryEntryPlace> {
@@ -59,7 +68,7 @@ type GooglePlaceTypes =
   | 'postal_code'
   | 'political'
 
-type PlaceTextSearchResponse = { places: GooglePlace[] }
+type PlaceTextSearchResponse = { places?: GooglePlace[] }
 
 function google(path: string) {
   const url = new URL(`https://maps.googleapis.com/maps/api/place${path}`)

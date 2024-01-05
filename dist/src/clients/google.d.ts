@@ -3,6 +3,7 @@ declare function placeDetails(placeId: string): Promise<GalleryEntryPlace>;
 declare const _default: {
     raw: {
         places: {
+            searchOld: (query: string) => Promise<OldGooglePlace>;
             search: (query: string) => Promise<PlaceTextSearchResponse>;
             details: (placeId: string) => Promise<{
                 result: OldGooglePlace;
@@ -16,7 +17,7 @@ declare const _default: {
 export default _default;
 type GooglePlaceTypes = 'street_number' | 'route' | 'locality' | 'administrative_area_level_1' | 'administrative_area_level_2' | 'administrative_area_level_3' | 'country' | 'postal_code' | 'political';
 type PlaceTextSearchResponse = {
-    places: GooglePlace[];
+    places?: GooglePlace[];
 };
 export type GooglePlace = {
     name: string;

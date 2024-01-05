@@ -9,8 +9,8 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      await clients.page
-        .summary('www.cottoncattleco.com')
+      await clients.google
+        .search('https://www.Venturabrushgoats.com')
         .then(print)
         .catch((err) => {
           console.error(err.message)

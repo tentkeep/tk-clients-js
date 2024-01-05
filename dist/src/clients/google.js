@@ -4,7 +4,7 @@ const searchFields = 'place_id,formatted_address,name,rating,opening_hours,geome
 const raw = {
     places: {
         searchOld: (query) => google(`/findplacefromtext/json?fields=${searchFields}&input=${query}&inputtype=textquery`),
-        search: (query) => {
+        search: (query, options) => {
             if (!process.env.CLIENTS_GCP_KEY)
                 throw new Error('Missing API Key');
             const basicFields = 'places.id,places.name,places.addressComponents,places.displayName,places.formattedAddress,places.location,places.primaryType';
@@ -18,14 +18,15 @@ const raw = {
                 },
                 body: {
                     textQuery: query,
+                    maxResultCount: options?.limit ?? 20,
                 },
             });
         },
         details: (placeId) => google(`/details/json?place_id=${placeId}`),
     },
 };
-async function search(query) {
-    const result = await raw.places.search(query);
+async function search(query, options) {
+    const result = await raw.places.search(query, options);
     return result.places?.map(mapPlaceTextSearch) ?? [];
 }
 async function placeDetails(placeId) {
@@ -107,16 +108,20 @@ function mapPlaceTextSearch(place) {
         hours: place.regularOpeningHours?.periods?.map((period) => {
             return {
                 open: {
-                    day: period.open.day,
-                    hours: period.open.hour,
-                    minutes: period.open.minute,
-                    time: `${period.open.hour}:${period.open.minute < 10 ? '0' : ''}${period.open.minute}`,
+                    day: period.open?.day,
+                    hours: period.open?.hour,
+                    minutes: period.open?.minute,
+                    time: period.open
+                        ? `${period.open?.hour}:${period.open.minute < 10 ? '0' : ''}${period.open?.minute}`
+                        : undefined,
                 },
                 close: {
-                    day: period.close.day,
-                    hours: period.close.hour,
-                    minutes: period.close.minute,
-                    time: `${period.close.hour}:${period.close.minute < 10 ? '0' : ''}${period.close.minute}`,
+                    day: period.close?.day,
+                    hours: period.close?.hour,
+                    minutes: period.close?.minute,
+                    time: period.close
+                        ? `${period.close.hour}:${period.close.minute < 10 ? '0' : ''}${period.close.minute}`
+                        : undefined,
                 },
             };
         }),

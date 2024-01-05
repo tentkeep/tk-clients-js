@@ -417,7 +417,9 @@ export declare const clients: {
                         } | undefined;
                     } | undefined;
                 }>;
-                search: (query: string) => Promise<{
+                search: (query: string, options?: {
+                    limit: number;
+                } | undefined) => Promise<{
                     places?: import("./src/clients/google.js").GooglePlace[] | undefined;
                 }>;
                 details: (placeId: string) => Promise<{

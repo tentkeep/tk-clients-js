@@ -16,7 +16,10 @@ const raw = {
         `/findplacefromtext/json?fields=${searchFields}&input=${query}&inputtype=textquery`,
       ),
 
-    search: (query: string): Promise<PlaceTextSearchResponse> => {
+    search: (
+      query: string,
+      options?: { limit: number },
+    ): Promise<PlaceTextSearchResponse> => {
       if (!process.env.CLIENTS_GCP_KEY) throw new Error('Missing API Key')
       const basicFields =
         'places.id,places.name,places.addressComponents,places.displayName,places.formattedAddress,places.location,places.primaryType'
@@ -31,6 +34,7 @@ const raw = {
         },
         body: {
           textQuery: query,
+          maxResultCount: options?.limit ?? 20,
         },
       })
     },
@@ -39,8 +43,11 @@ const raw = {
   },
 }
 
-async function search(query: string): Promise<GalleryEntryPlace[]> {
-  const result = await raw.places.search(query)
+async function search(
+  query: string,
+  options?: { limit: number },
+): Promise<GalleryEntryPlace[]> {
+  const result = await raw.places.search(query, options)
   return result.places?.map(mapPlaceTextSearch) ?? []
 }
 
@@ -152,20 +159,24 @@ function mapPlaceTextSearch(place: GooglePlace): GalleryEntryPlace {
     hours: place.regularOpeningHours?.periods?.map((period) => {
       return {
         open: {
-          day: period.open.day as any,
-          hours: period.open.hour,
-          minutes: period.open.minute,
-          time: `${period.open.hour}:${period.open.minute < 10 ? '0' : ''}${
-            period.open.minute
-          }` as any,
+          day: period.open?.day as any,
+          hours: period.open?.hour,
+          minutes: period.open?.minute,
+          time: period.open
+            ? `${period.open?.hour}:${period.open.minute < 10 ? '0' : ''}${
+                period.open?.minute
+              }`
+            : (undefined as any),
         },
         close: {
-          day: period.close.day as any,
-          hours: period.close.hour,
-          minutes: period.close.minute,
-          time: `${period.close.hour}:${period.close.minute < 10 ? '0' : ''}${
-            period.close.minute
-          }` as any,
+          day: period.close?.day as any,
+          hours: period.close?.hour,
+          minutes: period.close?.minute,
+          time: period.close
+            ? `${period.close.hour}:${period.close.minute < 10 ? '0' : ''}${
+                period.close.minute
+              }`
+            : (undefined as any),
         },
       }
     }),

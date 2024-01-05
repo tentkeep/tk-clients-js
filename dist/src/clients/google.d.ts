@@ -4,7 +4,9 @@ declare const _default: {
     raw: {
         places: {
             searchOld: (query: string) => Promise<OldGooglePlace>;
-            search: (query: string) => Promise<PlaceTextSearchResponse>;
+            search: (query: string, options?: {
+                limit: number;
+            } | undefined) => Promise<PlaceTextSearchResponse>;
             details: (placeId: string) => Promise<{
                 result: OldGooglePlace;
             }>;

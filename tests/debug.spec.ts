@@ -10,9 +10,7 @@ describe('debug', () => {
     'prints info',
     async () => {
       await clients.google
-        .search(
-          'Ayers Valley Farm, 9551 State Route 353, Russellville, Ohio 45168 United States',
-        )
+        .search('379 CR 14, Gunnison, CO 81230 United States', { limit: 2 })
         .then(print)
         .catch((err) => {
           console.error(err.message)

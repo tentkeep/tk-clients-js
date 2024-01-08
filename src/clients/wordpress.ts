@@ -209,16 +209,17 @@ const commerce = {
 
     const post = (await host(url).posts({ per_page: 1 }))[0]
 
-    const productOptions = { per_page: 100, _embed: 'wp:featuredmedia' }
+    const productOptions = { per_page: 50, _embed: 'wp:featuredmedia' }
     const products = await host(url)
       .product(productOptions)
       .then((products) => products.map(mapProduct))
 
-    let page = products.length <= 100 ? -1 : 2
+    let page = products.length <= productOptions.per_page ? -1 : 2
     while (page > 0) {
+      console.info('  > WordpressCommerce > Getting page', page)
       const _products = await host(url).product(productOptions)
       products.push(..._products.map(mapProduct))
-      page = _products.length <= 100 ? -1 : 2
+      page = _products.length <= productOptions.per_page ? -1 : 2
     }
 
     return {

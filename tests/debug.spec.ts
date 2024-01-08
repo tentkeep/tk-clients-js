@@ -10,7 +10,7 @@ describe('debug', () => {
     'prints info',
     async () => {
       await clients.wordpress.commerce
-        .summarize('https://robariahfarms.com')
+        .summarize('https://www.hiddencreekfarmllc.com')
         .then(print)
         .catch((err) => {
           console.error(err)

@@ -9,8 +9,8 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      await clients.wordpress
-        .summarize('https://abcacres.com')
+      await clients.wordpress.commerce
+        .summarize('https://robariahfarms.com')
         .then(print)
         .catch((err) => {
           console.error(err)

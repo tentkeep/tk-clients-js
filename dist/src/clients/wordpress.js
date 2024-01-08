@@ -165,7 +165,7 @@ const commerce = {
             url: url,
             entryType: GalleryEntryTypes.WordpressCommerce,
             genericType: 'shop',
-            items: products,
+            items: products.filter((p) => !p.title.toLowerCase().match(/\btest\b/)),
         };
     },
 };

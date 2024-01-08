@@ -9,11 +9,11 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      await clients.google
-        .search('379 CR 14, Gunnison, CO 81230 United States', { limit: 2 })
+      await clients.wordpress
+        .summarize('https://abcacres.com')
         .then(print)
         .catch((err) => {
-          console.error(err.message)
+          console.error(err)
         })
     },
     { timeout: 35000 },

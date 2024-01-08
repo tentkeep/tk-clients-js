@@ -104,16 +104,31 @@ const host = (_host: string) => {
         .then((posts) => posts.length === 1)
         .catch((_err) => false)
     },
-    async summary(limit: number = 100): Promise<GalleryEntrySummary> {
-      const posts = await resources.posts({ per_page: limit })
+    async summary(limit: number = 50): Promise<GalleryEntrySummary> {
+      const posts: WordpressPost[] = []
       const authorRefs: number[] = []
       const categoryRefs: number[] = []
       const tagRefs: string[] = []
-      posts.forEach((p) => {
-        if (p.author) authorRefs.push(p.author)
-        categoryRefs.push(...(p.categories || []))
-        tagRefs.push(...(p.tags || []))
-      })
+
+      async function getPosts(page: number) {
+        const _posts = await resources.posts({ per_page: limit, page })
+        posts.push(..._posts)
+        _posts.forEach((p) => {
+          if (p.author) authorRefs.push(p.author)
+          categoryRefs.push(...(p.categories || []))
+          tagRefs.push(...(p.tags || []))
+        })
+        return _posts
+      }
+
+      let page = 0
+      while (posts.length >= page * limit) {
+        page++
+        console.info('Wordpress > Fetching Page', page)
+        await getPosts(page)
+      }
+      console.log('Wordpress > Fetched All', posts.length)
+
       const categoriesPromise = resources
         .categories({
           per_page: 100,

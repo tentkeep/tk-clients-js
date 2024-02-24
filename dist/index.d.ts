@@ -7,14 +7,15 @@ export declare const clients: {
             basic_group: import("./src/clients/discourse.js").Group;
         }>;
         createInvite: (invite: import("./src/clients/discourse.js").InviteRequest, fromUsername: string) => Promise<import("./src/clients/discourse.js").InviteResponse>;
+        getTopic: (topic: string | number) => Promise<import("./src/clients/discourse.js").DiscourseTopic>;
         group: (groupName: string) => Promise<{
             group: import("./src/clients/discourse.js").Group;
         }>;
         groupMembers: (groupName: string) => Promise<import("./src/clients/discourse.js").GroupMembers>;
-        privateMessage: (fromUsername: string, toUsername: string, subject: string, message: string) => Promise<import("./src/clients/discourse.js").NewPostResponse>;
+        privateMessage: (fromUsername: string, toUsername: string, subject: string, message: string) => Promise<import("./src/clients/discourse.js").DiscoursePost>;
         removeGroupMembers: (groupId: number, usernames: string[], actingUser: string) => Promise<import("./src/clients/discourse.js").AddGroupMembersResponse>;
         removeGroupOwnerRole: (groupId: number, usernames: string[], actingUser: string) => Promise<any>;
-        replyToTopic: (topicId: number, message: string) => Promise<import("./src/clients/discourse.js").NewPostResponse>;
+        replyToTopic: (topicId: number, message: string) => Promise<import("./src/clients/discourse.js").DiscoursePost>;
         search: (query: string) => Promise<import("./src/clients/discourse.js").SearchResponse>;
         user: <T extends string | number>(user: T) => Promise<T extends number ? import("./src/clients/discourse.js").DiscourseUser : import("./src/clients/discourse.js").DiscourseUserPlus>;
         userEmails: (username: string) => Promise<import("./src/clients/discourse.js").DiscourseUserEmails>;

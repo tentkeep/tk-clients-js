@@ -33,6 +33,7 @@ export default (host) => ({
         },
         body: invite,
     }),
+    getTopic: (topic) => discourse(`${host}/t/${topic}.json`),
     group: (groupName) => discourse(`${host}/groups/${groupName}.json`),
     groupMembers: (groupName) => discourse(`${host}/groups/${groupName}/members.json`),
     privateMessage: (fromUsername, toUsername, subject, message) => discourse(`${host}/posts.json`, {

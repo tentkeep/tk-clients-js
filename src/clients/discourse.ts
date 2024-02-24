@@ -46,6 +46,8 @@ export default (host: string) => ({
       },
       body: invite,
     }) as Promise<InviteResponse>,
+  getTopic: (topic: number | string) =>
+    discourse(`${host}/t/${topic}.json`) as Promise<DiscourseTopic>,
   group: (groupName: string) =>
     discourse(`${host}/groups/${groupName}.json`) as Promise<{ group: Group }>,
   groupMembers: (groupName: string) =>
@@ -70,7 +72,7 @@ export default (host: string) => ({
         target_recipients: toUsername,
         archetype: 'private_message',
       },
-    }) as Promise<NewPostResponse>,
+    }) as Promise<DiscoursePost>,
   removeGroupMembers: (
     groupId: number,
     usernames: string[],
@@ -110,7 +112,7 @@ export default (host: string) => ({
         topic_id: topicId,
         raw: message,
       },
-    }) as Promise<NewPostResponse>,
+    }) as Promise<DiscoursePost>,
   search: (query: string) =>
     discourse(`${host}/search/query?term=${query}`, {
       headers: { Accept: 'application/json' },
@@ -281,6 +283,13 @@ export type DiscourseUser = {
   external_ids: any
 }
 
+export type DiscourseUserMini = {
+  id: number
+  username: string
+  name: string
+  avatar_template: string
+}
+
 export type DiscourseUserEmails = {
   email: string
   secondary_emails: string[]
@@ -380,7 +389,7 @@ export type AddGroupMembersResponse = {
   emails: string[]
 }
 
-export type NewPostResponse = {
+export type DiscoursePost = {
   id: number
   name?: string
   username?: string
@@ -452,4 +461,131 @@ export type InviteResponse = {
   expired: boolean
   topics: any[]
   groups: Group[]
+}
+
+export type DiscourseTopic = {
+  post_stream: {
+    posts: DiscoursePost[]
+    stream: number[]
+  }
+  timeline_lookup: number[][]
+  suggested_topics: {
+    id: number
+    title: string
+    fancy_title: string
+    slug: string
+    posts_count: number
+    reply_count: number
+    highest_post_number: number
+    image_url: string
+    created_at: Date
+    last_posted_at: Date
+    bumped: boolean
+    bumped_at: Date
+    archetype: string
+    unseen: boolean
+    last_read_post_number: number
+    unread: number
+    new_posts: number
+    unread_posts: number
+    pinned: boolean
+    unpinned: null
+    visible: boolean
+    closed: boolean
+    archived: boolean
+    notification_level: number
+    bookmarked: boolean
+    liked: boolean
+    tags: []
+    tags_descriptions: {}
+    like_count: number
+    views: number
+    category_id: number
+    featured_link: null
+    posters: {
+      extras: string
+      description: string
+      user: DiscourseUserMini
+    }[]
+  }[]
+  tags: []
+  tags_descriptions: {}
+  id: number
+  title: string
+  fancy_title: string
+  posts_count: number
+  created_at: Date
+  views: number
+  reply_count: number
+  like_count: number
+  last_posted_at: Date
+  visible: boolean
+  closed: boolean
+  archived: boolean
+  has_summary: boolean
+  archetype: string
+  slug: string
+  category_id: number
+  word_count: number
+  deleted_at: null
+  user_id: -1
+  featured_link: null
+  pinned_globally: boolean
+  pinned_at: null
+  pinned_until: null
+  image_url: null
+  slow_mode_seconds: number
+  draft: null
+  draft_key: string
+  draft_sequence: number
+  posted: boolean
+  unpinned: null
+  pinned: boolean
+  current_post_number: number
+  highest_post_number: number
+  last_read_post_number: number
+  last_read_post_id: number
+  deleted_by: null
+  has_deleted: boolean
+  actions_summary: [
+    {
+      id: number
+      count: number
+      hidden: boolean
+      can_act: boolean
+    },
+  ]
+  chunk_size: number
+  bookmarked: boolean
+  bookmarks: []
+  topic_timer: null
+  message_bus_last_id: number
+  participant_count: number
+  show_read_indicator: boolean
+  thumbnails: null
+  slow_mode_enabled_until: null
+  summarizable: boolean
+  details: {
+    can_edit: boolean
+    notification_level: number
+    notifications_reason_id: null
+    can_move_posts: boolean
+    can_remove_allowed_users: boolean
+    can_create_post: boolean
+    can_reply_as_new_topic: boolean
+    can_flag_topic: boolean
+    can_convert_topic: boolean
+    can_review_topic: boolean
+    can_close_topic: boolean
+    can_archive_topic: boolean
+    can_split_merge_topic: boolean
+    can_edit_staff_notes: boolean
+    can_toggle_topic_visibility: boolean
+    can_pin_unpin_topic: boolean
+    can_moderate_category: boolean
+    can_remove_self_id: number
+    participants: Partial<DiscourseUser>
+    created_by: DiscourseUserMini
+    last_poster: DiscourseUserMini
+  }
 }

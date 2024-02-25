@@ -11,7 +11,7 @@ describe('debug', () => {
     async () => {
       await clients
         .discourse('https://boards.thebootroots.com')
-        .getTopic(4)
+        .getPost(8)
         .then(print)
         .catch((err) => {
           console.error(err)

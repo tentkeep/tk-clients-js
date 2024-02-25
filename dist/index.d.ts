@@ -7,6 +7,7 @@ export declare const clients: {
             basic_group: import("./src/clients/discourse.js").Group;
         }>;
         createInvite: (invite: import("./src/clients/discourse.js").InviteRequest, fromUsername: string) => Promise<import("./src/clients/discourse.js").InviteResponse>;
+        getPost: (id: number) => Promise<import("./src/clients/discourse.js").DiscoursePost>;
         getTopic: (topic: string | number) => Promise<import("./src/clients/discourse.js").DiscourseTopic>;
         group: (groupName: string) => Promise<{
             group: import("./src/clients/discourse.js").Group;

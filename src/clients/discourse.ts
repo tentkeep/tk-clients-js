@@ -46,6 +46,8 @@ export default (host: string) => ({
       },
       body: invite,
     }) as Promise<InviteResponse>,
+  getPost: (id: number) =>
+    discourse(`${host}/posts/${id}.json`) as Promise<DiscoursePost>,
   getTopic: (topic: number | string) =>
     discourse(`${host}/t/${topic}.json`) as Promise<DiscourseTopic>,
   group: (groupName: string) =>

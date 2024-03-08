@@ -459,7 +459,8 @@ export type DiscourseTopic = {
         can_pin_unpin_topic: boolean;
         can_moderate_category: boolean;
         can_remove_self_id: number;
-        participants: Partial<DiscourseUser>;
+        participants: Partial<DiscourseUser>[];
+        allowed_groups: Partial<Group>[];
         created_by: DiscourseUserMini;
         last_poster: DiscourseUserMini;
     };

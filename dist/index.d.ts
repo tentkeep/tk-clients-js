@@ -8,7 +8,10 @@ export declare const clients: {
         }>;
         createInvite: (invite: import("./src/clients/discourse.js").InviteRequest, fromUsername: string) => Promise<import("./src/clients/discourse.js").InviteResponse>;
         getPost: (id: number) => Promise<import("./src/clients/discourse.js").DiscoursePost>;
-        getTopic: (topic: string | number) => Promise<import("./src/clients/discourse.js").DiscourseTopic>;
+        getTopic: (topic: string | number, options: {
+            actingUsername: string;
+            external_id?: true | undefined;
+        }) => Promise<import("./src/clients/discourse.js").DiscourseTopic>;
         group: (groupName: string) => Promise<{
             group: import("./src/clients/discourse.js").Group;
         }>;

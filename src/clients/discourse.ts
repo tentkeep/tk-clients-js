@@ -48,8 +48,19 @@ export default (host: string) => ({
     }) as Promise<InviteResponse>,
   getPost: (id: number) =>
     discourse(`${host}/posts/${id}.json`) as Promise<DiscoursePost>,
-  getTopic: (topic: number | string) =>
-    discourse(`${host}/t/${topic}.json`) as Promise<DiscourseTopic>,
+  getTopic: (
+    topic: number | string,
+    options: { actingUsername: string; external_id?: true },
+  ) =>
+    discourse(
+      `${host}/t/${options?.external_id ? 'external_id/' : ''}${topic}.json`,
+      {
+        headers: {
+          'Api-Username': options?.actingUsername,
+          'Content-Type': 'application/json',
+        },
+      },
+    ) as Promise<DiscourseTopic>,
   group: (groupName: string) =>
     discourse(`${host}/groups/${groupName}.json`) as Promise<{ group: Group }>,
   groupMembers: (groupName: string) =>

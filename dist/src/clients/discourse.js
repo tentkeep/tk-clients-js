@@ -34,7 +34,12 @@ export default (host) => ({
         body: invite,
     }),
     getPost: (id) => discourse(`${host}/posts/${id}.json`),
-    getTopic: (topic) => discourse(`${host}/t/${topic}.json`),
+    getTopic: (topic, options) => discourse(`${host}/t/${options?.external_id ? 'external_id/' : ''}${topic}.json`, {
+        headers: {
+            'Api-Username': options?.actingUsername,
+            'Content-Type': 'application/json',
+        },
+    }),
     group: (groupName) => discourse(`${host}/groups/${groupName}.json`),
     groupMembers: (groupName) => discourse(`${host}/groups/${groupName}/members.json`),
     privateMessage: (fromUsername, toUsername, subject, message) => discourse(`${host}/posts.json`, {

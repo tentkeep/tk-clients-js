@@ -11,7 +11,10 @@ describe('debug', () => {
     async () => {
       await clients
         .discourse('https://boards.thebootroots.com')
-        .getPost(8)
+        .getTopic('group_order_Test33', {
+          actingUsername: 'system',
+          external_id: true,
+        })
         .then(print)
         .catch((err) => {
           console.error(err)

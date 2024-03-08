@@ -146,7 +146,11 @@ const Posts = (host: string) => ({
   create: (actingUsername: string, payload: CreatePost) =>
     discourse(`${host}/posts`, {
       method: 'post',
-      headers: { 'Api-Username': actingUsername ?? '_fail_' },
+      headers: {
+        'Api-Username': actingUsername ?? '_fail_',
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
       body: payload,
     }) as Promise<DiscoursePost>,
 })

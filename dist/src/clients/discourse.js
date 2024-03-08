@@ -98,7 +98,11 @@ export default (host) => ({
 const Posts = (host) => ({
     create: (actingUsername, payload) => discourse(`${host}/posts`, {
         method: 'post',
-        headers: { 'Api-Username': actingUsername ?? '_fail_' },
+        headers: {
+            'Api-Username': actingUsername ?? '_fail_',
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+        },
         body: payload,
     }),
 });

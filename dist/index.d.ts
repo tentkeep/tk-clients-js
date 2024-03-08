@@ -15,7 +15,7 @@ export declare const clients: {
                 target_recipients?: string | undefined;
                 archetype?: "private_message" | undefined;
                 external_id?: string | undefined;
-            }) => Promise<any>;
+            }) => Promise<import("./src/clients/discourse.js").DiscoursePost>;
         };
         addGroupMembers: (groupId: number, usernames: string[], actingUser: string) => Promise<import("./src/clients/discourse.js").AddGroupMembersResponse>;
         addGroupOwners: (groupId: number, usernames: string[], actingUser: string) => Promise<import("./src/clients/discourse.js").AddGroupMembersResponse>;

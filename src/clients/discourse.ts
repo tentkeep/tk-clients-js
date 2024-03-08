@@ -148,7 +148,7 @@ const Posts = (host: string) => ({
       method: 'post',
       headers: { 'Api-Username': actingUsername ?? '_fail_' },
       body: payload,
-    }),
+    }) as Promise<DiscoursePost>,
 })
 
 const discourse: API = (url: string | URL, options = null) => {

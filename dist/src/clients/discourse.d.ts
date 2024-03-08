@@ -1,6 +1,6 @@
 declare const _default: (host: string) => {
     Posts: {
-        create: (actingUsername: string, payload: CreatePost) => Promise<any>;
+        create: (actingUsername: string, payload: CreatePost) => Promise<DiscoursePost>;
     };
     addGroupMembers: (groupId: number, usernames: string[], actingUser: string | 'admin') => Promise<AddGroupMembersResponse>;
     addGroupOwners: (groupId: number, usernames: string[], actingUser: string | 'admin') => Promise<AddGroupMembersResponse>;

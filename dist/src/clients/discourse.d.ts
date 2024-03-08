@@ -1,4 +1,7 @@
 declare const _default: (host: string) => {
+    Posts: {
+        create: (actingUsername: string, payload: CreatePost) => Promise<any>;
+    };
     addGroupMembers: (groupId: number, usernames: string[], actingUser: string | 'admin') => Promise<AddGroupMembersResponse>;
     addGroupOwners: (groupId: number, usernames: string[], actingUser: string | 'admin') => Promise<AddGroupMembersResponse>;
     createGroup: (group: Group) => Promise<{
@@ -460,4 +463,18 @@ export type DiscourseTopic = {
         created_by: DiscourseUserMini;
         last_poster: DiscourseUserMini;
     };
+};
+type CreatePost = {
+    title: string;
+    raw: string;
+    target_recipients: string;
+    archetype?: 'private_message';
+    external_id?: string;
+} | {
+    raw: string;
+    topic_id: number;
+    title?: string;
+    target_recipients?: string;
+    archetype?: 'private_message';
+    external_id?: string;
 };

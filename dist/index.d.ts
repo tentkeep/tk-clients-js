@@ -1,6 +1,22 @@
 export * as Discourse from './src/clients/discourse.js';
 export declare const clients: {
     discourse: (host: string) => {
+        Posts: {
+            create: (actingUsername: string, payload: {
+                title: string;
+                raw: string;
+                target_recipients: string;
+                archetype?: "private_message" | undefined;
+                external_id?: string | undefined;
+            } | {
+                raw: string;
+                topic_id: number;
+                title?: string | undefined;
+                target_recipients?: string | undefined;
+                archetype?: "private_message" | undefined;
+                external_id?: string | undefined;
+            }) => Promise<any>;
+        };
         addGroupMembers: (groupId: number, usernames: string[], actingUser: string) => Promise<import("./src/clients/discourse.js").AddGroupMembersResponse>;
         addGroupOwners: (groupId: number, usernames: string[], actingUser: string) => Promise<import("./src/clients/discourse.js").AddGroupMembersResponse>;
         createGroup: (group: import("./src/clients/discourse.js").Group) => Promise<{

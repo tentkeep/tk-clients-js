@@ -1,6 +1,7 @@
 import { API, api } from '../api.js'
 
 export default (host: string) => ({
+  Posts: Posts(host),
   addGroupMembers: (
     groupId: number,
     usernames: string[],
@@ -139,6 +140,15 @@ export default (host: string) => ({
   },
   userEmails: (username: string): Promise<DiscourseUserEmails> =>
     discourse(`${host}/u/${username}/emails.json`),
+})
+
+const Posts = (host: string) => ({
+  create: (actingUsername: string, payload: CreatePost) =>
+    discourse(`${host}/posts`, {
+      method: 'post',
+      headers: { 'Api-Username': actingUsername ?? '_fail_' },
+      body: payload,
+    }),
 })
 
 const discourse: API = (url: string | URL, options = null) => {
@@ -602,3 +612,20 @@ export type DiscourseTopic = {
     last_poster: DiscourseUserMini
   }
 }
+
+type CreatePost =
+  | {
+      title: string
+      raw: string
+      target_recipients: string
+      archetype?: 'private_message'
+      external_id?: string
+    }
+  | {
+      raw: string
+      topic_id: number
+      title?: string
+      target_recipients?: string
+      archetype?: 'private_message'
+      external_id?: string
+    }

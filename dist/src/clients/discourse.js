@@ -1,5 +1,6 @@
 import { api } from '../api.js';
 export default (host) => ({
+    Posts: Posts(host),
     addGroupMembers: (groupId, usernames, actingUser) => discourse(`${host}/groups/${groupId}/members.json`, {
         method: 'put',
         headers: {
@@ -93,6 +94,13 @@ export default (host) => ({
             : discourse(`${host}/u/${user}.json`);
     },
     userEmails: (username) => discourse(`${host}/u/${username}/emails.json`),
+});
+const Posts = (host) => ({
+    create: (actingUsername, payload) => discourse(`${host}/posts`, {
+        method: 'post',
+        headers: { 'Api-Username': actingUsername ?? '_fail_' },
+        body: payload,
+    }),
 });
 const discourse = (url, options = null) => {
     const apiKey = process.env.DISCOURSE_KEY;

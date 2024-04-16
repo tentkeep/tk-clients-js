@@ -17,6 +17,7 @@ declare const _default: (host: string) => {
         group: Group;
     }>;
     groupMembers: (groupName: string) => Promise<GroupMembers>;
+    groupPrivateMessages: (username: string, groupName: string) => Promise<GroupPrivateMessages>;
     privateMessage: (fromUsername: string, toUsername: string, subject: string, message: string) => Promise<DiscoursePost>;
     removeGroupMembers: (groupId: number, usernames: string[], actingUser: string | 'admin') => Promise<AddGroupMembersResponse>;
     removeGroupOwnerRole: (groupId: number, usernames: string[], actingUser: string) => Promise<any>;
@@ -478,4 +479,15 @@ type CreatePost = {
     target_recipients?: string;
     archetype?: 'private_message';
     external_id?: string;
+};
+type GroupPrivateMessages = {
+    users: DiscourseUserMini[];
+    primary_groups: any[];
+    flair_groups: any[];
+    topic_list: {
+        can_create_topic: boolean;
+        per_page: number;
+        top_tags: any[];
+        topics: Partial<DiscourseTopic>[];
+    };
 };

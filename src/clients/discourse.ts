@@ -68,6 +68,15 @@ export default (host: string) => ({
     discourse(
       `${host}/groups/${groupName}/members.json`,
     ) as Promise<GroupMembers>,
+  groupPrivateMessages: (username: string, groupName: string) =>
+    discourse(
+      `${host}//topics/private-messages-group/${username}/${groupName}.json`,
+      {
+        headers: {
+          'Api-Username': username,
+        },
+      },
+    ) as Promise<GroupPrivateMessages>,
   privateMessage: (
     fromUsername: string,
     toUsername: string,
@@ -634,3 +643,15 @@ type CreatePost =
       archetype?: 'private_message'
       external_id?: string
     }
+
+type GroupPrivateMessages = {
+  users: DiscourseUserMini[]
+  primary_groups: any[]
+  flair_groups: any[]
+  topic_list: {
+    can_create_topic: boolean
+    per_page: number
+    top_tags: any[]
+    topics: Partial<DiscourseTopic>[]
+  }
+}

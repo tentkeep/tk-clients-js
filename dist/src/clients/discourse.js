@@ -43,6 +43,11 @@ export default (host) => ({
     }),
     group: (groupName) => discourse(`${host}/groups/${groupName}.json`),
     groupMembers: (groupName) => discourse(`${host}/groups/${groupName}/members.json`),
+    groupPrivateMessages: (username, groupName) => discourse(`${host}//topics/private-messages-group/${username}/${groupName}.json`, {
+        headers: {
+            'Api-Username': username,
+        },
+    }),
     privateMessage: (fromUsername, toUsername, subject, message) => discourse(`${host}/posts.json`, {
         method: 'post',
         headers: {

@@ -32,6 +32,17 @@ export declare const clients: {
             group: import("./src/clients/discourse.js").Group;
         }>;
         groupMembers: (groupName: string) => Promise<import("./src/clients/discourse.js").GroupMembers>;
+        groupPrivateMessages: (username: string, groupName: string) => Promise<{
+            users: import("./src/clients/discourse.js").DiscourseUserMini[];
+            primary_groups: any[];
+            flair_groups: any[];
+            topic_list: {
+                can_create_topic: boolean;
+                per_page: number;
+                top_tags: any[];
+                topics: Partial<import("./src/clients/discourse.js").DiscourseTopic>[];
+            };
+        }>;
         privateMessage: (fromUsername: string, toUsername: string, subject: string, message: string) => Promise<import("./src/clients/discourse.js").DiscoursePost>;
         removeGroupMembers: (groupId: number, usernames: string[], actingUser: string) => Promise<import("./src/clients/discourse.js").AddGroupMembersResponse>;
         removeGroupOwnerRole: (groupId: number, usernames: string[], actingUser: string) => Promise<any>;

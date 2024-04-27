@@ -136,6 +136,15 @@ export default (host: string) => ({
         raw: message,
       },
     }) as Promise<DiscoursePost>,
+  runDataQuery: (queryId: number, input: Record<string, any>) =>
+    discourse(`${host}/admin/plugins/explorer/queries/${queryId}/run`, {
+      method: 'post',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: { params: JSON.stringify(input) },
+    }).then(mapDataQuery) as Promise<{ data: Record<string, any>[] }>,
   search: (query: string) =>
     discourse(`${host}/search/query?term=${query}`, {
       headers: { Accept: 'application/json' },
@@ -177,6 +186,17 @@ const discourse: API = (url: string | URL, options = null) => {
   }
   const _url = url instanceof URL ? url : new URL(url)
   return api(_url, _options)
+}
+
+const mapDataQuery = (payload: DataExplorerResponse) => {
+  return payload.rows.map((row) => {
+    const obj: Record<string, any> = {}
+    for (let index = 0; index < payload.columns.length; index++) {
+      const key = payload.columns[index]
+      if (key) obj[key] = row[index]
+    }
+    return obj
+  })
 }
 
 export type SearchResponse = {
@@ -654,4 +674,19 @@ type GroupPrivateMessages = {
     top_tags: any[]
     topics: Partial<DiscourseTopic>[]
   }
+}
+
+type DataExplorerResponse = {
+  success: boolean
+  errors: any[]
+  duration: number
+  result_count: number
+  params: Record<string, any>
+  columns: string[]
+  default_limit: number
+  relations: {
+    group: []
+  }
+  colrender: Record<string, string>
+  rows: any[][]
 }

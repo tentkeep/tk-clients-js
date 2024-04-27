@@ -11,10 +11,10 @@ describe('debug', () => {
     async () => {
       await clients
         .discourse('https://boards.thebootroots.com')
-        .groupPrivateMessages('jwilkey', 'moderators')
+        .runDataQuery(4, { key: 'qL961SqMjS' })
         .then(print)
         .catch((err) => {
-          console.error(err)
+          console.error(err, '\n---', err.response?.body)
         })
     },
     { timeout: 35000 },

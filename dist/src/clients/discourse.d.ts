@@ -22,6 +22,9 @@ declare const _default: (host: string) => {
     removeGroupMembers: (groupId: number, usernames: string[], actingUser: string | 'admin') => Promise<AddGroupMembersResponse>;
     removeGroupOwnerRole: (groupId: number, usernames: string[], actingUser: string) => Promise<any>;
     replyToTopic: (topicId: number, message: string) => Promise<DiscoursePost>;
+    runDataQuery: (queryId: number, input: Record<string, any>) => Promise<{
+        data: Record<string, any>[];
+    }>;
     search: (query: string) => Promise<SearchResponse>;
     user: <T extends string | number>(user: T) => Promise<T extends number ? DiscourseUser : DiscourseUserPlus>;
     userEmails: (username: string) => Promise<DiscourseUserEmails>;

@@ -90,6 +90,14 @@ export default (host) => ({
             raw: message,
         },
     }),
+    runDataQuery: (queryId, input) => discourse(`${host}/admin/plugins/explorer/queries/${queryId}/run`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: { params: JSON.stringify(input) },
+    }).then(mapDataQuery),
     search: (query) => discourse(`${host}/search/query?term=${query}`, {
         headers: { Accept: 'application/json' },
     }),
@@ -124,6 +132,17 @@ const discourse = (url, options = null) => {
     }
     const _url = url instanceof URL ? url : new URL(url);
     return api(_url, _options);
+};
+const mapDataQuery = (payload) => {
+    return payload.rows.map((row) => {
+        const obj = {};
+        for (let index = 0; index < payload.columns.length; index++) {
+            const key = payload.columns[index];
+            if (key)
+                obj[key] = row[index];
+        }
+        return obj;
+    });
 };
 export var GroupVisibility;
 (function (GroupVisibility) {

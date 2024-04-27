@@ -189,14 +189,16 @@ const discourse: API = (url: string | URL, options = null) => {
 }
 
 const mapDataQuery = (payload: DataExplorerResponse) => {
-  return payload.rows.map((row) => {
-    const obj: Record<string, any> = {}
-    for (let index = 0; index < payload.columns.length; index++) {
-      const key = payload.columns[index]
-      if (key) obj[key] = row[index]
-    }
-    return obj
-  })
+  return {
+    data: payload.rows.map((row) => {
+      const obj: Record<string, any> = {}
+      for (let index = 0; index < payload.columns.length; index++) {
+        const key = payload.columns[index]
+        if (key) obj[key] = row[index]
+      }
+      return obj
+    }),
+  }
 }
 
 export type SearchResponse = {

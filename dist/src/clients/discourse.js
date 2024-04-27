@@ -134,15 +134,17 @@ const discourse = (url, options = null) => {
     return api(_url, _options);
 };
 const mapDataQuery = (payload) => {
-    return payload.rows.map((row) => {
-        const obj = {};
-        for (let index = 0; index < payload.columns.length; index++) {
-            const key = payload.columns[index];
-            if (key)
-                obj[key] = row[index];
-        }
-        return obj;
-    });
+    return {
+        data: payload.rows.map((row) => {
+            const obj = {};
+            for (let index = 0; index < payload.columns.length; index++) {
+                const key = payload.columns[index];
+                if (key)
+                    obj[key] = row[index];
+            }
+            return obj;
+        }),
+    };
 };
 export var GroupVisibility;
 (function (GroupVisibility) {

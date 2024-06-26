@@ -9,9 +9,11 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      await clients
-        .discourse('https://boards.thebootroots.com')
-        .runDataQuery(4, { key: 'qL961SqMjS' })
+      // await clients
+      //   .discourse('https://boards.thebootroots.com')
+      //   .runDataQuery(4, { key: 'qL961SqMjS' })
+      await clients.page
+        .summary('https://5barbeef.com/')
         .then(print)
         .catch((err) => {
           console.error(err, '\n---', err.response?.body)

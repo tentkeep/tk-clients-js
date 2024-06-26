@@ -47,6 +47,7 @@ const summary = async (url) => {
     pageSummary.platforms = {
         twitter: meta?.find((m) => m.property === 'twitter:site')?.content,
         barn2door: anchors.find((a) => a.includes('app.barn2door')),
+        youtube: anchors.find((a) => a.includes('youtube.com')),
     };
     pageSummary.elements = {
         anchors,

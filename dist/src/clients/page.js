@@ -16,9 +16,7 @@ const summary = async (url, options) => {
         throw e;
     });
     const dom = await jsdom.JSDOM.fromURL(_url, { virtualConsole });
-    console.log('GOT DOM');
     const pageInfo = await info(url, options);
-    console.log('GOT INFO');
     const page = dom.serialize();
     if (page.length < 100) {
         console.log('[page.summary] Unexpectedly short page:', page);
@@ -101,7 +99,6 @@ const info = async (url, options) => {
     const site = await api(_url, {
         signal: AbortSignal.timeout(options?.timeout ?? 20 * 1000),
     });
-    console.log('GOT SITE');
     if (!site.ok) {
         throw new ApiStatusError(404, 'Site not found');
     }

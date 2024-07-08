@@ -21,9 +21,7 @@ const summary = async (url: string, options?: { timeout?: number }) => {
   })
 
   const dom = await jsdom.JSDOM.fromURL(_url, { virtualConsole })
-  console.log('GOT DOM')
   const pageInfo = await info(url, options)
-  console.log('GOT INFO')
 
   const page = dom.serialize()
 
@@ -141,7 +139,6 @@ const info = async (
   const site = await api(_url, {
     signal: AbortSignal.timeout(options?.timeout ?? 20 * 1000),
   } as RequestInit)
-  console.log('GOT SITE')
   if (!site.ok) {
     throw new ApiStatusError(404, 'Site not found')
   }

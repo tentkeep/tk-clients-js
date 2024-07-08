@@ -4,7 +4,7 @@ import clients from '../../index.js'
 import { PageInfo, PageSummary, PageInfoFeatures } from '@tentkeep/tentkeep'
 import * as jsdom from 'jsdom'
 
-const summary = async (url: string) => {
+const summary = async (url: string, options?: { timeout?: number }) => {
   let _url = sanitizeUrl(url)
 
   const pageSummary: PageSummary = {
@@ -15,10 +15,16 @@ const summary = async (url: string) => {
     allowsIFrame: false,
   }
 
-  const [dom, pageInfo] = await Promise.all([
-    jsdom.JSDOM.fromURL(_url),
-    info(url),
-  ])
+  const virtualConsole = new jsdom.VirtualConsole()
+  virtualConsole.on('error', (e: any) => {
+    throw e
+  })
+
+  const dom = await jsdom.JSDOM.fromURL(_url, { virtualConsole })
+  console.log('GOT DOM')
+  const pageInfo = await info(url, options)
+  console.log('GOT INFO')
+
   const page = dom.serialize()
 
   if (page.length < 100) {
@@ -126,15 +132,21 @@ const summary = async (url: string) => {
 /**
  * PageInfo does NOT require scraping the site
  */
-const info = async (url: string): Promise<PageInfo> => {
+const info = async (
+  url: string,
+  options?: { timeout?: number },
+): Promise<PageInfo> => {
   let _url = sanitizeUrl(url)
 
-  const site = await api(_url)
+  const site = await api(_url, {
+    signal: AbortSignal.timeout(options?.timeout ?? 20 * 1000),
+  } as RequestInit)
+  console.log('GOT SITE')
   if (!site.ok) {
     throw new ApiStatusError(404, 'Site not found')
   }
 
-  const features: PageInfoFeatures[] = await detectFeatures(_url)
+  const features: PageInfoFeatures[] = await detectFeatures(_url, options)
 
   return {
     allowsIFrame: !site.headers['x-frame-options'],
@@ -148,8 +160,9 @@ export default {
   summary,
 }
 
-async function detectFeatures(_url: string) {
+async function detectFeatures(_url: string, options?: { timeout?: number }) {
   const features: PageInfoFeatures[] = []
+  let count = 0
 
   const shopifyPromise = clients.shopify.raw
     .products(_url, 1)
@@ -157,6 +170,7 @@ async function detectFeatures(_url: string) {
       if (r.products !== undefined) features.push('shopify')
     })
     .catch((_e) => {})
+    .finally(() => count++)
 
   const wordpressPromise = clients.wordpress
     .host(_url)
@@ -165,6 +179,7 @@ async function detectFeatures(_url: string) {
       if (r) features.push('wordpress')
     })
     .catch((_e) => {})
+    .finally(() => count++)
   const wordpressCommercePromise = clients.wordpress
     .host(_url)
     .hasProducts()
@@ -172,11 +187,19 @@ async function detectFeatures(_url: string) {
       if (r) features.push('wordpress-commerce')
     })
     .catch((_e) => {})
+    .finally(() => count++)
 
-  await Promise.allSettled([
-    shopifyPromise,
-    wordpressPromise,
-    wordpressCommercePromise,
+  await Promise.race([
+    Promise.allSettled([
+      shopifyPromise,
+      wordpressPromise,
+      wordpressCommercePromise,
+    ]),
+    new Promise((_res, reject) => {
+      setTimeout(() => {
+        reject('Page Features Timeout')
+      }, options?.timeout ?? 60 * 1000)
+    }),
   ])
   return features
 }

@@ -2,7 +2,9 @@ import { TagSource, GalleryEntryTypes, } from '@tentkeep/tentkeep';
 import { sanitizeUrl } from '../shareable/common.js';
 import api from '../api.js';
 const raw = {
-    products: (url, limit = 250, page = 1) => api(productsUrl(url, limit, page)),
+    products: (url, limit = 250, page = 1) => api(productsUrl(url, limit, page), {
+        signal: AbortSignal.timeout(60 * 1000),
+    }),
     collections: (url) => api(`${sanitizeUrl(url)}/collections.json?limit=250`),
     collectionProducts: (url, collectionHandle) => api(`${sanitizeUrl(url)}/collections/${collectionHandle}/products.json?limit=250`),
 };

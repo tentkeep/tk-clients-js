@@ -181,8 +181,9 @@ const discourse: API = (url: string | URL, options = null) => {
     ...options?.headers,
     'Api-Key': apiKey,
   }
-  if (!_options.headers['Api-Username']) {
-    _options.headers['Api-Username'] = apiUsername
+
+  if (!_options.headers?.['Api-Username']) {
+    _options.headers!['Api-Username'] = apiUsername
   }
   const _url = url instanceof URL ? url : new URL(url)
   return api(_url, _options)

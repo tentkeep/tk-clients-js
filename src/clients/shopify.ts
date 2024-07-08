@@ -15,7 +15,9 @@ const raw = {
     limit: number = 250,
     page: number = 1,
   ): Promise<{ products: ShopifyProduct[] }> =>
-    api(productsUrl(url, limit, page)),
+    api(productsUrl(url, limit, page), {
+      signal: AbortSignal.timeout(60 * 1000),
+    }),
   collections: (url: string): Promise<any> =>
     api(`${sanitizeUrl(url)}/collections.json?limit=250`),
   collectionProducts: (url: string, collectionHandle: string): Promise<any> =>

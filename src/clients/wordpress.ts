@@ -82,7 +82,7 @@ const resourceMethods = (site: string) =>
       if (typeof options === 'object') {
         forKey(options, (k) => url.searchParams.append(k, options[k]))
       }
-      return api(url)
+      return api(url, { signal: AbortSignal.timeout(60 * 1000) })
     }
     return wordpress
   }, {} as WordpressResources)

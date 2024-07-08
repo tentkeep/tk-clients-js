@@ -34,7 +34,7 @@ const resourceMethods = (site) => resources.reduce((wordpress, resource) => {
         if (typeof options === 'object') {
             forKey(options, (k) => url.searchParams.append(k, options[k]));
         }
-        return api(url);
+        return api(url, { signal: AbortSignal.timeout(60 * 1000) });
     };
     return wordpress;
 }, {});

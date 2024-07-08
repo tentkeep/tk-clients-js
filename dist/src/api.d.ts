@@ -9,6 +9,6 @@ export declare class ApiStatusError extends Error {
     bodyText: string;
     constructor(status: any, bodyText: any);
 }
-export type API = (url: string | URL, options?: RequestOptions | null) => Promise<any>;
+export type API = (url: string | URL, options?: RequestOptions | RequestInit | null) => Promise<any>;
 export declare const api: API;
 export default api;

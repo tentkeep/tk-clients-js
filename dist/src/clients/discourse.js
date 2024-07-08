@@ -127,7 +127,7 @@ const discourse = (url, options = null) => {
         ...options?.headers,
         'Api-Key': apiKey,
     };
-    if (!_options.headers['Api-Username']) {
+    if (!_options.headers?.['Api-Username']) {
         _options.headers['Api-Username'] = apiUsername;
     }
     const _url = url instanceof URL ? url : new URL(url);

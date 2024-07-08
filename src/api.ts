@@ -1,5 +1,5 @@
 // @ts-nocheck
-const got = async (url: any, options: any) => {
+const got = async (url: any, options: RequestInit) => {
   try {
     return (await import('got')).default(url, options).then((response: any) => {
       const contentType = response.headers['content-type']
@@ -65,12 +65,12 @@ const parseContent = async (response: any) => {
 
 export type API = (
   url: string | URL,
-  options?: RequestOptions | null,
+  options?: RequestOptions | RequestInit | null,
 ) => Promise<any>
 
 export const api: API = (
   url: string | URL,
-  options: RequestOptions | null = null,
+  options: RequestOptions | RequestInit | null = null,
 ) => {
   return got(url, sanitizeOptions(options))
     .then(statusChecker)

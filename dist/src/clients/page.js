@@ -2,7 +2,7 @@ import { sanitizeUrl } from '../shareable/common.js';
 import api, { ApiStatusError } from '../api.js';
 import clients from '../../index.js';
 import * as jsdom from 'jsdom';
-const summary = async (url) => {
+const summary = async (url, options) => {
     let _url = sanitizeUrl(url);
     const pageSummary = {
         url: _url,
@@ -11,10 +11,14 @@ const summary = async (url) => {
         headers: {},
         allowsIFrame: false,
     };
-    const [dom, pageInfo] = await Promise.all([
-        jsdom.JSDOM.fromURL(_url),
-        info(url),
-    ]);
+    const virtualConsole = new jsdom.VirtualConsole();
+    virtualConsole.on('error', (e) => {
+        throw e;
+    });
+    const dom = await jsdom.JSDOM.fromURL(_url, { virtualConsole });
+    console.log('GOT DOM');
+    const pageInfo = await info(url, options);
+    console.log('GOT INFO');
     const page = dom.serialize();
     if (page.length < 100) {
         console.log('[page.summary] Unexpectedly short page:', page);
@@ -92,13 +96,16 @@ const summary = async (url) => {
     }
     return pageSummary;
 };
-const info = async (url) => {
+const info = async (url, options) => {
     let _url = sanitizeUrl(url);
-    const site = await api(_url);
+    const site = await api(_url, {
+        signal: AbortSignal.timeout(options?.timeout ?? 20 * 1000),
+    });
+    console.log('GOT SITE');
     if (!site.ok) {
         throw new ApiStatusError(404, 'Site not found');
     }
-    const features = await detectFeatures(_url);
+    const features = await detectFeatures(_url, options);
     return {
         allowsIFrame: !site.headers['x-frame-options'],
         headers: site.headers,
@@ -109,15 +116,17 @@ export default {
     info,
     summary,
 };
-async function detectFeatures(_url) {
+async function detectFeatures(_url, options) {
     const features = [];
+    let count = 0;
     const shopifyPromise = clients.shopify.raw
         .products(_url, 1)
         .then((r) => {
         if (r.products !== undefined)
             features.push('shopify');
     })
-        .catch((_e) => { });
+        .catch((_e) => { })
+        .finally(() => count++);
     const wordpressPromise = clients.wordpress
         .host(_url)
         .isWordpress()
@@ -125,7 +134,8 @@ async function detectFeatures(_url) {
         if (r)
             features.push('wordpress');
     })
-        .catch((_e) => { });
+        .catch((_e) => { })
+        .finally(() => count++);
     const wordpressCommercePromise = clients.wordpress
         .host(_url)
         .hasProducts()
@@ -133,11 +143,19 @@ async function detectFeatures(_url) {
         if (r)
             features.push('wordpress-commerce');
     })
-        .catch((_e) => { });
-    await Promise.allSettled([
-        shopifyPromise,
-        wordpressPromise,
-        wordpressCommercePromise,
+        .catch((_e) => { })
+        .finally(() => count++);
+    await Promise.race([
+        Promise.allSettled([
+            shopifyPromise,
+            wordpressPromise,
+            wordpressCommercePromise,
+        ]),
+        new Promise((_res, reject) => {
+            setTimeout(() => {
+                reject('Page Features Timeout');
+            }, options?.timeout ?? 60 * 1000);
+        }),
     ]);
     return features;
 }

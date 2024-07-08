@@ -604,8 +604,12 @@ export declare const clients: {
         getAlbums: (albumIds: any) => Promise<any>;
     };
     page: {
-        info: (url: string) => Promise<import("@tentkeep/tentkeep").PageInfo>;
-        summary: (url: string) => Promise<import("@tentkeep/tentkeep").PageSummary>;
+        info: (url: string, options?: {
+            timeout?: number | undefined;
+        } | undefined) => Promise<import("@tentkeep/tentkeep").PageInfo>;
+        summary: (url: string, options?: {
+            timeout?: number | undefined;
+        } | undefined) => Promise<import("@tentkeep/tentkeep").PageSummary>;
     };
     rss: {
         search: (query: string, options?: Record<string, any> | undefined) => Promise<import("@tentkeep/tentkeep").GalleryEntry[]>;

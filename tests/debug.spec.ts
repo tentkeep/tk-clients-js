@@ -1,6 +1,5 @@
 import { describe, it } from 'vitest'
 import clients from '../index.js'
-import shopifyFixture from './fixtures/shopify-products.json'
 
 const [_entryPoint, _file, arg] = process.argv
 console.log('ARG', arg)
@@ -12,14 +11,18 @@ describe('debug', () => {
       // await clients
       //   .discourse('https://boards.thebootroots.com')
       //   .runDataQuery(4, { key: 'qL961SqMjS' })
-      await clients.page
-        .summary('https://5barbeef.com/')
-        .then(print)
-        .catch((err) => {
-          console.error(err, '\n---', err.response?.body)
-        })
+      try {
+        await clients.page
+          .summary('http://sunnyacresgoats.com', { timeout: 4000 })
+          .then(print)
+          .catch((err) => {
+            console.error(err, '\n---', err.response?.body)
+          })
+      } catch (error) {
+        console.error('ClientError', error)
+      }
     },
-    { timeout: 35000 },
+    { timeout: 10000 },
   )
 })
 

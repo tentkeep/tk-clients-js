@@ -722,6 +722,9 @@ export declare const clients: {
         session: {
             getEnv: () => Promise<any>;
             getMapKitToken: () => Promise<any>;
+            getMapKitKey: () => Promise<{
+                data: string;
+            }>;
             getSessionToken: (key: string) => Promise<any>;
         };
         shop: {
@@ -732,7 +735,7 @@ export declare const clients: {
             getStoreStatus: (token: string, storeId: number) => Promise<{
                 status: string;
             }>;
-            getStoreOrders: (token: string, storeId: number) => Promise<{
+            getStoreOrders: (token: string, storeId: number, userId?: number | undefined) => Promise<{
                 orders: import("@tentkeep/tentkeep").Order[];
             }>;
             getStoreUsers: (token: string, storeId: number) => Promise<{
@@ -773,29 +776,6 @@ export declare const clients: {
             }>;
             checkoutMembership: (token: string, variantId: string) => Promise<import("@tentkeep/tentkeep").CheckoutSession>;
             getCheckoutRedirectUrl: () => string;
-            getGroupOrders: (token: string) => Promise<{
-                ordersBundles: import("@tentkeep/tentkeep").OrdersBundle[];
-            }>;
-            getOrdersBundle: (token: string, ordersBundleId: number) => Promise<{
-                ordersBundle: import("@tentkeep/tentkeep").OrdersBundle;
-            }>;
-            saveOrders: (token: string | undefined, orders: import("@tentkeep/tentkeep").Order[]) => Promise<{
-                orders: import("@tentkeep/tentkeep").Order[];
-            }>;
-            saveOrdersBundle: (token: string | undefined, ordersBundle: import("@tentkeep/tentkeep").OrdersBundle) => Promise<{
-                ordersBundle: import("@tentkeep/tentkeep").OrdersBundle;
-            }>;
-            transferOrdersBundle: (token: string, ordersBundleId: number, toUserId: number) => Promise<{
-                ordersBundle: import("@tentkeep/tentkeep").OrdersBundle;
-            }>;
-            createGroupOrder: (token: string, options: import("@tentkeep/tentkeep/dist/src/types/request-types.js").CreateGroupOrderRequest) => Promise<import("@tentkeep/tentkeep").EntityBundle<"ordersBundle">>;
-            getProductSplitClaims: (token: string, ordersBundleId: number) => Promise<{
-                productSplitClaims: import("@tentkeep/tentkeep").ProductSplitClaim[];
-            }>;
-            saveProductSplitClaims: (token: string, ordersBundleId: number, productSplitClaims: import("@tentkeep/tentkeep").ProductSplitClaim[]) => Promise<{
-                productSplitClaims: import("@tentkeep/tentkeep").ProductSplitClaim[];
-            }>;
-            deleteProductSplitClaims: (token: string, ordersBundle: import("@tentkeep/tentkeep").OrdersBundle, productSplit: import("@tentkeep/tentkeep").AnyProductSplit, splitId: string) => Promise<boolean>;
             getSubscriptions: (token: string) => Promise<{
                 items: import("@tentkeep/tentkeep").GalleryEntryItem[];
             }>;
@@ -804,41 +784,148 @@ export declare const clients: {
         onUnauthorized: (callback: () => void) => void;
         findEntities: (entity: string, token?: string | undefined, query?: any) => Promise<Partial<import("@tentkeep/tentkeep").AllEntitiesBundle>>;
         getEntity: (entity: string, token: string | undefined, id: string | number) => Promise<Partial<import("@tentkeep/tentkeep").AllEntityBundle>>;
-        saveEntities: (entity: string, token: string, payload: Partial<import("@tentkeep/tentkeep").AllEntitiesBundle>) => Promise<Partial<import("@tentkeep/tentkeep").AllEntitiesBundle>>;
+        saveEntities: (entity: string, token: string, payload: Partial<import("@tentkeep/tentkeep").AllEntitiesBundle> | Partial<import("@tentkeep/tentkeep").AllEntityBundle>) => Promise<Partial<import("@tentkeep/tentkeep").AllEntitiesBundle>>;
+        doAction: (entity: string, token: string, action: string, payload: any) => Promise<any>;
+        deleteEntity: (entity: string, token: string, id: string | number) => Promise<{
+            success: boolean;
+        }>;
+        Content: {
+            create: (token: string, payload: Partial<import("@tentkeep/tentkeep").EntityBundle<"content">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"content">>;
+            find: (token: string, query: import("@tentkeep/tentkeep").SearchQuery<import("@tentkeep/tentkeep").PageContent>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"contents">>;
+            get: (token: string, id: string | number) => Promise<import("@tentkeep/tentkeep").EntityBundle<"content">>;
+            save: (token: string, payload: Partial<import("@tentkeep/tentkeep").MixedEntityBundle<"contents">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"contents">>;
+            do: (token: string, action: string, payload: any) => Promise<any>;
+            delete: (token: string, id: string | number) => Promise<{
+                success: boolean;
+            }>;
+        };
+        Customers: {
+            create: (token: string, payload: Partial<import("@tentkeep/tentkeep").EntityBundle<"customer">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"customer">>;
+            find: (token: string, query: import("@tentkeep/tentkeep").SearchQuery<{
+                storeId: number;
+            }>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"customers">>;
+            get: (token: string, id: string | number) => Promise<import("@tentkeep/tentkeep").EntityBundle<"customer">>;
+            save: (token: string, payload: Partial<import("@tentkeep/tentkeep").MixedEntityBundle<"customers">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"customers">>;
+            do: (token: string, action: string, payload: any) => Promise<any>;
+            delete: (token: string, id: string | number) => Promise<{
+                success: boolean;
+            }>;
+        };
         Discounts: {
-            find: (token: string, query: import("@tentkeep/tentkeep").SearchQuery<import("@tentkeep/tentkeep").Discount>) => Promise<import("@tentkeep/tentkeep").EntitiesBundle<"discounts">>;
+            create: (token: string, payload: Partial<import("@tentkeep/tentkeep").EntityBundle<"discount">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"discount">>;
+            find: (token: string, query: import("@tentkeep/tentkeep").SearchQuery<import("@tentkeep/tentkeep").Discount>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"discounts">>;
             get: (token: string, id: string | number) => Promise<import("@tentkeep/tentkeep").EntityBundle<"discount">>;
-            save: (token: string, payload: Partial<import("@tentkeep/tentkeep").EntitiesBundle<"discounts">>) => Promise<import("@tentkeep/tentkeep").EntitiesBundle<"discounts">>;
+            save: (token: string, payload: Partial<import("@tentkeep/tentkeep").MixedEntityBundle<"discounts">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"discounts">>;
+            do: (token: string, action: string, payload: any) => Promise<any>;
+            delete: (token: string, id: string | number) => Promise<{
+                success: boolean;
+            }>;
+        };
+        Galleries: {
+            create: (token: string, payload: Partial<import("@tentkeep/tentkeep").EntityBundle<"gallery">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"gallery">>;
+            find: (token: string, query: import("@tentkeep/tentkeep").SearchQuery<import("@tentkeep/tentkeep").Gallery>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"galleries">>;
+            get: (token: string, id: string | number) => Promise<import("@tentkeep/tentkeep").EntityBundle<"gallery">>;
+            save: (token: string, payload: Partial<import("@tentkeep/tentkeep").MixedEntityBundle<"galleries">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"galleries">>;
+            do: (token: string, action: string, payload: any) => Promise<any>;
             delete: (token: string, id: string | number) => Promise<{
                 success: boolean;
             }>;
         };
         Groups: {
+            create: (token: string, payload: Partial<import("@tentkeep/tentkeep").EntityBundle<"group">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"group">>;
             find: (token: string, query: {
                 query?: string | undefined;
                 me?: boolean | undefined;
-            }) => Promise<import("@tentkeep/tentkeep").EntitiesBundle<"groups">>;
+            }) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"groups">>;
             get: (token: string, id: string | number) => Promise<import("@tentkeep/tentkeep").EntityBundle<"group">>;
-            save: (token: string, payload: Partial<import("@tentkeep/tentkeep").EntitiesBundle<"groups">>) => Promise<import("@tentkeep/tentkeep").EntitiesBundle<"groups">>;
+            save: (token: string, payload: Partial<import("@tentkeep/tentkeep").MixedEntityBundle<"groups">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"groups">>;
+            do: (token: string, action: string, payload: any) => Promise<any>;
+            delete: (token: string, id: string | number) => Promise<{
+                success: boolean;
+            }>;
+        };
+        GroupOrders: {
+            create: (token: string, payload: Partial<import("@tentkeep/tentkeep").EntityBundle<"groupOrder" | "userProfile">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"groupOrder" | "userProfile">>;
+            find: (token: string, query: import("@tentkeep/tentkeep").SearchQuery<import("@tentkeep/tentkeep").GroupOrder>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"groupOrders">>;
+            get: (token: string, id: string | number) => Promise<import("@tentkeep/tentkeep").EntityBundle<"groupOrder" | "userProfile">>;
+            save: (token: string, payload: Partial<import("@tentkeep/tentkeep").MixedEntityBundle<"groupOrders">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"groupOrders">>;
+            do: (token: string, action: string, payload: any) => Promise<any>;
+            delete: (token: string, id: string | number) => Promise<{
+                success: boolean;
+            }>;
+        };
+        Messages: {
+            create: (token: string, payload: Partial<import("@tentkeep/tentkeep").EntityBundle<"message">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"message">>;
+            find: (token: string, query: import("@tentkeep/tentkeep").SearchQuery<import("@tentkeep/tentkeep").ThreadMessage>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"messages">>;
+            get: (token: string, id: string | number) => Promise<import("@tentkeep/tentkeep").EntityBundle<"message">>;
+            save: (token: string, payload: Partial<import("@tentkeep/tentkeep").MixedEntityBundle<"messages">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"messages">>;
+            do: (token: string, action: string, payload: any) => Promise<any>;
             delete: (token: string, id: string | number) => Promise<{
                 success: boolean;
             }>;
         };
         Orders: {
-            find: (token: string, query: import("@tentkeep/tentkeep").SearchQuery<import("@tentkeep/tentkeep").Order | import("@tentkeep/tentkeep").GalleryOrder>) => Promise<import("@tentkeep/tentkeep").EntitiesBundle<"galleryOrders" | "orders">>;
-            get: (token: string, id: string | number) => Promise<import("@tentkeep/tentkeep").EntityBundle<"galleryOrder" | "order">>;
-            save: (token: string, payload: Partial<import("@tentkeep/tentkeep").EntitiesBundle<"galleryOrders" | "orders">>) => Promise<import("@tentkeep/tentkeep").EntitiesBundle<"galleryOrders" | "orders">>;
+            create: (token: string, payload: Partial<import("@tentkeep/tentkeep").EntityBundle<"order" | "galleryOrder">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"order" | "galleryOrder">>;
+            find: (token: string, query: import("@tentkeep/tentkeep").SearchQuery<import("@tentkeep/tentkeep").Order | import("@tentkeep/tentkeep").GalleryOrder>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"galleryOrders" | "orders">>;
+            get: (token: string, id: string | number) => Promise<import("@tentkeep/tentkeep").EntityBundle<"order" | "galleryOrder">>;
+            save: (token: string, payload: Partial<import("@tentkeep/tentkeep").MixedEntityBundle<"galleryOrders" | "orders">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"galleryOrders" | "orders">>;
+            do: (token: string, action: string, payload: any) => Promise<any>;
             delete: (token: string, id: string | number) => Promise<{
                 success: boolean;
             }>;
         };
-        OrdersBundles: {
-            find: (token: string, query: import("@tentkeep/tentkeep").SearchQuery<import("@tentkeep/tentkeep").OrdersBundle>) => Promise<import("@tentkeep/tentkeep").EntitiesBundle<"ordersBundles">>;
-            get: (token: string, id: string | number) => Promise<import("@tentkeep/tentkeep").EntityBundle<"ordersBundle">>;
-            save: (token: string, payload: Partial<import("@tentkeep/tentkeep").EntitiesBundle<"ordersBundles">>) => Promise<import("@tentkeep/tentkeep").EntitiesBundle<"ordersBundles">>;
+        ProductBundles: {
+            create: (token: string, payload: Partial<import("@tentkeep/tentkeep").EntityBundle<"productBundle">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"productBundle">>;
+            find: (token: string, query: import("@tentkeep/tentkeep").SearchQuery<import("@tentkeep/tentkeep").ProductBundle>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"productBundles">>;
+            get: (token: string, id: string | number) => Promise<import("@tentkeep/tentkeep").EntityBundle<"productBundle">>;
+            save: (token: string, payload: Partial<import("@tentkeep/tentkeep").MixedEntityBundle<"productBundles">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"productBundles">>;
+            do: (token: string, action: string, payload: any) => Promise<any>;
             delete: (token: string, id: string | number) => Promise<{
                 success: boolean;
             }>;
+        };
+        ProductSplits: {
+            create: (token: string, payload: Partial<import("@tentkeep/tentkeep").EntityBundle<"productSplit">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"productSplit">>;
+            find: (token: string, query: import("@tentkeep/tentkeep").SearchQuery<import("@tentkeep/tentkeep").AnyProductSplit>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"productSplits">>;
+            get: (token: string, id: string | number) => Promise<import("@tentkeep/tentkeep").EntityBundle<"productSplit">>;
+            save: (token: string, payload: Partial<import("@tentkeep/tentkeep").MixedEntityBundle<"productSplits">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"productSplits">>;
+            do: (token: string, action: string, payload: any) => Promise<any>;
+            delete: (token: string, id: string | number) => Promise<{
+                success: boolean;
+            }>;
+        };
+        ProductSplitClaims: {
+            create: (token: string, payload: Partial<import("@tentkeep/tentkeep").EntityBundle<"productSplitClaim">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"productSplitClaim">>;
+            find: (token: string, query: import("@tentkeep/tentkeep").SearchQuery<import("@tentkeep/tentkeep").ProductSplitClaim>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"productSplitClaims">>;
+            get: (token: string, id: string | number) => Promise<import("@tentkeep/tentkeep").EntityBundle<"productSplitClaim">>;
+            save: (token: string, payload: Partial<import("@tentkeep/tentkeep").MixedEntityBundle<"productSplitClaims">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"productSplitClaims">>;
+            do: (token: string, action: string, payload: any) => Promise<any>;
+            delete: (token: string, id: string | number) => Promise<{
+                success: boolean;
+            }>;
+        };
+        Threads: {
+            create: (token: string, payload: Partial<import("@tentkeep/tentkeep").EntityBundle<"thread">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"thread">>;
+            find: (token: string, query: import("@tentkeep/tentkeep").SearchQuery<import("@tentkeep/tentkeep").Thread>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"threads">>;
+            get: (token: string, id: string | number) => Promise<import("@tentkeep/tentkeep").EntityBundle<"thread">>;
+            save: (token: string, payload: Partial<import("@tentkeep/tentkeep").MixedEntityBundle<"threads">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"threads">>;
+            do: (token: string, action: string, payload: any) => Promise<any>;
+            delete: (token: string, id: string | number) => Promise<{
+                success: boolean;
+            }>;
+        };
+        Transactions: {
+            create: (token: string, payload: Partial<import("@tentkeep/tentkeep").EntityBundle<"transaction">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"transaction" | "checkoutSession">>;
+            find: (token: string, query: import("@tentkeep/tentkeep").SearchQuery<import("@tentkeep/tentkeep").Transaction>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"transactions">>;
+            get: (token: string, id: string | number) => Promise<import("@tentkeep/tentkeep").EntityBundle<"transaction">>;
+            save: (token: string, payload: Partial<import("@tentkeep/tentkeep").MixedEntityBundle<"transactions">>) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"transactions">>;
+            do: (token: string, action: string, payload: any) => Promise<any>;
+            delete: (token: string, id: string | number) => Promise<{
+                success: boolean;
+            }>;
+        };
+        Actions: {
+            do: <T_1 extends import("@tentkeep/tentkeep").ActionPayload>(token: string, payload: T_1) => Promise<import("@tentkeep/tentkeep").ActionReturn<T_1>>;
         };
         getComposition: (token: string | undefined, compositionId: number) => Promise<{
             composition: import("@tentkeep/tentkeep/dist/src/composition/composition-types.js").Composition;
@@ -851,7 +938,7 @@ export declare const clients: {
         getUser: (token: string, username: string) => Promise<{
             user: import("@tentkeep/tentkeep").User;
         }>;
-        getCart: (token: string) => Promise<import("@tentkeep/tentkeep").EntitiesBundle<"galleryOrders" | "orders">>;
+        getCart: (token: string) => Promise<import("@tentkeep/tentkeep").MixedEntityBundle<"galleryOrders" | "orders">>;
         getShareableLink: (token: string, request: import("@tentkeep/tentkeep/dist/src/types/request-types.js").ShareRequest) => Promise<any>;
         sendMessageToSupport: (token: string, message: string) => Promise<any>;
         updateGroup: (token: string, groupId: number, changes: {
@@ -860,7 +947,7 @@ export declare const clients: {
             remove?: string[] | undefined;
             removeOwners?: string[] | undefined;
         }) => Promise<any>;
-        getGalleries: (options?: import("@tentkeep/tentkeep").SearchOptions | undefined) => Promise<import("@tentkeep/tentkeep").TKResponse | import("@tentkeep/tentkeep").Gallery>;
+        getGalleries: (options?: import("@tentkeep/tentkeep").SearchOptions | undefined) => Promise<import("@tentkeep/tentkeep").Gallery | import("@tentkeep/tentkeep").TKResponse>;
         searchGalleries: (query: string, options?: import("@tentkeep/tentkeep").SearchOptions | undefined) => Promise<import("@tentkeep/tentkeep").SearchResponse>;
         searchGalleryEntryItems: (query: string, options?: import("@tentkeep/tentkeep").SearchOptions | undefined) => Promise<import("@tentkeep/tentkeep").SearchResponse>;
         getGalleriesNearby: (location: import("@tentkeep/tentkeep").LocationSearch, options: {
@@ -904,6 +991,7 @@ export declare const clients: {
             images?: import("@tentkeep/tentkeep").EntityImage[] | undefined;
             compositionId?: number | undefined;
             attributes?: import("@tentkeep/tentkeep").GalleryAttribute[] | undefined;
+            meta?: Record<string, any> | undefined;
         } & {
             title: string;
         }) => Promise<import("@tentkeep/tentkeep").Gallery>;
@@ -916,6 +1004,7 @@ export declare const clients: {
             images?: import("@tentkeep/tentkeep").EntityImage[] | undefined;
             compositionId?: number | undefined;
             attributes?: import("@tentkeep/tentkeep").GalleryAttribute[] | undefined;
+            meta?: Record<string, any> | undefined;
         } & {
             id: number;
         }) => Promise<import("@tentkeep/tentkeep").Gallery>;

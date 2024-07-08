@@ -40,9 +40,13 @@ const summary = async (url: string) => {
   ).map(attributeMapper)
 
   const title = dom.window.document.head.querySelector('title')?.text ?? ''
-  const anchors = Array.from(
-    dom.window.document.body.querySelectorAll('a'),
-  ).map((a) => a.href)
+  const anchors = [
+    ...new Set(
+      Array.from(dom.window.document.body.querySelectorAll('a')).map(
+        (a) => a.href,
+      ),
+    ),
+  ]
   const images: string[] = [
     ...new Set(
       page.match(/[^("']*(jpg|jpeg|png)[^)"']*/g)?.map((img) => {
@@ -63,10 +67,21 @@ const summary = async (url: string) => {
   pageSummary.image = findImage(meta, _url)
   pageSummary.images = images
   pageSummary.icon = findIcon(links, _url)
+  const arr = (...args: (string | string[] | undefined)[]) =>
+    args.flatMap((arg) => arg).filter((arg) => !!arg) as string[]
   pageSummary.platforms = {
-    twitter: meta?.find((m) => m.property === 'twitter:site')?.content,
     barn2door: anchors.find((a) => a.includes('app.barn2door')),
-    youtube: anchors.find((a) => a.includes('youtube.com')),
+    facebook: anchors.filter((a) => a.includes('facebook.com')),
+    instagram: anchors.filter((a) => a.includes('instagram.com')),
+    linkedin: anchors.filter((a) => a.includes('linkedin.com')),
+    storefront: arr(anchors.filter((a) => a.match(/\Wshop|\Wstore|products/))),
+    x: arr(
+      meta?.find((m) => m.property === 'twitter:site')?.content,
+      meta?.find((m) => m.property === 'x:site')?.content,
+      anchors.find((a) => a.includes('twitter.com')),
+      anchors.find((a) => a.includes('x.com')),
+    ),
+    youtube: anchors.filter((a) => a.includes('youtube.com')),
   }
   pageSummary.elements = {
     anchors,

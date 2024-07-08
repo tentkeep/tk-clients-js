@@ -30,7 +30,7 @@ const summary = async (url, options) => {
     const title = dom.window.document.head.querySelector('title')?.text ?? '';
     const anchors = [
         ...new Set(Array.from(dom.window.document.body.querySelectorAll('a')).map((a) => a.href)),
-    ];
+    ].filter(Boolean);
     const images = [
         ...new Set(page.match(/[^("']*(jpg|jpeg|png)[^)"']*/g)?.map((img) => {
             img = img.split('?')[0] ?? '';

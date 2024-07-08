@@ -13,7 +13,7 @@ describe('debug', () => {
       //   .runDataQuery(4, { key: 'qL961SqMjS' })
       try {
         await clients.page
-          .summary('http://sunnyacresgoats.com', { timeout: 4000 })
+          .summary('http://edelenfarms.com', { timeout: 4000 })
           .then(print)
           .catch((err) => {
             console.error(err, '\n---', err.response?.body)

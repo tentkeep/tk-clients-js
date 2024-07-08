@@ -50,7 +50,7 @@ const summary = async (url: string, options?: { timeout?: number }) => {
         (a) => a.href,
       ),
     ),
-  ]
+  ].filter(Boolean)
   const images: string[] = [
     ...new Set(
       page.match(/[^("']*(jpg|jpeg|png)[^)"']*/g)?.map((img) => {
@@ -71,8 +71,10 @@ const summary = async (url: string, options?: { timeout?: number }) => {
   pageSummary.image = findImage(meta, _url)
   pageSummary.images = images
   pageSummary.icon = findIcon(links, _url)
+
   const arr = (...args: (string | string[] | undefined)[]) =>
     args.flatMap((arg) => arg).filter((arg) => !!arg) as string[]
+
   pageSummary.platforms = {
     barn2door: anchors.find((a) => a.includes('app.barn2door')),
     facebook: anchors.filter((a) => a.includes('facebook.com')),

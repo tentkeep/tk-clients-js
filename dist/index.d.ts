@@ -51,7 +51,7 @@ export declare const clients: {
             data: Record<string, any>[];
         }>;
         search: (query: string) => Promise<import("./src/clients/discourse.js").SearchResponse>;
-        user: <T extends string | number>(user: T) => Promise<T extends number ? import("./src/clients/discourse.js").DiscourseUser : import("./src/clients/discourse.js").DiscourseUserPlus>;
+        user: <T extends string | number>(user: T, actingUsername: string) => Promise<T extends number ? import("./src/clients/discourse.js").DiscourseUser : import("./src/clients/discourse.js").DiscourseUserPlus<"self">>;
         userEmails: (username: string) => Promise<import("./src/clients/discourse.js").DiscourseUserEmails>;
     };
     etsy: {

@@ -8,19 +8,16 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      // await clients
-      //   .discourse('https://boards.thebootroots.com')
-      //   .runDataQuery(4, { key: 'qL961SqMjS' })
-      try {
-        await clients.page
-          .summary('http://edelenfarms.com', { timeout: 4000 })
-          .then(print)
-          .catch((err) => {
-            console.error(err, '\n---', err.response?.body)
-          })
-      } catch (error) {
-        console.error('ClientError', error)
-      }
+      await clients
+        .discourse('https://boards.thebootroots.com')
+        .user('ten_tkeep', 'ten_tkeep')
+        .then((res) => {
+          print(res)
+        })
+        .catch((err) => {
+          console.error(err, err.response.body)
+        })
+      // .runDataQuery(4, { key: 'qL961SqMjS' })
     },
     { timeout: 10000 },
   )

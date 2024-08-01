@@ -30,7 +30,12 @@ async function search(query, options) {
     return result.places?.map(mapPlaceTextSearch) ?? [];
 }
 async function placeDetails(placeId) {
-    return mapPlace((await raw.places.details(placeId)).result);
+    const response = await raw.places.details(placeId);
+    if (!response.result) {
+        console.error('Google client error', response);
+        throw new Error('Google client error: ' + JSON.stringify(response));
+    }
+    return mapPlace(response.result);
 }
 const contentClient = {
     search,

@@ -26,7 +26,7 @@ declare const _default: (host: string) => {
         data: Record<string, any>[];
     }>;
     search: (query: string) => Promise<SearchResponse>;
-    user: <T extends string | number>(user: T) => Promise<T extends number ? DiscourseUser : DiscourseUserPlus>;
+    user: <T extends string | number>(user: T, actingUsername: string) => Promise<T extends number ? DiscourseUser : DiscourseUserPlus<"self">>;
     userEmails: (username: string) => Promise<DiscourseUserEmails>;
 };
 export default _default;
@@ -183,7 +183,15 @@ export type DiscourseUserEmails = {
         description: string;
     }[];
 };
-export type DiscourseUserPlus = {
+type GroupUser = {
+    group_id: number;
+    user_id: number;
+    notification_level: number;
+};
+type GroupUserSelf = GroupUser & {
+    owner: boolean;
+};
+export type DiscourseUserPlus<T extends 'self' | 'system'> = {
     user_badges: any[];
     badges: any[];
     badge_types: any[];
@@ -198,11 +206,7 @@ export type DiscourseUserPlus = {
         trust_level: number;
     }[];
     user: DiscourseUser & {
-        group_users: {
-            group_id: number;
-            user_id: number;
-            notification_level: number;
-        }[];
+        group_users: T extends 'self' ? GroupUserSelf[] | undefined : GroupUser[];
         user_option: any;
     };
 };

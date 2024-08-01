@@ -52,7 +52,12 @@ async function search(
 }
 
 async function placeDetails(placeId: string): Promise<GalleryEntryPlace> {
-  return mapPlace((await raw.places.details(placeId)).result)
+  const response = await raw.places.details(placeId)
+  if (!response.result) {
+    console.error('Google client error', response)
+    throw new Error('Google client error: ' + JSON.stringify(response))
+  }
+  return mapPlace(response.result)
 }
 
 const contentClient = {

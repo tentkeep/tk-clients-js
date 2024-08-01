@@ -101,10 +101,16 @@ export default (host) => ({
     search: (query) => discourse(`${host}/search/query?term=${query}`, {
         headers: { Accept: 'application/json' },
     }),
-    user: (user) => {
-        return typeof user === 'number'
-            ? discourse(`${host}/admin/users/${user}.json`)
-            : discourse(`${host}/u/${user}.json`);
+    user: (user, actingUsername) => {
+        const headers = {
+            'Api-Username': actingUsername ?? '_fail_',
+            Accept: 'application/json',
+        };
+        return typeof user === 'string'
+            ? discourse(`${host}/u/${user}.json`, { headers })
+            : actingUsername === 'system'
+                ? discourse(`${host}/admin/users/${user}.json`)
+                : Promise.reject(new Error('This is an admin operation'));
     },
     userEmails: (username) => discourse(`${host}/u/${username}/emails.json`),
 });

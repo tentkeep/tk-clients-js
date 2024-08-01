@@ -151,10 +151,23 @@ export default (host: string) => ({
     }) as Promise<SearchResponse>,
   user: <T extends number | string>(
     user: T,
-  ): Promise<T extends number ? DiscourseUser : DiscourseUserPlus> => {
-    return typeof user === 'number'
+    actingUsername: string,
+  ): Promise<
+    T extends number
+      ? DiscourseUser
+      : typeof actingUsername extends 'system'
+      ? DiscourseUserPlus<'system'>
+      : DiscourseUserPlus<'self'>
+  > => {
+    const headers = {
+      'Api-Username': actingUsername ?? '_fail_',
+      Accept: 'application/json',
+    }
+    return typeof user === 'string'
+      ? discourse(`${host}/u/${user}.json`, { headers })
+      : actingUsername === 'system'
       ? discourse(`${host}/admin/users/${user}.json`)
-      : discourse(`${host}/u/${user}.json`)
+      : Promise.reject(new Error('This is an admin operation'))
   },
   userEmails: (username: string): Promise<DiscourseUserEmails> =>
     discourse(`${host}/u/${username}/emails.json`),
@@ -359,7 +372,16 @@ export type DiscourseUserEmails = {
   }[]
 }
 
-export type DiscourseUserPlus = {
+type GroupUser = {
+  group_id: number
+  user_id: number
+  notification_level: number
+}
+type GroupUserSelf = GroupUser & {
+  owner: boolean
+}
+
+export type DiscourseUserPlus<T extends 'self' | 'system'> = {
   user_badges: any[]
   badges: any[]
   badge_types: any[]
@@ -374,11 +396,7 @@ export type DiscourseUserPlus = {
     trust_level: number
   }[]
   user: DiscourseUser & {
-    group_users: {
-      group_id: number
-      user_id: number
-      notification_level: number
-    }[]
+    group_users: T extends 'self' ? GroupUserSelf[] | undefined : GroupUser[]
     user_option: any
   }
 }

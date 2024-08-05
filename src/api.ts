@@ -3,8 +3,8 @@ const got = async (url: any, options: RequestInit) => {
   try {
     return (await import('got')).default(url, options).then((response: any) => {
       const contentType = response.headers['content-type']
-      response.isJson = contentType.includes('json')
-      response.isXml = contentType.includes('xml')
+      response.isJson = contentType?.includes('json')
+      response.isXml = contentType?.includes('xml')
       response.bodyString = response.body
       return response
     })

@@ -2,8 +2,8 @@ const got = async (url, options) => {
     try {
         return (await import('got')).default(url, options).then((response) => {
             const contentType = response.headers['content-type'];
-            response.isJson = contentType.includes('json');
-            response.isXml = contentType.includes('xml');
+            response.isJson = contentType?.includes('json');
+            response.isXml = contentType?.includes('xml');
             response.bodyString = response.body;
             return response;
         });

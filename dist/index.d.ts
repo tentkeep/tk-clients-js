@@ -1,6 +1,9 @@
 export * as Discourse from './src/clients/discourse.js';
 export declare const clients: {
     discourse: (host: string) => {
+        Groups: {
+            join: (groupId: number, actingUsername: string) => Promise<undefined>;
+        };
         Posts: {
             create: (actingUsername: string, payload: {
                 title: string;

@@ -1,6 +1,7 @@
 import { API, api } from '../api.js'
 
 export default (host: string) => ({
+  Groups: Groups(host),
   Posts: Posts(host),
   addGroupMembers: (
     groupId: number,
@@ -171,6 +172,16 @@ export default (host: string) => ({
   },
   userEmails: (username: string): Promise<DiscourseUserEmails> =>
     discourse(`${host}/u/${username}/emails.json`),
+})
+
+const Groups = (host: string) => ({
+  join: (groupId: number, actingUsername: string) =>
+    discourse(`${host}/groups/${groupId}/join.json`, {
+      method: 'put',
+      headers: {
+        'Api-Username': actingUsername ?? '_fail_',
+      },
+    }) as Promise<undefined>,
 })
 
 const Posts = (host: string) => ({

@@ -10,12 +10,12 @@ describe('debug', () => {
     async () => {
       await clients
         .discourse('https://boards.thebootroots.com')
-        .user('ten_tkeep', 'ten_tkeep')
+        .Groups.join(120, 'Tentkeep')
         .then((res) => {
           print(res)
         })
         .catch((err) => {
-          console.error(err, err.response.body)
+          console.error(err, err.response?.body)
         })
       // .runDataQuery(4, { key: 'qL961SqMjS' })
     },
@@ -97,5 +97,12 @@ function youtube() {
 }
 
 function print(result: any) {
-  console.log(JSON.stringify(result, null, 2))
+  if (result) {
+    try {
+      return console.log(JSON.stringify(result, null, 2))
+    } catch (error) {
+      return console.log(result)
+    }
+  }
+  console.log('empty result')
 }

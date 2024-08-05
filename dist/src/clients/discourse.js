@@ -1,5 +1,6 @@
 import { api } from '../api.js';
 export default (host) => ({
+    Groups: Groups(host),
     Posts: Posts(host),
     addGroupMembers: (groupId, usernames, actingUser) => discourse(`${host}/groups/${groupId}/members.json`, {
         method: 'put',
@@ -113,6 +114,14 @@ export default (host) => ({
                 : Promise.reject(new Error('This is an admin operation'));
     },
     userEmails: (username) => discourse(`${host}/u/${username}/emails.json`),
+});
+const Groups = (host) => ({
+    join: (groupId, actingUsername) => discourse(`${host}/groups/${groupId}/join.json`, {
+        method: 'put',
+        headers: {
+            'Api-Username': actingUsername ?? '_fail_',
+        },
+    }),
 });
 const Posts = (host) => ({
     create: (actingUsername, payload) => discourse(`${host}/posts`, {

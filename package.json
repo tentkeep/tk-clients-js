@@ -1,6 +1,6 @@
 {
   "name": "@tentkeep/clients",
-  "version": "0.2.53",
+  "version": "0.2.54",
   "description": "node interfaces for various clients",
   "type": "module",
   "main": "./dist/index.js",

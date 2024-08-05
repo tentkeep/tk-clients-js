@@ -122,6 +122,12 @@ const Groups = (host) => ({
             'Api-Username': actingUsername ?? '_fail_',
         },
     }),
+    leave: (groupId, actingUsername) => discourse(`${host}/groups/${groupId}/leave.json`, {
+        method: 'delete',
+        headers: {
+            'Api-Username': actingUsername ?? '_fail_',
+        },
+    }),
 });
 const Posts = (host) => ({
     create: (actingUsername, payload) => discourse(`${host}/posts`, {

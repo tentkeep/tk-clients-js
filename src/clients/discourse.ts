@@ -182,6 +182,13 @@ const Groups = (host: string) => ({
         'Api-Username': actingUsername ?? '_fail_',
       },
     }) as Promise<undefined>,
+  leave: (groupId: number, actingUsername: string) =>
+    discourse(`${host}/groups/${groupId}/leave.json`, {
+      method: 'delete',
+      headers: {
+        'Api-Username': actingUsername ?? '_fail_',
+      },
+    }) as Promise<undefined>,
 })
 
 const Posts = (host: string) => ({

@@ -1,6 +1,7 @@
 declare const _default: (host: string) => {
     Groups: {
         join: (groupId: number, actingUsername: string) => Promise<undefined>;
+        leave: (groupId: number, actingUsername: string) => Promise<undefined>;
     };
     Posts: {
         create: (actingUsername: string, payload: CreatePost) => Promise<DiscoursePost>;

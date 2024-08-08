@@ -1605,8 +1605,3 @@ export declare const clients: {
     };
 };
 export default clients;
-export declare const logic: {
-    tentkeep: {
-        canEdit: (galleryUser: import("@tentkeep/tentkeep").GalleryUser) => import("@tentkeep/tentkeep").GalleryUserRoles | undefined;
-    };
-};

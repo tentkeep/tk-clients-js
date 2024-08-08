@@ -11,7 +11,6 @@ import wordpress from './src/clients/wordpress.js'
 import youtube from './src/clients/youtube.js'
 
 import tentkeep from '@tentkeep/tentkeep'
-import { logic as tentkeepLogic } from '@tentkeep/tentkeep'
 
 export * as Discourse from './src/clients/discourse.js'
 
@@ -31,7 +30,3 @@ export const clients = {
 }
 
 export default clients
-
-export const logic = {
-  tentkeep: tentkeepLogic,
-}

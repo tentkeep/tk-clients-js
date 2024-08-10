@@ -9,7 +9,6 @@ import shopify from './src/clients/shopify.js';
 import spotify from './src/clients/spotify.js';
 import wordpress from './src/clients/wordpress.js';
 import youtube from './src/clients/youtube.js';
-import tentkeep from '@tentkeep/tentkeep';
 export * as Discourse from './src/clients/discourse.js';
 export const clients = {
     discourse,
@@ -21,7 +20,6 @@ export const clients = {
     rss,
     shopify,
     spotify,
-    tentkeep,
     wordpress,
     youtube,
 };

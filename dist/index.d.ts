@@ -1239,6 +1239,7 @@ export declare const clients: {
         searchYouTube: import("./src/clients/youtube.js").YoutubeResourceAPI;
         search: (query: string) => Promise<import("@tentkeep/tentkeep").GalleryEntry[]>;
         summarize: (channelId: string) => Promise<import("@tentkeep/tentkeep").Entity & {
+            readonly type?: import("@tentkeep/tentkeep").EntityType.Entry | undefined;
             id?: number | undefined;
             galleryId?: number | undefined;
             createdBy?: number | undefined;

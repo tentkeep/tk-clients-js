@@ -18,7 +18,6 @@ Desktop.ini
 node_modules
 *.log
 *.gz
-src/
 .prettierignore                      
 .prettierrc                          
 .vscode/settings.json

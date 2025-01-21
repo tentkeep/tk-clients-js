@@ -3,7 +3,7 @@ const host = 'https://api.spotify.com';
 export default {
     searchArtists: (query) => spotify(`${host}/v1/search?q=${query}&type=artist`),
     searchPlaylists: (query) => spotify(`${host}/v1/search?q=${query}&type=playlist`),
-    searchPodcasts: (query) => spotify(`${host}/v1/search?q=${query}&type=show&market=US&limit=3`),
+    searchPodcasts: (query) => spotify(`${host}/v1/search?q=${query}&type=show&market=US&limit=50`),
     userPlaylists: (userId) => spotify(`${host}/v1/users/${userId}/playlists`),
     playlist: (playlistId) => spotify(`${host}/v1/playlists/${playlistId}`),
     playlistTracks: (playlistId) => spotify(`${host}/v1/playlists/${playlistId}/tracks`),
@@ -18,6 +18,7 @@ const spotify = async (url, options) => {
         ..._options.headers,
         Authorization: `Bearer ${cachedToken}`,
     };
+    console.log('spotify', url, _options);
     return api(url, _options).catch(async (e) => {
         if (e.status === 401) {
             cachedToken = await token();

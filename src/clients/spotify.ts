@@ -6,7 +6,9 @@ export default {
   searchPlaylists: (query) =>
     spotify(`${host}/v1/search?q=${query}&type=playlist`),
   searchPodcasts: (query) =>
-    spotify(`${host}/v1/search?q=${query}&type=show&market=US&limit=3`),
+    spotify(
+      `${host}/v1/search?q=${query}&type=show&market=US&limit=50`,
+    ) as Promise<ShowsSearchResults>,
   userPlaylists: (userId) => spotify(`${host}/v1/users/${userId}/playlists`),
   playlist: (playlistId) => spotify(`${host}/v1/playlists/${playlistId}`),
   playlistTracks: (playlistId) =>
@@ -25,6 +27,7 @@ const spotify = async (url: string, options?) => {
     ..._options.headers,
     Authorization: `Bearer ${cachedToken}`,
   }
+  console.log('spotify', url, _options)
 
   return api(url, _options).catch(async (e) => {
     if (e.status === 401) {
@@ -51,3 +54,38 @@ const token = () =>
     },
     body: 'grant_type=client_credentials',
   }).then((tokenPayload) => tokenPayload.access_token)
+
+type ShowsSearchResults = {
+  shows: {
+    href: string
+    limit: number
+    next: string
+    offset: number
+    previous: null
+    total: number
+    items: {
+      copyrights: []
+      description: string
+      html_description: string
+      explicit: false
+      external_urls: {
+        spotify: string
+      }
+      href: string
+      id: string
+      images: {
+        height: number
+        url: string
+        width: number
+      }[]
+      is_externally_hosted: false
+      languages: string[]
+      media_type: 'audio'
+      name: string
+      publisher: string
+      type: 'show'
+      uri: string
+      total_episodes: number
+    }[]
+  }
+}

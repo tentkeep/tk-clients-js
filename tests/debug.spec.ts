@@ -8,9 +8,9 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      await clients
-        .discourse('https://boards.thebootroots.com')
-        .Groups.join(120, 'Tentkeep')
+      await clients.spotify
+        // await clients.itunes
+        .searchPodcasts('regenerative agriculture')
         .then((res) => {
           print(res)
         })

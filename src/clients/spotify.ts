@@ -29,7 +29,6 @@ const spotify = async (url: string, options?) => {
     ..._options.headers,
     Authorization: `Bearer ${cachedToken}`,
   }
-  console.log('spotify', url, _options)
 
   return api(url, _options).catch(async (e) => {
     if (e.status === 401) {

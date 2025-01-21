@@ -695,7 +695,9 @@ export declare const clients: {
     spotify: {
         searchArtists: (query: any) => any;
         searchPlaylists: (query: any) => any;
-        searchPodcasts: (query: any) => Promise<{
+        searchPodcasts: (query: any, options?: {
+            limit: number;
+        } | undefined) => Promise<{
             shows: {
                 href: string;
                 limit: number;

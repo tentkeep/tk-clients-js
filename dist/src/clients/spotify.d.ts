@@ -1,7 +1,9 @@
 declare const _default: {
     searchArtists: (query: any) => any;
     searchPlaylists: (query: any) => any;
-    searchPodcasts: (query: any) => Promise<ShowsSearchResults>;
+    searchPodcasts: (query: any, options?: {
+        limit: number;
+    }) => Promise<ShowsSearchResults>;
     userPlaylists: (userId: any) => any;
     playlist: (playlistId: any) => any;
     playlistTracks: (playlistId: any) => any;

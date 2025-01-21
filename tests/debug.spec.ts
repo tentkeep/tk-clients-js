@@ -10,7 +10,7 @@ describe('debug', () => {
     async () => {
       await clients.spotify
         // await clients.itunes
-        .searchPodcasts('regenerative agriculture')
+        .searchPodcasts('regenerative agriculture', { limit: 2 })
         .then((res) => {
           print(res)
         })

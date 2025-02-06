@@ -8,16 +8,22 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      await clients.spotify
-        // await clients.itunes
-        .searchPodcasts('regenerative agriculture', { limit: 2 })
+      // await clients.spotify
+      //   .searchPodcasts('regenerative agriculture', { limit: 2 })
+      await clients
+        .discourse('https://boards.thebootroots.com')
+        // .runDataQuery(
+        //   8,
+        //   { date: '2025-01-23' },
+        //   { jsonKeys: ['notifications'] },
+        // )
+        .getPrivateMessages('system', { page: 1 })
         .then((res) => {
           print(res)
         })
         .catch((err) => {
           console.error(err, err.response?.body)
         })
-      // .runDataQuery(4, { key: 'qL961SqMjS' })
     },
     { timeout: 10000 },
   )

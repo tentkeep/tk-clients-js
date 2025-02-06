@@ -48,10 +48,25 @@ export declare const clients: {
             };
         }>;
         privateMessage: (fromUsername: string, toUsername: string, subject: string, message: string) => Promise<import("./src/clients/discourse.js").DiscoursePost>;
+        getPrivateMessages: (username: string, options?: {
+            page?: number | undefined;
+        } | undefined) => Promise<{
+            users: import("./src/clients/discourse.js").DiscourseUserMini[];
+            primary_groups: any[];
+            flair_groups: any[];
+            topic_list: {
+                can_create_topic: boolean;
+                per_page: number;
+                top_tags: any[];
+                topics: Partial<import("./src/clients/discourse.js").DiscourseTopic>[];
+            };
+        }>;
         removeGroupMembers: (groupId: number, usernames: string[], actingUser: string) => Promise<import("./src/clients/discourse.js").AddGroupMembersResponse>;
         removeGroupOwnerRole: (groupId: number, usernames: string[], actingUser: string) => Promise<any>;
         replyToTopic: (topicId: number, message: string) => Promise<import("./src/clients/discourse.js").DiscoursePost>;
-        runDataQuery: (queryId: number, input: Record<string, any>) => Promise<{
+        runDataQuery: (queryId: number, input: Record<string, any>, options?: {
+            jsonKeys?: string[] | undefined;
+        } | undefined) => Promise<{
             data: Record<string, any>[];
         }>;
         search: (query: string) => Promise<import("./src/clients/discourse.js").SearchResponse>;

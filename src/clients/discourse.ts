@@ -77,7 +77,7 @@ export default (host: string) => ({
           'Api-Username': username,
         },
       },
-    ) as Promise<GroupPrivateMessages>,
+    ) as Promise<PrivateMessagesList>,
   privateMessage: (
     fromUsername: string,
     toUsername: string,
@@ -97,6 +97,17 @@ export default (host: string) => ({
         archetype: 'private_message',
       },
     }) as Promise<DiscoursePost>,
+  getPrivateMessages: (username: string, options?: { page?: number }) =>
+    discourse(
+      `${host}/topics/private-messages/${username}.json?page=${
+        (options?.page ?? 1) - 1
+      }`,
+      {
+        headers: {
+          'Api-Username': username,
+        },
+      },
+    ) as Promise<PrivateMessagesList>,
   removeGroupMembers: (
     groupId: number,
     usernames: string[],
@@ -137,15 +148,24 @@ export default (host: string) => ({
         raw: message,
       },
     }) as Promise<DiscoursePost>,
-  runDataQuery: (queryId: number, input: Record<string, any>) =>
+  runDataQuery: (
+    queryId: number,
+    input: Record<string, any>,
+    options?: DataQueryOptions,
+  ) =>
     discourse(`${host}/admin/plugins/explorer/queries/${queryId}/run`, {
       method: 'post',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        // Origin: 'https://boards.thebootroots.com',
+        'X-CSRF-Token':
+          'bmjaw8mku2ZqNT86ezTVeJueCqPR3_1ql1Na1I6OjZPLK2WTvlYQykXAnNnIAfWu5oucw3psMDJy6iYwahtI6A',
       },
       body: { params: JSON.stringify(input) },
-    }).then(mapDataQuery) as Promise<{ data: Record<string, any>[] }>,
+    }).then((res) => mapDataQuery(res, options)) as Promise<{
+      data: Record<string, any>[]
+    }>,
   search: (query: string) =>
     discourse(`${host}/search/query?term=${query}`, {
       headers: { Accept: 'application/json' },
@@ -220,13 +240,23 @@ const discourse: API = (url: string | URL, options = null) => {
   return api(_url, _options)
 }
 
-const mapDataQuery = (payload: DataExplorerResponse) => {
+type DataQueryOptions = {
+  jsonKeys?: string[]
+}
+
+const mapDataQuery = (
+  payload: DataExplorerResponse,
+  options?: DataQueryOptions,
+) => {
   return {
     data: payload.rows.map((row) => {
       const obj: Record<string, any> = {}
       for (let index = 0; index < payload.columns.length; index++) {
         const key = payload.columns[index]
-        if (key) obj[key] = row[index]
+        if (key)
+          obj[key] = options?.jsonKeys?.includes(key)
+            ? JSON.parse(row[index])
+            : row[index]
       }
       return obj
     }),
@@ -703,7 +733,7 @@ type CreatePost =
       external_id?: string
     }
 
-type GroupPrivateMessages = {
+type PrivateMessagesList = {
   users: DiscourseUserMini[]
   primary_groups: any[]
   flair_groups: any[]

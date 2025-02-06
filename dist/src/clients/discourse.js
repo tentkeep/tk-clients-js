@@ -62,6 +62,11 @@ export default (host) => ({
             archetype: 'private_message',
         },
     }),
+    getPrivateMessages: (username, options) => discourse(`${host}/topics/private-messages/${username}.json?page=${(options?.page ?? 1) - 1}`, {
+        headers: {
+            'Api-Username': username,
+        },
+    }),
     removeGroupMembers: (groupId, usernames, actingUser) => discourse(`${host}/groups/${groupId}/members.json`, {
         method: 'delete',
         headers: {
@@ -91,14 +96,15 @@ export default (host) => ({
             raw: message,
         },
     }),
-    runDataQuery: (queryId, input) => discourse(`${host}/admin/plugins/explorer/queries/${queryId}/run`, {
+    runDataQuery: (queryId, input, options) => discourse(`${host}/admin/plugins/explorer/queries/${queryId}/run`, {
         method: 'post',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
+            'X-CSRF-Token': 'bmjaw8mku2ZqNT86ezTVeJueCqPR3_1ql1Na1I6OjZPLK2WTvlYQykXAnNnIAfWu5oucw3psMDJy6iYwahtI6A',
         },
         body: { params: JSON.stringify(input) },
-    }).then(mapDataQuery),
+    }).then((res) => mapDataQuery(res, options)),
     search: (query) => discourse(`${host}/search/query?term=${query}`, {
         headers: { Accept: 'application/json' },
     }),
@@ -154,14 +160,16 @@ const discourse = (url, options = null) => {
     const _url = url instanceof URL ? url : new URL(url);
     return api(_url, _options);
 };
-const mapDataQuery = (payload) => {
+const mapDataQuery = (payload, options) => {
     return {
         data: payload.rows.map((row) => {
             const obj = {};
             for (let index = 0; index < payload.columns.length; index++) {
                 const key = payload.columns[index];
                 if (key)
-                    obj[key] = row[index];
+                    obj[key] = options?.jsonKeys?.includes(key)
+                        ? JSON.parse(row[index])
+                        : row[index];
             }
             return obj;
         }),

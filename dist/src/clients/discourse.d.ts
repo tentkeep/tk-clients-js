@@ -21,12 +21,15 @@ declare const _default: (host: string) => {
         group: Group;
     }>;
     groupMembers: (groupName: string) => Promise<GroupMembers>;
-    groupPrivateMessages: (username: string, groupName: string) => Promise<GroupPrivateMessages>;
+    groupPrivateMessages: (username: string, groupName: string) => Promise<PrivateMessagesList>;
     privateMessage: (fromUsername: string, toUsername: string, subject: string, message: string) => Promise<DiscoursePost>;
+    getPrivateMessages: (username: string, options?: {
+        page?: number;
+    }) => Promise<PrivateMessagesList>;
     removeGroupMembers: (groupId: number, usernames: string[], actingUser: string | 'admin') => Promise<AddGroupMembersResponse>;
     removeGroupOwnerRole: (groupId: number, usernames: string[], actingUser: string) => Promise<any>;
     replyToTopic: (topicId: number, message: string) => Promise<DiscoursePost>;
-    runDataQuery: (queryId: number, input: Record<string, any>) => Promise<{
+    runDataQuery: (queryId: number, input: Record<string, any>, options?: DataQueryOptions) => Promise<{
         data: Record<string, any>[];
     }>;
     search: (query: string) => Promise<SearchResponse>;
@@ -34,6 +37,9 @@ declare const _default: (host: string) => {
     userEmails: (username: string) => Promise<DiscourseUserEmails>;
 };
 export default _default;
+type DataQueryOptions = {
+    jsonKeys?: string[];
+};
 export type SearchResponse = {
     posts: {
         id: number;
@@ -491,7 +497,7 @@ type CreatePost = {
     archetype?: 'private_message';
     external_id?: string;
 };
-type GroupPrivateMessages = {
+type PrivateMessagesList = {
     users: DiscourseUserMini[];
     primary_groups: any[];
     flair_groups: any[];

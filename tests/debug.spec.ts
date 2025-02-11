@@ -12,14 +12,17 @@ describe('debug', () => {
       //   .searchPodcasts('regenerative agriculture', { limit: 2 })
       await clients
         .discourse('https://boards.thebootroots.com')
-        // .runDataQuery(
-        //   8,
-        //   { date: '2025-01-23' },
-        //   { jsonKeys: ['notifications'] },
+        // .runDataQuery(9, { username: 'jwilkey' }, { jsonKeys: [] })
+        .getTopic('154', { actingUsername: 'jwilkey', latestPosts: true })
+        // .getPrivateMessages('system', { page: 1 })
+        // .privateMessage(
+        //   'bootroots',
+        //   'devtestdubbadoo_1724861068463',
+        //   'Test Msg_Access',
+        //   'sent on ' + new Date().toISOString(),
         // )
-        .getPrivateMessages('system', { page: 1 })
         .then((res) => {
-          print(res)
+          print(res.post_stream.posts.map((p) => p.cooked))
         })
         .catch((err) => {
           console.error(err, err.response?.body)

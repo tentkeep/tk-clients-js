@@ -30,7 +30,8 @@ export declare const clients: {
         getPost: (id: number) => Promise<import("./src/clients/discourse.js").DiscoursePost>;
         getTopic: (topic: string | number, options: {
             actingUsername: string;
-            external_id?: true | undefined;
+            external_id?: boolean | undefined;
+            latestPosts?: boolean | undefined;
         }) => Promise<import("./src/clients/discourse.js").DiscourseTopic>;
         group: (groupName: string) => Promise<{
             group: import("./src/clients/discourse.js").Group;
@@ -47,7 +48,9 @@ export declare const clients: {
                 topics: Partial<import("./src/clients/discourse.js").DiscourseTopic>[];
             };
         }>;
-        privateMessage: (fromUsername: string, toUsername: string, subject: string, message: string) => Promise<import("./src/clients/discourse.js").DiscoursePost>;
+        privateMessage: (fromUsername: string, toUsername: string, subject: string, message: string, options?: {
+            external_id?: string | undefined;
+        } | undefined) => Promise<import("./src/clients/discourse.js").DiscoursePost>;
         getPrivateMessages: (username: string, options?: {
             page?: number | undefined;
         } | undefined) => Promise<{

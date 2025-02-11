@@ -36,7 +36,7 @@ export default (host) => ({
         body: invite,
     }),
     getPost: (id) => discourse(`${host}/posts/${id}.json`),
-    getTopic: (topic, options) => discourse(`${host}/t/${options?.external_id ? 'external_id/' : ''}${topic}.json`, {
+    getTopic: (topic, options) => discourse(`${host}/t/${options?.external_id ? 'external_id/' : ''}${topic}${options.latestPosts ? '/last' : ''}.json`, {
         headers: {
             'Api-Username': options?.actingUsername,
             'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ export default (host) => ({
             'Api-Username': username,
         },
     }),
-    privateMessage: (fromUsername, toUsername, subject, message) => discourse(`${host}/posts.json`, {
+    privateMessage: (fromUsername, toUsername, subject, message, options) => discourse(`${host}/posts.json`, {
         method: 'post',
         headers: {
             'Api-Username': fromUsername,
@@ -60,6 +60,7 @@ export default (host) => ({
             raw: message,
             target_recipients: toUsername,
             archetype: 'private_message',
+            ...options,
         },
     }),
     getPrivateMessages: (username, options) => discourse(`${host}/topics/private-messages/${username}.json?page=${(options?.page ?? 1) - 1}`, {

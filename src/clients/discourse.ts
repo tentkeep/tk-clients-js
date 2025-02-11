@@ -52,10 +52,16 @@ export default (host: string) => ({
     discourse(`${host}/posts/${id}.json`) as Promise<DiscoursePost>,
   getTopic: (
     topic: number | string,
-    options: { actingUsername: string; external_id?: true },
+    options: {
+      actingUsername: string
+      external_id?: boolean
+      latestPosts?: boolean
+    },
   ) =>
     discourse(
-      `${host}/t/${options?.external_id ? 'external_id/' : ''}${topic}.json`,
+      `${host}/t/${options?.external_id ? 'external_id/' : ''}${topic}${
+        options.latestPosts ? '/last' : ''
+      }.json`,
       {
         headers: {
           'Api-Username': options?.actingUsername,
@@ -83,6 +89,7 @@ export default (host: string) => ({
     toUsername: string,
     subject: string,
     message: string,
+    options?: { external_id?: string },
   ) =>
     discourse(`${host}/posts.json`, {
       method: 'post',
@@ -95,6 +102,7 @@ export default (host: string) => ({
         raw: message,
         target_recipients: toUsername,
         archetype: 'private_message',
+        ...options,
       },
     }) as Promise<DiscoursePost>,
   getPrivateMessages: (username: string, options?: { page?: number }) =>

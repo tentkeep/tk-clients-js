@@ -15,14 +15,17 @@ declare const _default: (host: string) => {
     getPost: (id: number) => Promise<DiscoursePost>;
     getTopic: (topic: number | string, options: {
         actingUsername: string;
-        external_id?: true;
+        external_id?: boolean;
+        latestPosts?: boolean;
     }) => Promise<DiscourseTopic>;
     group: (groupName: string) => Promise<{
         group: Group;
     }>;
     groupMembers: (groupName: string) => Promise<GroupMembers>;
     groupPrivateMessages: (username: string, groupName: string) => Promise<PrivateMessagesList>;
-    privateMessage: (fromUsername: string, toUsername: string, subject: string, message: string) => Promise<DiscoursePost>;
+    privateMessage: (fromUsername: string, toUsername: string, subject: string, message: string, options?: {
+        external_id?: string;
+    }) => Promise<DiscoursePost>;
     getPrivateMessages: (username: string, options?: {
         page?: number;
     }) => Promise<PrivateMessagesList>;

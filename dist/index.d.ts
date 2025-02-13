@@ -20,6 +20,8 @@ export declare const clients: {
                 archetype?: "private_message" | undefined;
                 external_id?: string | undefined;
             }) => Promise<import("./src/clients/discourse.js").DiscoursePost>;
+            get: (id: number, actingUsername: string) => Promise<import("./src/clients/discourse.js").DiscoursePost>;
+            find: (topicId: number, ids: number[], actingUsername: string) => Promise<import("./src/clients/discourse.js").DiscoursePost[]>;
         };
         addGroupMembers: (groupId: number, usernames: string[], actingUser: string) => Promise<import("./src/clients/discourse.js").AddGroupMembersResponse>;
         addGroupOwners: (groupId: number, usernames: string[], actingUser: string) => Promise<import("./src/clients/discourse.js").AddGroupMembersResponse>;
@@ -27,7 +29,6 @@ export declare const clients: {
             basic_group: import("./src/clients/discourse.js").Group;
         }>;
         createInvite: (invite: import("./src/clients/discourse.js").InviteRequest, fromUsername: string) => Promise<import("./src/clients/discourse.js").InviteResponse>;
-        getPost: (id: number) => Promise<import("./src/clients/discourse.js").DiscoursePost>;
         getTopic: (topic: string | number, options: {
             actingUsername: string;
             external_id?: boolean | undefined;

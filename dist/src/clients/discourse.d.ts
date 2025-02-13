@@ -5,6 +5,8 @@ declare const _default: (host: string) => {
     };
     Posts: {
         create: (actingUsername: string, payload: CreatePost) => Promise<DiscoursePost>;
+        get: (id: number, actingUsername: string) => Promise<DiscoursePost>;
+        find: (topicId: number, ids: number[], actingUsername: string) => Promise<DiscoursePost[]>;
     };
     addGroupMembers: (groupId: number, usernames: string[], actingUser: string | 'admin') => Promise<AddGroupMembersResponse>;
     addGroupOwners: (groupId: number, usernames: string[], actingUser: string | 'admin') => Promise<AddGroupMembersResponse>;
@@ -12,7 +14,6 @@ declare const _default: (host: string) => {
         basic_group: Group;
     }>;
     createInvite: (invite: InviteRequest, fromUsername: string) => Promise<InviteResponse>;
-    getPost: (id: number) => Promise<DiscoursePost>;
     getTopic: (topic: number | string, options: {
         actingUsername: string;
         external_id?: boolean;

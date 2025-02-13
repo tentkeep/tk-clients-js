@@ -13,7 +13,8 @@ describe('debug', () => {
       await clients
         .discourse('https://boards.thebootroots.com')
         // .runDataQuery(9, { username: 'jwilkey' }, { jsonKeys: [] })
-        .getTopic('154', { actingUsername: 'jwilkey', latestPosts: true })
+        // .getTopic('154', { actingUsername: 'jwilkey', latestPosts: true })
+        .Posts.find(154, [183, 511, 512], 'bootroots')
         // .getPrivateMessages('system', { page: 1 })
         // .privateMessage(
         //   'bootroots',
@@ -22,7 +23,7 @@ describe('debug', () => {
         //   'sent on ' + new Date().toISOString(),
         // )
         .then((res) => {
-          print(res.post_stream.posts.map((p) => p.cooked))
+          print(res)
         })
         .catch((err) => {
           console.error(err, err.response?.body)

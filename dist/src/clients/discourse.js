@@ -35,7 +35,6 @@ export default (host) => ({
         },
         body: invite,
     }),
-    getPost: (id) => discourse(`${host}/posts/${id}.json`),
     getTopic: (topic, options) => discourse(`${host}/t/${options?.external_id ? 'external_id/' : ''}${topic}${options.latestPosts ? '/last' : ''}.json`, {
         headers: {
             'Api-Username': options?.actingUsername,
@@ -44,7 +43,7 @@ export default (host) => ({
     }),
     group: (groupName) => discourse(`${host}/groups/${groupName}.json`),
     groupMembers: (groupName) => discourse(`${host}/groups/${groupName}/members.json`),
-    groupPrivateMessages: (username, groupName) => discourse(`${host}//topics/private-messages-group/${username}/${groupName}.json`, {
+    groupPrivateMessages: (username, groupName) => discourse(`${host}/topics/private-messages-group/${username}/${groupName}.json`, {
         headers: {
             'Api-Username': username,
         },
@@ -145,6 +144,20 @@ const Posts = (host) => ({
             Accept: 'application/json',
         },
         body: payload,
+    }),
+    get: (id, actingUsername) => discourse(`${host}/posts/${id}.json`, {
+        headers: {
+            Accept: 'application/json',
+            'Api-Username': actingUsername ?? '_fail_',
+        },
+    }),
+    find: (topicId, ids, actingUsername) => discourse(`${host}/t/${topicId}/posts.json?${ids
+        .map((id) => `post_ids[]=${id}`)
+        .join('&')}`, {
+        headers: {
+            Accept: 'application/json',
+            'Api-Username': actingUsername ?? '_fail_',
+        },
     }),
 });
 const discourse = (url, options = null) => {

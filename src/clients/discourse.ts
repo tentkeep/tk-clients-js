@@ -48,8 +48,6 @@ export default (host: string) => ({
       },
       body: invite,
     }) as Promise<InviteResponse>,
-  getPost: (id: number) =>
-    discourse(`${host}/posts/${id}.json`) as Promise<DiscoursePost>,
   getTopic: (
     topic: number | string,
     options: {
@@ -77,7 +75,7 @@ export default (host: string) => ({
     ) as Promise<GroupMembers>,
   groupPrivateMessages: (username: string, groupName: string) =>
     discourse(
-      `${host}//topics/private-messages-group/${username}/${groupName}.json`,
+      `${host}/topics/private-messages-group/${username}/${groupName}.json`,
       {
         headers: {
           'Api-Username': username,
@@ -230,6 +228,25 @@ const Posts = (host: string) => ({
       },
       body: payload,
     }) as Promise<DiscoursePost>,
+  get: (id: number, actingUsername: string) =>
+    discourse(`${host}/posts/${id}.json`, {
+      headers: {
+        Accept: 'application/json',
+        'Api-Username': actingUsername ?? '_fail_',
+      },
+    }) as Promise<DiscoursePost>,
+  find: (topicId: number, ids: number[], actingUsername: string) =>
+    discourse(
+      `${host}/t/${topicId}/posts.json?${ids
+        .map((id) => `post_ids[]=${id}`)
+        .join('&')}`,
+      {
+        headers: {
+          Accept: 'application/json',
+          'Api-Username': actingUsername ?? '_fail_',
+        },
+      },
+    ) as Promise<DiscoursePost[]>,
 })
 
 const discourse: API = (url: string | URL, options = null) => {

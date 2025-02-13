@@ -14,7 +14,7 @@ describe('debug', () => {
         .discourse('https://boards.thebootroots.com')
         // .runDataQuery(9, { username: 'jwilkey' }, { jsonKeys: [] })
         // .getTopic('154', { actingUsername: 'jwilkey', latestPosts: true })
-        .Posts.find(154, [183, 511, 512], 'bootroots')
+        .Posts.find(154, [183, 511, 512], 'jwilkey')
         // .getPrivateMessages('system', { page: 1 })
         // .privateMessage(
         //   'bootroots',
@@ -23,7 +23,7 @@ describe('debug', () => {
         //   'sent on ' + new Date().toISOString(),
         // )
         .then((res) => {
-          print(res)
+          print(res.post_stream.posts)
         })
         .catch((err) => {
           console.error(err, err.response?.body)

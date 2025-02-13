@@ -246,7 +246,7 @@ const Posts = (host: string) => ({
           'Api-Username': actingUsername ?? '_fail_',
         },
       },
-    ) as Promise<DiscoursePost[]>,
+    ) as Promise<{ post_stream: { posts: DiscoursePost[] } }>,
 })
 
 const discourse: API = (url: string | URL, options = null) => {

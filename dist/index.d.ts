@@ -21,7 +21,11 @@ export declare const clients: {
                 external_id?: string | undefined;
             }) => Promise<import("./src/clients/discourse.js").DiscoursePost>;
             get: (id: number, actingUsername: string) => Promise<import("./src/clients/discourse.js").DiscoursePost>;
-            find: (topicId: number, ids: number[], actingUsername: string) => Promise<import("./src/clients/discourse.js").DiscoursePost[]>;
+            find: (topicId: number, ids: number[], actingUsername: string) => Promise<{
+                post_stream: {
+                    posts: import("./src/clients/discourse.js").DiscoursePost[];
+                };
+            }>;
         };
         addGroupMembers: (groupId: number, usernames: string[], actingUser: string) => Promise<import("./src/clients/discourse.js").AddGroupMembersResponse>;
         addGroupOwners: (groupId: number, usernames: string[], actingUser: string) => Promise<import("./src/clients/discourse.js").AddGroupMembersResponse>;

@@ -79,7 +79,7 @@ function productUrl(url, product) {
     return `${sanitizeUrl(_url)}/products/${product.handle}`;
 }
 const mapToGalleryEntryItem = (product, url, _url) => {
-    return {
+    const itemProduct = {
         sourceId: product.id.toString(),
         title: product.title,
         entryType: GalleryEntryTypes.Shopify,
@@ -101,10 +101,12 @@ const mapToGalleryEntryItem = (product, url, _url) => {
                     url: `${sanitizeUrl(url)}/products/${product.handle}?variant=${variant.id}`,
                     date: variant.updated_at,
                     price: parseFloat(variant.price),
-                    available: variant.available,
+                    isAvailable: variant.available,
                 };
             }),
         },
     };
+    itemProduct.detail.isAvailable = itemProduct.detail.variants.some((v) => v.isAvailable);
+    return itemProduct;
 };
 //# sourceMappingURL=shopify.js.map

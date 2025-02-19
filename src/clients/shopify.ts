@@ -164,7 +164,7 @@ const mapToGalleryEntryItem = (
   url: string,
   _url: URL,
 ) => {
-  return {
+  const itemProduct = {
     sourceId: product.id.toString(),
     title: product.title,
     entryType: GalleryEntryTypes.Shopify,
@@ -188,9 +188,15 @@ const mapToGalleryEntryItem = (
           }`,
           date: variant.updated_at,
           price: parseFloat(variant.price),
-          available: variant.available,
+          isAvailable: variant.available,
         } as GalleryEntryItemProductVariant
       }),
     },
   } as GalleryEntryItemProduct
+
+  itemProduct.detail.isAvailable = itemProduct.detail.variants.some(
+    (v) => v.isAvailable,
+  )
+
+  return itemProduct
 }

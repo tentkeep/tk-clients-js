@@ -5,7 +5,6 @@ import {
   GalleryEntryTypes,
 } from '@tentkeep/tentkeep'
 import { API, api } from '../api.js'
-import { TentkeepClient } from './tentkeep-client.js'
 import { SummarizeOptions } from '../../index.js'
 
 const host = 'https://openapi.etsy.com/v3'
@@ -117,7 +116,7 @@ const contentClient = {
       ),
     } as GalleryEntrySummary
   },
-} as TentkeepClient
+}
 
 export default {
   // favorites: (userId) => etsy(`${host}/v2/users/${userId}/favorites/listings`),

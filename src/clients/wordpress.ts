@@ -9,7 +9,6 @@ import {
 } from '@tentkeep/tentkeep'
 import { api } from '../api.js'
 import { forKey, sanitizeUrl } from '../shareable/common.js'
-import { TentkeepClient } from './tentkeep-client.js'
 import { SummarizeOptions } from '../../index.js'
 
 const resources = [
@@ -315,7 +314,7 @@ export default {
     host(siteUrl).summary(options),
   commerce,
   host,
-} as TentkeepClient & { host: typeof host; commerce: typeof commerce }
+}
 
 const toFunctionName = (resource) =>
   resource.replace(/-(.)/, (_, d) => d.toUpperCase())

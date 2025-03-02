@@ -5,7 +5,6 @@ import {
 } from '@tentkeep/tentkeep'
 import { api } from '../api.js'
 import { forKey } from '../shareable/common.js'
-import { TentkeepClient } from './tentkeep-client.js'
 import { SummarizeOptions } from '../../index.js'
 
 const flatten = (obj, keepAsArray, keyPath = '') => {
@@ -95,7 +94,7 @@ const contentClient = {
         ),
       } as GalleryEntrySummary
     }),
-} as TentkeepClient
+}
 
 export default {
   feed,

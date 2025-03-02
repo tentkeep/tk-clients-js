@@ -6,6 +6,7 @@ import {
 import { api } from '../api.js'
 import { forKey } from '../shareable/common.js'
 import { TentkeepClient } from './tentkeep-client.js'
+import { SummarizeOptions } from '../../index.js'
 
 const flatten = (obj, keepAsArray, keyPath = '') => {
   forKey(obj, (k) => {
@@ -57,7 +58,7 @@ const contentClient = {
   /**
    * @param feedUrl - the feed url
    */
-  summarize: (feedUrl: string) =>
+  summarize: (feedUrl: string, _options?: SummarizeOptions) =>
     feed(feedUrl).then((podcast) => {
       const { title, description, image, item } = podcast
       const pubDateComparator = (a, b) => {
@@ -90,7 +91,7 @@ const contentClient = {
                 length: i.enclosure.$length,
                 type: i.enclosure.$type,
               },
-            } as GalleryEntryItem),
+            }) as GalleryEntryItem,
         ),
       } as GalleryEntrySummary
     }),

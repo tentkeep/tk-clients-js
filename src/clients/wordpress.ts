@@ -10,6 +10,7 @@ import {
 import { api } from '../api.js'
 import { forKey, sanitizeUrl } from '../shareable/common.js'
 import { TentkeepClient } from './tentkeep-client.js'
+import { SummarizeOptions } from '../../index.js'
 
 const resources = [
   'block-types',
@@ -41,6 +42,7 @@ export type WordpressOptions = {
   page?: number
   include?: string
   _embed?: string
+  modified_after?: string
 }
 export type WordpressResourceAPI<T = Record<string, any>> = (
   options: WordpressOptions,
@@ -104,14 +106,19 @@ const host = (_host: string) => {
         .then((posts) => posts.length === 1)
         .catch((_err) => false)
     },
-    async summary(limit: number = 50): Promise<GalleryEntrySummary> {
+    async summary(options?: SummarizeOptions): Promise<GalleryEntrySummary> {
       const posts: WordpressPost[] = []
       const authorRefs: number[] = []
       const categoryRefs: number[] = []
       const tagRefs: string[] = []
+      const limit = options?.limit ?? 50
 
       async function getPosts(page: number) {
-        const _posts = await resources.posts({ per_page: limit, page })
+        const queryParams: Record<string, any> = { per_page: limit, page }
+        if (options?.updatedAfter) {
+          queryParams.modified_after = options.updatedAfter
+        }
+        const _posts = await resources.posts(queryParams)
         posts.push(..._posts)
         _posts.forEach((p) => {
           if (p.author) authorRefs.push(p.author)
@@ -124,38 +131,42 @@ const host = (_host: string) => {
       let page = 0
       while (posts.length >= page * limit) {
         page++
-        console.info('Wordpress > Fetching Page', page)
+        if (options?.debug) console.info('Wordpress > Fetching Page', page)
         await getPosts(page)
       }
-      console.log('Wordpress > Fetched All', posts.length)
+      if (options?.debug) console.log('Wordpress > Fetched All', posts.length)
 
-      const categoriesPromise = resources
-        .categories({
-          per_page: 100,
-          include: categoryRefs.join(','),
-        })
-        .catch((e) => {
-          console.error('Failed to fetch Wordpress categories', url, e.message)
-          return []
-        })
-      const tagsPromise = resources
-        .tags({
-          per_page: 100,
-          include: tagRefs.join(','),
-        })
-        .catch((e) => {
-          console.error('Failed to fetch Wordpress tags', url, e.message)
-          return []
-        })
-      let categories: any[] = [],
-        tags: any[] = []
+      const categories: Record<string, any>[] = []
+      const tags: Record<string, any>[] = []
       try {
+        const categoriesPromise = resources
+          .categories({
+            per_page: 100,
+            include: categoryRefs.join(','),
+          })
+          .catch((e) => {
+            console.error(
+              'Failed to fetch Wordpress categories',
+              url,
+              e.message,
+            )
+            return []
+          })
+        const tagsPromise = resources
+          .tags({
+            per_page: 100,
+            include: tagRefs.join(','),
+          })
+          .catch((e) => {
+            console.error('Failed to fetch Wordpress tags', url, e.message)
+            return []
+          })
         const [_categories, _tags] = await Promise.all([
           categoriesPromise,
           tagsPromise,
         ])
-        categories = _categories
-        tags = _tags
+        categories.push(..._categories)
+        tags.push(..._tags)
       } catch (err) {
         console.error('Failed to fetch Wordpress categories or tags', err)
       }
@@ -179,7 +190,7 @@ const host = (_host: string) => {
               postDate: post.date,
               author: extractPostAuthor(post),
               tags: extractPostTags(post, categories, tags),
-            } as GalleryEntryItem),
+            }) as GalleryEntryItem,
         ),
       }
     },
@@ -187,8 +198,41 @@ const host = (_host: string) => {
 }
 
 const commerce = {
-  summarize: async (siteUrl: string): Promise<GalleryEntrySummary> => {
+  summarize: async (
+    siteUrl: string,
+    options?: SummarizeOptions,
+  ): Promise<GalleryEntrySummary> => {
     const url = sanitizeUrl(siteUrl)
+
+    const post = (await host(url).posts({ per_page: 1 }))[0]
+
+    const productOptions: WordpressOptions = {
+      per_page: 50,
+      _embed: 'wp:featuredmedia',
+    }
+    if (options?.updatedAfter) {
+      productOptions.modified_after = options.updatedAfter
+    }
+    const products = await host(url)
+      .product(productOptions)
+      .then((products) => products.map(mapProduct))
+
+    let page = products.length <= (productOptions.per_page ?? 0) ? -1 : 2
+    while (page > 0) {
+      console.info('  > WordpressCommerce > Getting page', page)
+      const _products = await host(url).product(productOptions)
+      products.push(..._products.map(mapProduct))
+      page = _products.length <= (productOptions.per_page ?? 0) ? -1 : 2
+    }
+
+    return {
+      sourceId: url,
+      title: post?.yoast_head_json?.og_site_name || url,
+      url: url,
+      entryType: GalleryEntryTypes.WordpressCommerce,
+      genericType: 'shop',
+      items: products.filter((p) => !p.title.toLowerCase().match(/\btest\b/)),
+    }
 
     function mapProduct(product: WordpressProduct): GalleryEntryItemProduct {
       const image = extractProductImage(product)
@@ -205,30 +249,6 @@ const commerce = {
           variants: [],
         },
       }
-    }
-
-    const post = (await host(url).posts({ per_page: 1 }))[0]
-
-    const productOptions = { per_page: 50, _embed: 'wp:featuredmedia' }
-    const products = await host(url)
-      .product(productOptions)
-      .then((products) => products.map(mapProduct))
-
-    let page = products.length <= productOptions.per_page ? -1 : 2
-    while (page > 0) {
-      console.info('  > WordpressCommerce > Getting page', page)
-      const _products = await host(url).product(productOptions)
-      products.push(..._products.map(mapProduct))
-      page = _products.length <= productOptions.per_page ? -1 : 2
-    }
-
-    return {
-      sourceId: url,
-      title: post?.yoast_head_json?.og_site_name || url,
-      url: url,
-      entryType: GalleryEntryTypes.WordpressCommerce,
-      genericType: 'shop',
-      items: products.filter((p) => !p.title.toLowerCase().match(/\btest\b/)),
     }
   },
 }
@@ -291,7 +311,8 @@ export default {
       return []
     }
   },
-  summarize: (siteUrl: string) => host(siteUrl).summary(),
+  summarize: (siteUrl: string, options?: SummarizeOptions) =>
+    host(siteUrl).summary(options),
   commerce,
   host,
 } as TentkeepClient & { host: typeof host; commerce: typeof commerce }

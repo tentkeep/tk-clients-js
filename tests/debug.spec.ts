@@ -8,32 +8,33 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      // await clients.spotify
-      //   .searchPodcasts('regenerative agriculture', { limit: 2 })
-      await clients
-        .discourse('https://boards.thebootroots.com')
-        // .runDataQuery(9, { username: 'jwilkey' }, { jsonKeys: [] })
-        // .getTopic('154', { actingUsername: 'jwilkey', latestPosts: true })
-        .Posts.find(154, [183, 511, 512], 'jwilkey')
-        // .getPrivateMessages('system', { page: 1 })
-        // .privateMessage(
-        //   'bootroots',
-        //   'devtestdubbadoo_1724861068463',
-        //   'Test Msg_Access',
-        //   'sent on ' + new Date().toISOString(),
-        // )
-        .then((res) => {
-          print(res.post_stream.posts)
-        })
-        .catch((err) => {
-          console.error(err, err.response?.body)
-        })
+      await rss().catch((err) => {
+        console.error(err, err.response?.body)
+      })
     },
     { timeout: 10000 },
   )
 })
 
 // OPTIONS BELOW
+
+async function discourse() {
+  return await clients
+    .discourse('https://boards.thebootroots.com')
+    // .runDataQuery(9, { username: 'jwilkey' }, { jsonKeys: [] })
+    // .getTopic('154', { actingUsername: 'jwilkey', latestPosts: true })
+    .Posts.find(154, [183, 511, 512], 'jwilkey')
+    // .getPrivateMessages('system', { page: 1 })
+    // .privateMessage(
+    //   'bootroots',
+    //   'devtestdubbadoo_1724861068463',
+    //   'Test Msg_Access',
+    //   'sent on ' + new Date().toISOString(),
+    // )
+    .then((res) => {
+      print(res.post_stream.posts)
+    })
+}
 
 function googlePlaces() {
   clients.google.search(arg as string).then((result) => {
@@ -50,34 +51,44 @@ function musickit() {
 }
 
 function pageSummary() {
-  clients.page.summary(arg as string).then(print)
+  return clients.page.summary(arg as string).then(print)
 }
 
 function pageInfo() {
-  clients.page.info(arg as string).then(print)
+  return clients.page.info(arg as string).then(print)
 }
 
 function podcastSummary() {
-  clients.itunes.podcasts(arg as string).then(print)
+  return clients.itunes.podcasts(arg as string).then(print)
+}
+
+function rss() {
+  return clients.rss.feed('https://feeds.buzzsprout.com/804512.rss').then(print)
 }
 
 function wordpress() {
-  clients.wordpress
-    .host(arg as string)
-    .summary()
-    // .isWordpress()
-    .then(print)
+  return (
+    clients.wordpress
+      .host(arg as string)
+      .summary()
+      // .isWordpress()
+      .then(print)
+  )
+}
+
+function shopify() {
+  return clients.shopify
 }
 
 function shopifyProductSummary() {
-  clients.shopify.summarize(arg as string).then(print)
+  return clients.shopify.summarize(arg as string).then(print)
 }
 function shopifyRaw() {
-  clients.shopify.raw.products(arg as string, 250).then(print)
+  return clients.shopify.raw.products(arg as string, 250).then(print)
 }
 
 function spotify() {
-  clients.spotify.searchPodcasts(arg).then(print)
+  return clients.spotify.searchPodcasts(arg).then(print)
 }
 
 function tentkeep() {
@@ -93,17 +104,29 @@ function tentkeep() {
 }
 
 function youtube() {
-  clients.youtube
-    .playlist('UUkSIxqE14z-nX0f_Wy3JZEg')
-    // .channels({
-    //   id: 'UCkSIxqE14z-nX0f_Wy3JZEg',
-    //   part: 'snippet,contentDetails',
-    // })
-    // .channelSummary({
-    //   username: undefined,
-    //   channelId: 'UCkSIxqE14z-nX0f_Wy3JZEg',
-    // })
-    .then(print)
+  const channels = {
+    trinityLinton: {
+      channelId: 'UCkSIxqE14z-nX0f_Wy3JZEg',
+      uploadsPlaylistId: 'UUkSIxqE14z-nX0f_Wy3JZEg',
+    },
+    justinRhodes: {
+      channelId: 'UCOSGEokQQcdAVFuL_Aq8dlg',
+      uploadsPlaylistId: 'UUOSGEokQQcdAVFuL_Aq8dlg',
+    },
+  }
+  return (
+    clients.youtube
+      // .search('Justin Rhodes')
+      .summarize(channels.justinRhodes.channelId, {
+        updatedAfter: '2025-02-23',
+      })
+      // .playlist(channels.justinRhodes.uploadsPlaylistId)
+      // .channels({
+      //   id: channels.justinRhodes.channelId,
+      //   part: 'snippet,contentDetails',
+      // })
+      .then(print)
+  )
 }
 
 function print(result: any) {

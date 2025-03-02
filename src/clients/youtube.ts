@@ -6,6 +6,8 @@ import {
 } from '@tentkeep/tentkeep'
 import { API, api, ApiStatusError } from '../api.js'
 import { forKey } from '../shareable/common.js'
+import { SummarizeOptions } from '../../index.js'
+
 const host = 'https://www.googleapis.com/youtube/v3'
 
 const resources = [
@@ -46,9 +48,9 @@ const playlist = (playlistId, opts = {}) =>
   resourcesApi.playlistItems({
     playlistId,
     part: 'snippet,contentDetails',
-    maxResults: 50,
+    maxResults: 5,
     ...opts,
-  })
+  }) as Promise<YoutubePlaylistItemResponse>
 const channelForUser = (username) =>
   youtube(
     `${host}/channels?forUsername=${username}&part=snippet,contentDetails`,
@@ -72,12 +74,15 @@ const videosForPlaylist = (playlistId, opts = {}) => {
       return { videos, nextPageToken }
     }) // 1 x #pages
 }
-const allVideosForPlaylist = async (playlistId) => {
+const allVideosForPlaylist = async (
+  playlistId: string,
+  options?: SummarizeOptions,
+) => {
   const firstPage = await playlist(playlistId)
   const videos = firstPage.items
   let pageCount = 1
   let nextPageToken = firstPage.nextPageToken
-  while (nextPageToken) {
+  while (shouldFetchNextPage()) {
     const page = await playlist(playlistId, { pageToken: nextPageToken })
     videos.push(...page.items)
     pageCount++
@@ -85,6 +90,16 @@ const allVideosForPlaylist = async (playlistId) => {
   }
   console.log(`All videos fetched from ${pageCount} pages.`)
   return videos
+
+  function shouldFetchNextPage() {
+    if (nextPageToken && options?.updatedAfter) {
+      const updatedAfter = new Date(options.updatedAfter)
+      return videos
+        .slice(-1)
+        .some((v) => new Date(v.snippet.publishedAt) > updatedAfter)
+    }
+    return !!nextPageToken
+  }
 }
 
 type YoutubeEntry = {
@@ -117,12 +132,13 @@ export default {
               description: item.snippet.description,
               url: `https://youtube.com/channel/${item.snippet.channelId}`,
               image: item.snippet.thumbnails.high.url,
-            } as GalleryEntry),
+            }) as GalleryEntry,
         ),
       )
   },
   summarize: async (
     channelId: string,
+    options?: SummarizeOptions,
   ): Promise<GalleryEntrySummary & YoutubeEntry> => {
     const channelResponse = await resourcesApi.channels({
       id: channelId,
@@ -133,10 +149,14 @@ export default {
     }
     const channel = channelResponse.items[0]
     const uploadsPlaylistId = channel.contentDetails.relatedPlaylists.uploads
-    const [uploadedVideos, playlists] = await Promise.all([
-      allVideosForPlaylist(uploadsPlaylistId),
-      playlistsForChannel(channel.id),
-    ])
+    // const [uploadedVideos, playlists] = await Promise.all([
+    //   allVideosForPlaylist(uploadsPlaylistId),
+    //   playlistsForChannel(channel.id),
+    // ])
+    const uploadedVideos = await allVideosForPlaylist(
+      uploadsPlaylistId,
+      options,
+    )
     const img = channel.snippet.thumbnails.default
 
     return {
@@ -145,17 +165,17 @@ export default {
       image: img.url,
       url: `https://youtube.com/channel/${channel.id}`,
       items: uploadedVideos.map(
-        (i) =>
+        (vid) =>
           ({
-            sourceId: i.id,
+            sourceId: vid.id,
             entryType: GalleryEntryTypes.YouTube,
             genericType: 'video',
-            title: i.snippet.title,
-            description: i.snippet.description,
-            images: [i.snippet.thumbnails.high.url],
-            url: `https://youtube.com/video/${i.contentDetails.videoId}`,
-            date: new Date(i.contentDetails.videoPublishedAt),
-            videoId: i.contentDetails.videoId,
+            title: vid.snippet.title,
+            description: vid.snippet.description,
+            images: [vid.snippet.thumbnails.high.url],
+            url: `https://youtube.com/video/${vid.contentDetails.videoId}`,
+            date: new Date(vid.contentDetails.videoPublishedAt),
+            videoId: vid.contentDetails.videoId,
             // kind: i.kind,
             // channelId: i.snippet.channelId,
             // channelTitle: i.snippet.channelTitle,
@@ -165,20 +185,21 @@ export default {
             // views: i.statistics.viewCount, // requires video fetch
             // likes: i.statistics.likeCount, // requires video fetch
             // dislikes: i.statistics.dislikeCount // requires video fetch
-          } as GalleryEntryItem),
+          }) as GalleryEntryItem,
       ),
       publishedAt: channel.snippet.publishedAt,
       uploadsPlaylistId,
       imageWidth: img.width,
       imageHeight: img.height,
-      playlists: playlists.items.map((p) => ({
-        sourceId: p.id,
-        title: p.snippet.title,
-        description: p.snippet.description,
-        image: p.snippet.thumbnails.high.url,
-        publishedAt: p.snippet.publishedAt,
-        itemCount: p.contentDetails.itemCount,
-      })),
+      playlists: [],
+      // playlists: playlists.items.map((p) => ({
+      //   sourceId: p.id,
+      //   title: p.snippet.title,
+      //   description: p.snippet.description,
+      //   image: p.snippet.thumbnails.high.url,
+      //   publishedAt: p.snippet.publishedAt,
+      //   itemCount: p.contentDetails.itemCount,
+      // })),
     }
   },
   channelForUser,
@@ -236,4 +257,53 @@ type SearchResponse = {
       }
     },
   ]
+}
+
+type YoutubePlaylistItemResponse = {
+  kind: 'youtube#playlistItemListResponse'
+  etag: string
+  nextPageToken?: string
+  items: [
+    {
+      kind: 'youtube#playlistItem'
+      etag: string
+      id: string
+      snippet: {
+        publishedAt: string
+        channelId: string
+        title: string
+        description: string
+        thumbnails: {
+          default: YoutubeThumbnail
+          medium: YoutubeThumbnail
+          high: YoutubeThumbnail
+          standard: YoutubeThumbnail
+          maxres: YoutubeThumbnail
+        }
+        channelTitle: string
+        playlistId: string
+        position: 0
+        resourceId: {
+          kind: 'youtube#video'
+          videoId: string
+        }
+        videoOwnerChannelTitle: string
+        videoOwnerChannelId: string
+      }
+      contentDetails: {
+        videoId: string
+        videoPublishedAt: string
+      }
+    },
+  ]
+  pageInfo: {
+    totalResults: number
+    resultsPerPage: number
+  }
+}
+
+type YoutubeThumbnail = {
+  url: string
+  width: number
+  height: number
 }

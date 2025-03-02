@@ -6,6 +6,7 @@ import {
 } from '@tentkeep/tentkeep'
 import { API, api } from '../api.js'
 import { TentkeepClient } from './tentkeep-client.js'
+import { SummarizeOptions } from '../../index.js'
 
 const host = 'https://openapi.etsy.com/v3'
 
@@ -73,11 +74,11 @@ const contentClient = {
             description: shop.title,
             image: shop.icon_url_fullxfull,
             url: shop.url,
-          } as GalleryEntry),
+          }) as GalleryEntry,
       )
     })
   },
-  summarize: async (shopId: string) => {
+  summarize: async (shopId: string, _options?: SummarizeOptions) => {
     const shop = await getShop(shopId)
     if (!shop) {
       throw new Error('Shop not found')
@@ -112,7 +113,7 @@ const contentClient = {
               views: l.views,
               customizable: l.is_customizable,
             },
-          } as GalleryEntryItem),
+          }) as GalleryEntryItem,
       ),
     } as GalleryEntrySummary
   },

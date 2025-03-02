@@ -189,6 +189,7 @@ const mapToGalleryEntryItem = (
           date: variant.updated_at,
           price: parseFloat(variant.price),
           isAvailable: variant.available,
+          fulfillment: variant.requires_shipping ? ['shipping'] : [],
         } as GalleryEntryItemProductVariant
       }),
     },

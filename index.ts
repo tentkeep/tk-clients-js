@@ -10,6 +10,12 @@ import spotify from './src/clients/spotify.js'
 import wordpress from './src/clients/wordpress.js'
 import youtube from './src/clients/youtube.js'
 
+export type SummarizeOptions = {
+  updatedAfter?: string
+  limit?: number
+  debug?: boolean
+}
+
 export * as Discourse from './src/clients/discourse.js'
 
 export const clients = {

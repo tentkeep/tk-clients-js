@@ -30,3 +30,6 @@ benchmarks/graphs
 config/local.sh
 delete
 spike.js
+
+dist
+temp

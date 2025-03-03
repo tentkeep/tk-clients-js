@@ -5,18 +5,19 @@ import {
   GalleryEntryTypes,
 } from '@tentkeep/tentkeep'
 import { sanitizeUrl } from '../shareable/common.js'
-import api from '../api.js'
+import api, { RequestOptions } from '../api.js'
 import { GalleryEntryItemProductVariant } from '@tentkeep/tentkeep'
-import { TentkeepClient } from './tentkeep-client.js'
 
 const raw = {
   products: (
     url: string,
     limit: number = 250,
     page: number = 1,
+    options?: RequestOptions,
   ): Promise<{ products: ShopifyProduct[] }> =>
     api(productsUrl(url, limit, page), {
       signal: AbortSignal.timeout(60 * 1000),
+      ...options,
     }),
   collections: (url: string): Promise<any> =>
     api(`${sanitizeUrl(url)}/collections.json?limit=250`),
@@ -53,6 +54,7 @@ const contentClient = {
   },
   summarize: async (
     url: string,
+    options?: { headers?: Record<string, string> },
   ): Promise<GalleryEntry & { items: GalleryEntryItemProduct[] }> => {
     const limit = 250
     const _url = new URL(url)
@@ -61,7 +63,7 @@ const contentClient = {
 
     let page = 1
     while (page > 0) {
-      await raw.products(url, limit, page).then((response) => {
+      await raw.products(url, limit, page, options).then((response) => {
         page = response.products.length === 0 ? -1 : page + 1
 
         title = response.products[0]?.vendor ?? 'Products'
@@ -82,7 +84,7 @@ const contentClient = {
       items,
     }
   },
-} as TentkeepClient<{ limit: number }>
+}
 
 export type ShopifyProduct = {
   id: number

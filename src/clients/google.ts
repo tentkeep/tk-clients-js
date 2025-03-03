@@ -98,7 +98,7 @@ function google(path: string) {
 
 function mapPlace(place: OldGooglePlace): GalleryEntryPlace {
   if (!place.place_id || !place.name) {
-    throw new ApiStatusError(412, 'Missing sourceId or title')
+    throw new ApiStatusError(412, 'Missing sourceId or title', place)
   }
 
   function findComponent(type: GooglePlaceTypes) {
@@ -135,7 +135,7 @@ function mapPlace(place: OldGooglePlace): GalleryEntryPlace {
 
 function mapPlaceTextSearch(place: GooglePlace): GalleryEntryPlace {
   if (!place.id || !place.displayName?.text) {
-    throw new ApiStatusError(412, 'Missing sourceId or title')
+    throw new ApiStatusError(412, 'Missing sourceId or title', place)
   }
 
   function findComponent(type: GooglePlaceTypes) {

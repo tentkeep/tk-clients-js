@@ -8,7 +8,7 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      await rss().catch((err) => {
+      await shopifyProductSummary().catch((err) => {
         console.error(err, err.response?.body)
       })
     },
@@ -66,22 +66,16 @@ function rss() {
   return clients.rss.feed('https://feeds.buzzsprout.com/804512.rss').then(print)
 }
 
-function wordpress() {
-  return (
-    clients.wordpress
-      .host(arg as string)
-      .summary()
-      // .isWordpress()
-      .then(print)
-  )
-}
-
 function shopify() {
   return clients.shopify
 }
 
 function shopifyProductSummary() {
-  return clients.shopify.summarize(arg as string).then(print)
+  return clients.shopify
+    .summarize('https://grocefamilyfarm.com', {
+      headers: { 'User-Agent': 'Mozilla/5.0' },
+    })
+    .then(print)
 }
 function shopifyRaw() {
   return clients.shopify.raw.products(arg as string, 250).then(print)
@@ -101,6 +95,16 @@ function tentkeep() {
   // // .getWordpressPostsSummary(arg as string, 3)
   // .getGalleriesNearby('40207', { miles: 60, limit: 5 })
   // .then(print)
+}
+
+function wordpress() {
+  return (
+    clients.wordpress
+      .host(arg as string)
+      .summary()
+      // .isWordpress()
+      .then(print)
+  )
 }
 
 function youtube() {

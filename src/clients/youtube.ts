@@ -211,7 +211,7 @@ export default {
 const youtube: API = (url, options) => {
   const apiKey = process.env.CLIENTS_GCP_KEY
   if (!apiKey) {
-    throw new ApiStatusError(500, 'missing internal api key')
+    throw new ApiStatusError(500, 'missing internal api key', undefined)
   }
   const _url = url instanceof URL ? url : new URL(url)
   _url.searchParams.append('key', apiKey)

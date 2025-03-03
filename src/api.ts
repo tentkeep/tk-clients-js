@@ -35,19 +35,18 @@ export type RequestOptions = {
 }
 
 export class ApiStatusError extends Error {
-  status: number
-  bodyText: string
-
-  constructor(status, bodyText) {
+  constructor(
+    public status,
+    public bodyText,
+    public response: any,
+  ) {
     super(bodyText)
-    this.status = status
-    this.bodyText = bodyText
   }
 }
 
 const statusChecker = async (response: any) => {
   if (!response.ok) {
-    throw new ApiStatusError(response.statusCode, response.bodyString)
+    throw new ApiStatusError(response.statusCode, response.bodyString, response)
   } else {
     return response
   }

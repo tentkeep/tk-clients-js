@@ -30,10 +30,13 @@ const summary = async (url: string, options?: { timeout?: number }) => {
   }
 
   const attributeMapper = (m: HTMLElement) =>
-    Array.from(m.attributes).reduce((acc, cur) => {
-      acc[cur.nodeName] = cur.nodeValue
-      return acc
-    }, {} as Record<string, any>)
+    Array.from(m.attributes).reduce(
+      (acc, cur) => {
+        acc[cur.nodeName] = cur.nodeValue
+        return acc
+      },
+      {} as Record<string, any>,
+    )
 
   const meta = Array.from(
     dom.window.document.head.querySelectorAll('meta'),
@@ -142,7 +145,7 @@ const info = async (
     signal: AbortSignal.timeout(options?.timeout ?? 20 * 1000),
   } as RequestInit)
   if (!site.ok) {
-    throw new ApiStatusError(404, 'Site not found')
+    throw new ApiStatusError(404, 'Site not found', site)
   }
 
   const features: PageInfoFeatures[] = await detectFeatures(_url, options)
@@ -195,9 +198,12 @@ async function detectFeatures(_url: string, options?: { timeout?: number }) {
       wordpressCommercePromise,
     ]),
     new Promise((_res, reject) => {
-      setTimeout(() => {
-        reject('Page Features Timeout')
-      }, options?.timeout ?? 60 * 1000)
+      setTimeout(
+        () => {
+          reject('Page Features Timeout')
+        },
+        options?.timeout ?? 60 * 1000,
+      )
     }),
   ])
   return features

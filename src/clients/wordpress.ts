@@ -19,6 +19,7 @@ const resources = [
   'block-directory-items',
   'categories',
   'comments',
+  'directory',
   'media',
   'pages',
   'page-revisions',
@@ -55,6 +56,7 @@ export interface WordpressResources {
   blockDirectoryItems: WordpressResourceAPI
   categories: WordpressResourceAPI
   comments: WordpressResourceAPI
+  directory: WordpressResourceAPI<WordpressPost>
   media: WordpressResourceAPI
   pages: WordpressResourceAPI
   pageRevisions: WordpressResourceAPI

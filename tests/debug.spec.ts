@@ -1,5 +1,7 @@
 import { describe, it } from 'vitest'
 import clients from '../index.js'
+import fs from 'fs'
+import got from 'got'
 
 const [_entryPoint, _file, arg] = process.argv
 console.log('ARG', arg)
@@ -8,11 +10,11 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      await shopifyProductSummary().catch((err) => {
+      await pageSummary().catch((err) => {
         console.error(err, err.response?.body)
       })
     },
-    { timeout: 10000 },
+    { timeout: 15 * 60 * 1000 },
   )
 })
 
@@ -50,12 +52,21 @@ function musickit() {
   return clients.musickit.search('True Words').then(print)
 }
 
-function pageSummary() {
-  return clients.page.summary(arg as string).then(print)
+function pageSummary(url: string) {
+  return clients.page.summary(url, { textContent: true }).then((res) => {
+    fs.appendFileSync(
+      'temp/pageSummary.json',
+      JSON.stringify(
+        { url, title: res.title, content: res.textContent },
+        null,
+        2,
+      ) + ',\n',
+    )
+  })
 }
 
 function pageInfo() {
-  return clients.page.info(arg as string).then(print)
+  return clients.page.summary('https://www.farmerspal.com').then(print)
 }
 
 function podcastSummary() {
@@ -100,10 +111,12 @@ function tentkeep() {
 function wordpress() {
   return (
     clients.wordpress
-      .host(arg as string)
+      .host('https://realorganicproject.org')
       .summary()
       // .isWordpress()
-      .then(print)
+      .then((res) => {
+        print(res)
+      })
   )
 }
 
@@ -142,4 +155,45 @@ function print(result: any) {
     }
   }
   console.log('empty result')
+}
+
+function wait(seconds: number) {
+  return new Promise((res) => setTimeout(res, seconds * 1000))
+}
+
+function runQueue(
+  concurrentOperations: number,
+  items: any[],
+  callback: (item: any) => Promise<any>,
+) {
+  let queueIndex = -1
+  let completedCount = 0
+
+  return new Promise((resolve) => {
+    for (let i = 0; i < Math.min(concurrentOperations, items.length); i++) {
+      queue()
+    }
+
+    function queue() {
+      queueIndex++
+      const item = items[queueIndex]
+      console.log(`${queueIndex}. STARTED`)
+      callback(item).finally(() => {
+        completedCount++
+        const percent = ((completedCount / items.length) * 100).toFixed(1)
+        console.log(`>> Item ${completedCount}/${items.length} - ${percent}%`)
+        if (completedCount < items.length) {
+          queue()
+        } else {
+          resolve(true)
+        }
+      })
+    }
+  })
+    .then(() => {
+      console.log('UpdateQueue done', queueIndex)
+    })
+    .catch((err) => {
+      console.error('Top Level Error', err)
+    })
 }

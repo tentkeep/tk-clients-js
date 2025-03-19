@@ -4,15 +4,19 @@ import clients from '../../index.js'
 import { PageInfo, PageSummary, PageInfoFeatures } from '@tentkeep/tentkeep'
 import * as jsdom from 'jsdom'
 
-const summary = async (url: string, options?: { timeout?: number }) => {
+const summary = async (
+  url: string,
+  options?: { timeout?: number; textContent?: boolean },
+) => {
   let _url = sanitizeUrl(url)
 
-  const pageSummary: PageSummary = {
+  const pageSummary: PageSummary & { textContent } = {
     url: _url,
     title: '',
     features: [] as PageInfoFeatures[],
     headers: {},
     allowsIFrame: false,
+    textContent: undefined as string | undefined,
   }
 
   const virtualConsole = new jsdom.VirtualConsole()

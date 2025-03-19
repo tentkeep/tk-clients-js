@@ -38,7 +38,7 @@ export class ApiStatusError extends Error {
   constructor(
     public status,
     public bodyText,
-    public response: any,
+    public response?: any,
   ) {
     super(bodyText)
   }

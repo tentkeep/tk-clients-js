@@ -1,7 +1,8 @@
 import { describe, it } from 'vitest'
 import clients from '../index.js'
 import fs from 'fs'
-import got from 'got'
+import { KrogerLocation, KrogerResponse } from '../src/clients/kroger.js'
+import { GalleryEntryItemProduct } from '@tentkeep/tentkeep'
 
 const [_entryPoint, _file, arg] = process.argv
 console.log('ARG', arg)
@@ -10,7 +11,7 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      await pageSummary().catch((err) => {
+      await kroger().catch((err) => {
         console.error(err, err.response?.body)
       })
     },
@@ -46,6 +47,16 @@ function googlePlaces() {
       clients.google.placeDetails(result[0]?.sourceId ?? '').then(print)
     }
   })
+}
+
+async function kroger() {
+  const response: KrogerResponse<KrogerLocation> =
+    await clients.kroger.searchLocations('40207')
+
+  const locationId = response.data[0].locationId
+
+  const products = await clients.kroger.search('crackers', locationId)
+  print(products.data[0], false)
 }
 
 function musickit() {
@@ -146,10 +157,12 @@ function youtube() {
   )
 }
 
-function print(result: any) {
+function print(result: any, formatted = true) {
   if (result) {
     try {
-      return console.log(JSON.stringify(result, null, 2))
+      return console.log(
+        JSON.stringify(result, null, formatted ? 2 : undefined),
+      )
     } catch (error) {
       return console.log(result)
     }

@@ -1,3 +1,4 @@
+import kroger from 'src/clients/kroger.js'
 import discourse from './src/clients/discourse.js'
 import etsy from './src/clients/etsy.js'
 import google from './src/clients/google.js'
@@ -23,6 +24,7 @@ export const clients = {
   etsy,
   google,
   itunes,
+  kroger,
   musickit,
   page,
   rss,

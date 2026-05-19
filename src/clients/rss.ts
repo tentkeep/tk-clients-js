@@ -49,7 +49,7 @@ const contentClient = {
         genericType: 'audio',
         title: podcast.title,
         description: podcast.description,
-        image: podcast.image.url,
+        image: podcast.image?.url || podcast['itunes:image']?.['$href'],
         url: query,
       },
     ]
@@ -59,7 +59,8 @@ const contentClient = {
    */
   summarize: (feedUrl: string, _options?: SummarizeOptions) =>
     feed(feedUrl).then((podcast) => {
-      const { title, description, image, item } = podcast
+      const { title, description, item } = podcast
+      const image = podcast.image?.url || podcast['itunes:image']?.['$href']
       const pubDateComparator = (a, b) => {
         return new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
       }
@@ -70,7 +71,7 @@ const contentClient = {
         sourceId: Buffer.from(feedUrl).toString('base64'),
         title,
         description,
-        image: image.url,
+        image,
         url: feedUrl,
         items: recentItems.map(
           (i) =>
@@ -82,7 +83,7 @@ const contentClient = {
               description: i.description,
               url: i.enclosure.$url,
               date: new Date(i.pubDate),
-              images: [image.url],
+              images: [image],
               detail: {
                 pubDate: i.pubDate,
                 author: i['itunes:author'],

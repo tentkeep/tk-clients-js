@@ -10,7 +10,7 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      await pageSummary().catch((err) => {
+      await rss().catch((err) => {
         console.error(err, err.response?.body)
       })
     },
@@ -74,7 +74,11 @@ function podcastSummary() {
 }
 
 function rss() {
-  return clients.rss.feed('https://feeds.buzzsprout.com/804512.rss').then(print)
+  return clients.rss
+    .summarize('https://anchor.fm/s/fa40e28c/podcast/rss')
+    .then((res) => {
+      print(res)
+    })
 }
 
 function shopify() {

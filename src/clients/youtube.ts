@@ -215,6 +215,9 @@ const youtube: API = (url, options) => {
   }
   const _url = url instanceof URL ? url : new URL(url)
   _url.searchParams.append('key', apiKey)
+  if (!options) options = {}
+  if (!options?.headers) options.headers = {}
+  options.headers['Referer'] = 'tentkeep.com'
   return api(_url, options)
 }
 

@@ -10,7 +10,7 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      await rss().catch((err) => {
+      await youtubeSearch().catch((err) => {
         console.error(err, err.response?.body)
       })
     },
@@ -146,6 +146,14 @@ function youtube() {
       //   id: channels.justinRhodes.channelId,
       //   part: 'snippet,contentDetails',
       // })
+      .then(print)
+  )
+}
+function youtubeSearch() {
+  return (
+    clients.youtube
+      // .search('The Immanuel Network')
+      .search('Blues clues')
       .then(print)
   )
 }

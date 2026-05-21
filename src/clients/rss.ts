@@ -1,4 +1,5 @@
 import {
+  GalleryEntry,
   GalleryEntryItem,
   GalleryEntrySummary,
   GalleryEntryTypes,
@@ -45,13 +46,13 @@ const contentClient = {
     return [
       {
         sourceId: query,
-        entryType: GalleryEntryTypes.Podcast,
-        genericType: 'audio',
+        entryType: GalleryEntryTypes.RSS,
+        genericType: 'page',
         title: podcast.title,
         description: podcast.description,
         image: podcast.image?.url || podcast['itunes:image']?.['$href'],
         url: query,
-      },
+      } as GalleryEntry,
     ]
   },
   /**
@@ -77,8 +78,8 @@ const contentClient = {
           (i) =>
             ({
               sourceId: Buffer.from(i.enclosure.$url).toString('base64'),
-              entryType: GalleryEntryTypes.Podcast,
-              genericType: 'audio',
+              entryType: GalleryEntryTypes.RSS,
+              genericType: 'page',
               title: i.title,
               description: i.description,
               url: i.enclosure.$url,

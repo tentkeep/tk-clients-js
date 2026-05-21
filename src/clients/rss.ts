@@ -59,14 +59,14 @@ const contentClient = {
    * @param feedUrl - the feed url
    */
   summarize: (feedUrl: string, _options?: SummarizeOptions) =>
-    feed(feedUrl).then((podcast) => {
-      const { title, description, item } = podcast
-      const image = podcast.image?.url || podcast['itunes:image']?.['$href']
+    feed(feedUrl).then((_feed) => {
+      const { title, description, item } = _feed
+      const image = _feed.image?.url || _feed['itunes:image']?.['$href']
       const pubDateComparator = (a, b) => {
         return new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
       }
       const recentItems = item.sort(pubDateComparator)
-      console.log('Podcast with episode count:', recentItems.length)
+      console.log('RSS Feed with item count:', recentItems.length)
 
       return {
         sourceId: Buffer.from(feedUrl).toString('base64'),
@@ -77,20 +77,23 @@ const contentClient = {
         items: recentItems.map(
           (i) =>
             ({
-              sourceId: Buffer.from(i.enclosure.$url).toString('base64'),
+              sourceId: Buffer.from(i.enclosure?.$url || i.link).toString(
+                'base64',
+              ),
               entryType: GalleryEntryTypes.RSS,
               genericType: 'page',
               title: i.title,
               description: i.description,
-              url: i.enclosure.$url,
-              date: new Date(i.pubDate),
+              url: i.enclosure?.$url || i.link,
+              date: i.pubDate ? new Date(i.pubDate) : undefined,
               images: [image],
               detail: {
                 pubDate: i.pubDate,
-                author: i['itunes:author'],
+                author: i['itunes:author'] || i['dc:creator'],
                 duration: i['itunes:duration'],
-                length: i.enclosure.$length,
-                type: i.enclosure.$type,
+                length: i.enclosure?.$length,
+                type: i.enclosure?.$type,
+                content: i['content:encoded'],
               },
             }) as GalleryEntryItem,
         ),
@@ -107,57 +110,59 @@ type RSS = {
   title: string
   description: string
   link: string
-  image: {
-    url: string
-    title: string
-    link: string
+  image?: {
+    url?: string
+    title?: string
+    link?: string
   }
-  generator: string
+  generator?: string
   lastBuildDate: string
-  'atom:link': {
-    $href: string
-    $rel: string
-    $type: string
+  pubDate: string
+  'atom:link'?: {
+    $href?: string
+    $rel?: string
+    $type?: string
   }
-  author: string
-  copyright: string
-  language: string
-  'anchor:support': string
-  'anchor:station': string
-  'itunes:author': string
-  'itunes:summary': string
-  'itunes:type': string
-  'itunes:owner': {
-    'itunes:name': string
-    'itunes:email': string
+  author?: string
+  copyright?: string
+  language?: string
+  'anchor:support'?: string
+  'anchor:station'?: string
+  'itunes:author'?: string
+  'itunes:summary'?: string
+  'itunes:type'?: string
+  'itunes:owner'?: {
+    'itunes:name'?: string
+    'itunes:email'?: string
   }
-  'itunes:explicit': string
-  'itunes:category': { $text: string }
-  'itunes:image': {
-    $href: string
+  'itunes:explicit'?: string
+  'itunes:category'?: { $text?: string }
+  'itunes:image'?: {
+    $href?: string
   }
   item: [
     {
       title: string
       description: string
       link: string
-      guid: { _: string }
-      'dc:creator': string
-      pubDate: string
-      enclosure: {
-        $url: string
-        $length: string
-        $type: string
+      guid?: string | { _: string }
+      'dc:creator'?: string
+      pubDate?: string
+      'content:encoded'?: string
+      enclosure?: {
+        $url?: string
+        $length?: string
+        $type?: string
       }
-      'itunes:summary': string
-      'itunes:explicit': string
-      'itunes:duration': string
-      'itunes:image': {
-        $href: string
+      'itunes:summary'?: string
+      'itunes:explicit'?: string
+      'itunes:duration'?: string
+      'itunes:image'?: {
+        $href?: string
       }
-      'itunes:season': string
-      'itunes:episode': string
-      'itunes:episodeType': string
+      'itunes:season'?: string
+      'itunes:episode'?: string
+      'itunes:episodeType'?: string
     },
   ]
 }

@@ -10,7 +10,7 @@ describe('debug', () => {
   it(
     'prints info',
     async () => {
-      await youtubeSearch().catch((err) => {
+      await rss().catch((err) => {
         console.error(err, err.response?.body)
       })
     },
@@ -75,7 +75,7 @@ function podcastSummary() {
 
 function rss() {
   return clients.rss
-    .summarize('https://anchor.fm/s/fa40e28c/podcast/rss')
+    .summarize('https://firesideky.com/blog/rss')
     .then((res) => {
       print(res)
     })

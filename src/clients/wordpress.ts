@@ -191,6 +191,9 @@ const host = (_host: string) => {
               postDate: post.date,
               author: extractPostAuthor(post),
               tags: extractPostTags(post, categories, tags),
+              detail: {
+                content: post.content?.rendered,
+              },
             }) as GalleryEntryItem,
         ),
       }

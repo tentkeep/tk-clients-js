@@ -74,6 +74,9 @@ const contentClient = {
         description,
         image,
         url: feedUrl,
+        entryType: GalleryEntryTypes.RSS,
+        genericType: 'page',
+        date: _feed.pubDate ? new Date(_feed.pubDate) : undefined,
         items: recentItems.map(
           (i) =>
             ({

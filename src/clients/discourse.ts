@@ -1,268 +1,276 @@
 import { API, api } from '../api.js'
 
-export default (host: string) => ({
-  Groups: Groups(host),
-  Posts: Posts(host),
-  addGroupMembers: (
-    groupId: number,
-    usernames: string[],
-    actingUser: string | 'admin',
-  ) =>
-    discourse(`${host}/groups/${groupId}/members.json`, {
-      method: 'put',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        'Api-Username': actingUser === 'admin' ? undefined : actingUser,
-      },
-      body: { usernames: usernames.join(',') },
-    }) as Promise<AddGroupMembersResponse>,
-  addGroupOwners: (
-    groupId: number,
-    usernames: string[],
-    actingUser: string | 'admin',
-  ) =>
-    discourse(`${host}/groups/${groupId}/owners.json`, {
-      method: 'put',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        'Api-Username': actingUser === 'admin' ? undefined : actingUser,
-      },
-      body: { usernames: usernames.join(',') },
-    }) as Promise<AddGroupMembersResponse>,
-  createGroup: (group: Group) =>
-    discourse(`${host}/admin/groups.json`, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: { group },
-    }) as Promise<{ basic_group: Group }>,
-  createInvite: (invite: InviteRequest, fromUsername: string) =>
-    discourse(`${host}/invites.json`, {
-      method: 'post',
-      headers: {
-        'Api-Username': fromUsername,
-        'Content-Type': 'application/json',
-      },
-      body: invite,
-    }) as Promise<InviteResponse>,
-  getTopic: (
-    topic: number | string,
-    options: {
-      actingUsername: string
-      external_id?: boolean
-      latestPosts?: boolean
-    },
-  ) =>
-    discourse(
-      `${host}/t/${options?.external_id ? 'external_id/' : ''}${topic}${
-        options.latestPosts ? '/last' : ''
-      }.json`,
-      {
+export default (host: string, configuration?: { apiKey?: string }) => {
+  const discourse: API = (url: string | URL, options = null) => {
+    const apiKey = configuration?.apiKey ?? process.env.DISCOURSE_KEY
+    const apiUsername = process.env.DISCOURSE_ADMIN_USERNAME
+    const _options = options ?? {}
+    _options.headers = {
+      ...options?.headers,
+      'Api-Key': apiKey,
+    }
+
+    if (!_options.headers?.['Api-Username']) {
+      _options.headers!['Api-Username'] = apiUsername
+    }
+    const _url = url instanceof URL ? url : new URL(url)
+    return api(_url, _options)
+  }
+
+  return {
+    Groups: Groups(host),
+    Posts: Posts(host),
+    addGroupMembers: (
+      groupId: number,
+      usernames: string[],
+      actingUser: string | 'admin',
+    ) =>
+      discourse(`${host}/groups/${groupId}/members.json`, {
+        method: 'put',
         headers: {
-          'Api-Username': options?.actingUsername,
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          'Api-Username': actingUser === 'admin' ? undefined : actingUser,
+        },
+        body: { usernames: usernames.join(',') },
+      }) as Promise<AddGroupMembersResponse>,
+    addGroupOwners: (
+      groupId: number,
+      usernames: string[],
+      actingUser: string | 'admin',
+    ) =>
+      discourse(`${host}/groups/${groupId}/owners.json`, {
+        method: 'put',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          'Api-Username': actingUser === 'admin' ? undefined : actingUser,
+        },
+        body: { usernames: usernames.join(',') },
+      }) as Promise<AddGroupMembersResponse>,
+    createGroup: (group: Group) =>
+      discourse(`${host}/admin/groups.json`, {
+        method: 'post',
+        headers: {
           'Content-Type': 'application/json',
         },
-      },
-    ) as Promise<DiscourseTopic>,
-  group: (groupName: string) =>
-    discourse(`${host}/groups/${groupName}.json`) as Promise<{ group: Group }>,
-  groupMembers: (groupName: string) =>
-    discourse(
-      `${host}/groups/${groupName}/members.json`,
-    ) as Promise<GroupMembers>,
-  groupPrivateMessages: (username: string, groupName: string) =>
-    discourse(
-      `${host}/topics/private-messages-group/${username}/${groupName}.json`,
-      {
+        body: { group },
+      }) as Promise<{ basic_group: Group }>,
+    createInvite: (invite: InviteRequest, fromUsername: string) =>
+      discourse(`${host}/invites.json`, {
+        method: 'post',
         headers: {
-          'Api-Username': username,
+          'Api-Username': fromUsername,
+          'Content-Type': 'application/json',
         },
+        body: invite,
+      }) as Promise<InviteResponse>,
+    getTopic: (
+      topic: number | string,
+      options: {
+        actingUsername: string
+        external_id?: boolean
+        latestPosts?: boolean
       },
-    ) as Promise<PrivateMessagesList>,
-  privateMessage: (
-    fromUsername: string,
-    toUsername: string,
-    subject: string,
-    message: string,
-    options?: { external_id?: string },
-  ) =>
-    discourse(`${host}/posts.json`, {
-      method: 'post',
-      headers: {
-        'Api-Username': fromUsername,
-        'Content-Type': 'application/json',
-      },
-      body: {
-        title: subject,
-        raw: message,
-        target_recipients: toUsername,
-        archetype: 'private_message',
-        ...options,
-      },
-    }) as Promise<DiscoursePost>,
-  getPrivateMessages: (username: string, options?: { page?: number }) =>
-    discourse(
-      `${host}/topics/private-messages/${username}.json?page=${
-        (options?.page ?? 1) - 1
-      }`,
-      {
+    ) =>
+      discourse(
+        `${host}/t/${options?.external_id ? 'external_id/' : ''}${topic}${
+          options.latestPosts ? '/last' : ''
+        }.json`,
+        {
+          headers: {
+            'Api-Username': options?.actingUsername,
+            'Content-Type': 'application/json',
+          },
+        },
+      ) as Promise<DiscourseTopic>,
+    group: (groupName: string) =>
+      discourse(`${host}/groups/${groupName}.json`) as Promise<{
+        group: Group
+      }>,
+    groupMembers: (groupName: string) =>
+      discourse(
+        `${host}/groups/${groupName}/members.json`,
+      ) as Promise<GroupMembers>,
+    groupPrivateMessages: (username: string, groupName: string) =>
+      discourse(
+        `${host}/topics/private-messages-group/${username}/${groupName}.json`,
+        {
+          headers: {
+            'Api-Username': username,
+          },
+        },
+      ) as Promise<PrivateMessagesList>,
+    privateMessage: (
+      fromUsername: string,
+      toUsername: string,
+      subject: string,
+      message: string,
+      options?: { external_id?: string },
+    ) =>
+      discourse(`${host}/posts.json`, {
+        method: 'post',
         headers: {
-          'Api-Username': username,
+          'Api-Username': fromUsername,
+          'Content-Type': 'application/json',
         },
-      },
-    ) as Promise<PrivateMessagesList>,
-  removeGroupMembers: (
-    groupId: number,
-    usernames: string[],
-    actingUser: string | 'admin',
-  ) =>
-    discourse(`${host}/groups/${groupId}/members.json`, {
-      method: 'delete',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        'Api-Username': actingUser === 'admin' ? undefined : actingUser,
-      },
-      body: { usernames: usernames.join(',') },
-    }) as Promise<AddGroupMembersResponse>,
-  removeGroupOwnerRole: (
-    groupId: number,
-    usernames: string[],
-    actingUser: string,
-  ) =>
-    discourse(`${host}/admin/groups/${groupId}/owners.json`, {
-      method: 'delete',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        'Api-Username': actingUser === 'admin' ? undefined : actingUser,
-      },
-      body: {
-        group: {
-          usernames: usernames.join(','),
+        body: {
+          title: subject,
+          raw: message,
+          target_recipients: toUsername,
+          archetype: 'private_message',
+          ...options,
         },
-      },
-    }),
-  replyToTopic: (topicId: number, message: string) =>
-    discourse(`${host}/groups/posts.json`, {
-      method: 'post',
-      body: {
-        topic_id: topicId,
-        raw: message,
-      },
-    }) as Promise<DiscoursePost>,
-  runDataQuery: (
-    queryId: number,
-    input: Record<string, any>,
-    options?: DataQueryOptions,
-  ) =>
-    discourse(`${host}/admin/plugins/explorer/queries/${queryId}/run`, {
-      method: 'post',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        // Origin: 'https://boards.thebootroots.com',
-        'X-CSRF-Token':
-          'bmjaw8mku2ZqNT86ezTVeJueCqPR3_1ql1Na1I6OjZPLK2WTvlYQykXAnNnIAfWu5oucw3psMDJy6iYwahtI6A',
-      },
-      body: { params: JSON.stringify(input) },
-    }).then((res) => mapDataQuery(res, options)) as Promise<{
-      data: Record<string, any>[]
-    }>,
-  search: (query: string) =>
-    discourse(`${host}/search/query?term=${query}`, {
-      headers: { Accept: 'application/json' },
-    }) as Promise<SearchResponse>,
-  user: <T extends number | string>(
-    user: T,
-    actingUsername: string,
-  ): Promise<
-    T extends number
-      ? DiscourseUser
-      : typeof actingUsername extends 'system'
-      ? DiscourseUserPlus<'system'>
-      : DiscourseUserPlus<'self'>
-  > => {
-    const headers = {
-      'Api-Username': actingUsername ?? '_fail_',
-      Accept: 'application/json',
-    }
-    return typeof user === 'string'
-      ? discourse(`${host}/u/${user}.json`, { headers })
-      : actingUsername === 'system'
-      ? discourse(`${host}/admin/users/${user}.json`)
-      : Promise.reject(new Error('This is an admin operation'))
-  },
-  userEmails: (username: string): Promise<DiscourseUserEmails> =>
-    discourse(`${host}/u/${username}/emails.json`),
-})
-
-const Groups = (host: string) => ({
-  join: (groupId: number, actingUsername: string) =>
-    discourse(`${host}/groups/${groupId}/join.json`, {
-      method: 'put',
-      headers: {
-        'Api-Username': actingUsername ?? '_fail_',
-      },
-    }) as Promise<undefined>,
-  leave: (groupId: number, actingUsername: string) =>
-    discourse(`${host}/groups/${groupId}/leave.json`, {
-      method: 'delete',
-      headers: {
-        'Api-Username': actingUsername ?? '_fail_',
-      },
-    }) as Promise<undefined>,
-})
-
-const Posts = (host: string) => ({
-  create: (actingUsername: string, payload: CreatePost) =>
-    discourse(`${host}/posts`, {
-      method: 'post',
-      headers: {
-        'Api-Username': actingUsername ?? '_fail_',
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: payload,
-    }) as Promise<DiscoursePost>,
-  get: (id: number, actingUsername: string) =>
-    discourse(`${host}/posts/${id}.json`, {
-      headers: {
-        Accept: 'application/json',
-        'Api-Username': actingUsername ?? '_fail_',
-      },
-    }) as Promise<DiscoursePost>,
-  find: (topicId: number, ids: number[], actingUsername: string) =>
-    discourse(
-      `${host}/t/${topicId}/posts.json?${ids
-        .map((id) => `post_ids[]=${id}`)
-        .join('&')}`,
-      {
+      }) as Promise<DiscoursePost>,
+    getPrivateMessages: (username: string, options?: { page?: number }) =>
+      discourse(
+        `${host}/topics/private-messages/${username}.json?page=${
+          (options?.page ?? 1) - 1
+        }`,
+        {
+          headers: {
+            'Api-Username': username,
+          },
+        },
+      ) as Promise<PrivateMessagesList>,
+    removeGroupMembers: (
+      groupId: number,
+      usernames: string[],
+      actingUser: string | 'admin',
+    ) =>
+      discourse(`${host}/groups/${groupId}/members.json`, {
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          'Api-Username': actingUser === 'admin' ? undefined : actingUser,
+        },
+        body: { usernames: usernames.join(',') },
+      }) as Promise<AddGroupMembersResponse>,
+    removeGroupOwnerRole: (
+      groupId: number,
+      usernames: string[],
+      actingUser: string,
+    ) =>
+      discourse(`${host}/admin/groups/${groupId}/owners.json`, {
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          'Api-Username': actingUser === 'admin' ? undefined : actingUser,
+        },
+        body: {
+          group: {
+            usernames: usernames.join(','),
+          },
+        },
+      }),
+    replyToTopic: (topicId: number, message: string) =>
+      discourse(`${host}/groups/posts.json`, {
+        method: 'post',
+        body: {
+          topic_id: topicId,
+          raw: message,
+        },
+      }) as Promise<DiscoursePost>,
+    runDataQuery: (
+      queryId: number,
+      input: Record<string, any>,
+      options?: DataQueryOptions,
+    ) =>
+      discourse(`${host}/admin/plugins/explorer/queries/${queryId}/run`, {
+        method: 'post',
         headers: {
           Accept: 'application/json',
-          'Api-Username': actingUsername ?? '_fail_',
+          'Content-Type': 'application/json',
+          // Origin: 'https://boards.thebootroots.com',
+          'X-CSRF-Token':
+            'bmjaw8mku2ZqNT86ezTVeJueCqPR3_1ql1Na1I6OjZPLK2WTvlYQykXAnNnIAfWu5oucw3psMDJy6iYwahtI6A',
         },
-      },
-    ) as Promise<{ post_stream: { posts: DiscoursePost[] } }>,
-})
-
-const discourse: API = (url: string | URL, options = null) => {
-  const apiKey = process.env.DISCOURSE_KEY
-  const apiUsername = process.env.DISCOURSE_ADMIN_USERNAME
-  const _options = options ?? {}
-  _options.headers = {
-    ...options?.headers,
-    'Api-Key': apiKey,
+        body: { params: JSON.stringify(input) },
+      }).then((res) => mapDataQuery(res, options)) as Promise<{
+        data: Record<string, any>[]
+      }>,
+    search: (query: string) =>
+      discourse(`${host}/search/query?term=${query}`, {
+        headers: { Accept: 'application/json' },
+      }) as Promise<SearchResponse>,
+    user: <T extends number | string>(
+      user: T,
+      actingUsername: string,
+    ): Promise<
+      T extends number
+        ? DiscourseUser
+        : typeof actingUsername extends 'system'
+          ? DiscourseUserPlus<'system'>
+          : DiscourseUserPlus<'self'>
+    > => {
+      const headers = {
+        'Api-Username': actingUsername ?? '_fail_',
+        Accept: 'application/json',
+      }
+      return typeof user === 'string'
+        ? discourse(`${host}/u/${user}.json`, { headers })
+        : actingUsername === 'system'
+          ? discourse(`${host}/admin/users/${user}.json`)
+          : Promise.reject(new Error('This is an admin operation'))
+    },
+    userEmails: (username: string): Promise<DiscourseUserEmails> =>
+      discourse(`${host}/u/${username}/emails.json`),
   }
 
-  if (!_options.headers?.['Api-Username']) {
-    _options.headers!['Api-Username'] = apiUsername
+  function Groups(host: string) {
+    return {
+      join: (groupId: number, actingUsername: string) =>
+        discourse(`${host}/groups/${groupId}/join.json`, {
+          method: 'put',
+          headers: {
+            'Api-Username': actingUsername ?? '_fail_',
+          },
+        }) as Promise<undefined>,
+      leave: (groupId: number, actingUsername: string) =>
+        discourse(`${host}/groups/${groupId}/leave.json`, {
+          method: 'delete',
+          headers: {
+            'Api-Username': actingUsername ?? '_fail_',
+          },
+        }) as Promise<undefined>,
+    }
   }
-  const _url = url instanceof URL ? url : new URL(url)
-  return api(_url, _options)
+
+  function Posts(host: string) {
+    return {
+      create: (actingUsername: string, payload: CreatePost) =>
+        discourse(`${host}/posts`, {
+          method: 'post',
+          headers: {
+            'Api-Username': actingUsername ?? '_fail_',
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: payload,
+        }) as Promise<DiscoursePost>,
+      get: (id: number, actingUsername: string) =>
+        discourse(`${host}/posts/${id}.json`, {
+          headers: {
+            Accept: 'application/json',
+            'Api-Username': actingUsername ?? '_fail_',
+          },
+        }) as Promise<DiscoursePost>,
+      find: (topicId: number, ids: number[], actingUsername: string) =>
+        discourse(
+          `${host}/t/${topicId}/posts.json?${ids
+            .map((id) => `post_ids[]=${id}`)
+            .join('&')}`,
+          {
+            headers: {
+              Accept: 'application/json',
+              'Api-Username': actingUsername ?? '_fail_',
+            },
+          },
+        ) as Promise<{ post_stream: { posts: DiscoursePost[] } }>,
+    }
+  }
 }
 
 type DataQueryOptions = {

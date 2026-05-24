@@ -1,21 +1,17 @@
 import { describe, it } from 'vitest'
 import clients from '../index.js'
 import fs from 'fs'
-import got from 'got'
+import { log } from 'console'
 
 const [_entryPoint, _file, arg] = process.argv
 console.log('ARG', arg)
 
-describe('debug', () => {
-  it(
-    'prints info',
-    async () => {
-      await rss().catch((err) => {
-        console.error(err, err.response?.body)
-      })
-    },
-    { timeout: 15 * 60 * 1000 },
-  )
+describe.only('debug', () => {
+  it('prints info', { timeout: 15 * 60 * 1000 }, async () => {
+    await spotify().catch((err) => {
+      console.error(err, err.response?.body)
+    })
+  })
 })
 
 // OPTIONS BELOW
@@ -97,7 +93,15 @@ function shopifyRaw() {
 }
 
 function spotify() {
-  return clients.spotify.searchPodcasts(arg).then(print)
+  // return clients.spotify.search('Stories are soul food').then(print)
+  // return clients.spotify.getShowEpisodes('0XtTN3Qd8tboszmY9rxgS8').then(print)
+  return clients.spotify
+    .summarize('show:7A7Wu3na1k8mG8raUyAgUY', {
+      logger: console,
+      updatedAfter: '2026-04-23',
+    })
+    .then(print)
+  // return clients.spotify.getEpisode('027wMJQQITG70kJ4PrYKJM').then(print)
 }
 
 function tentkeep() {

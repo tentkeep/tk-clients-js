@@ -14,6 +14,11 @@ export type SummarizeOptions = {
   updatedAfter?: string
   limit?: number
   debug?: boolean
+  logger?: {
+    info?: (...args: any[]) => void
+    warn?: (...args: any[]) => void
+    error?: (...args: any[]) => void
+  }
 }
 
 export * as Discourse from './src/clients/discourse.js'

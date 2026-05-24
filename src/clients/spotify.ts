@@ -57,6 +57,7 @@ function mapShow(show): GalleryEntry {
     image: show.images[0]?.url,
     entryType: GalleryEntryTypes.Spotify,
     genericType: 'audio',
+    url: show.external_urls.spotify,
     detail: show,
   }
 }
@@ -68,6 +69,7 @@ function mapArtist(artist): GalleryEntry {
     image: artist.images[0]?.url,
     entryType: GalleryEntryTypes.Spotify,
     genericType: 'music',
+    url: artist.external_urls.spotify,
     detail: artist,
   }
 }
@@ -109,13 +111,14 @@ async function summarize(
         offset += 50
       }
     }
+
     const items = _episodes.map((episode) => {
       const { name, description, id, release_date, ...rest } = episode
       delete rest.html_description
       return {
         title: name,
         description: description,
-        image: episode.images[0]?.url,
+        images: [episode.images[0]?.url],
         sourceId: `episode:${id}`,
         entryType: GalleryEntryTypes.Spotify,
         genericType: 'audio',

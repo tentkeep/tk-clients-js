@@ -40,14 +40,19 @@ export default client
 
 var cachedToken = null
 
-function search(query: string): Promise<GalleryEntry[]> {
-  return spotify(`${host}/v1/search?q=${query}&type=artist,show&limit=5`).then(
-    (result: SpotifySearchResult) => {
-      const artists = result.artists.items.map((artist) => mapArtist(artist))
-      const shows = result.shows.items.map((show) => mapShow(show))
-      return [...artists, ...shows]
-    },
-  )
+function search(
+  query: string,
+  options?: { type?: 'artist' | 'show' },
+): Promise<GalleryEntry[]> {
+  const type = options?.type ?? 'artist,show'
+  return spotify(
+    `${host}/v1/search?q=${query}&type=${type}&market=US&limit=5`,
+  ).then((result: SpotifySearchResult) => {
+    const artists =
+      result.artists?.items.map((artist) => mapArtist(artist)) ?? []
+    const shows = result.shows?.items.map((show) => mapShow(show)) ?? []
+    return [...artists, ...shows]
+  })
 }
 function mapShow(show): GalleryEntry {
   return {
@@ -156,12 +161,14 @@ const spotify = async (url: string, options?) => {
   }
 
   return api(url, _options).catch(async (e) => {
-    if (e.status === 401) {
-      cachedToken = await token()
-      return spotify(url, _options)
-    } else {
-      throw e
-    }
+    console.warn(
+      'Spotify API request failed, attempting to refresh token...',
+      e,
+    )
+    // Try to refresh the token once
+    cachedToken = await token()
+    _options.headers.Authorization = `Bearer ${cachedToken}`
+    return api(url, _options)
   })
 }
 

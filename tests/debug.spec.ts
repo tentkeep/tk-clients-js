@@ -96,10 +96,7 @@ function spotify() {
   // return clients.spotify.search('Stories are soul food').then(print)
   // return clients.spotify.getShowEpisodes('0XtTN3Qd8tboszmY9rxgS8').then(print)
   return clients.spotify
-    .summarize('show:7A7Wu3na1k8mG8raUyAgUY', {
-      logger: console,
-      updatedAfter: '2026-04-23',
-    })
+    .search('pillar community church', { type: 'show' })
     .then(print)
   // return clients.spotify.getEpisode('027wMJQQITG70kJ4PrYKJM').then(print)
 }

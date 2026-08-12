@@ -8,7 +8,7 @@ console.log('ARG', arg)
 
 describe.only('debug', () => {
   it('prints info', { timeout: 15 * 60 * 1000 }, async () => {
-    await spotify().catch((err) => {
+    await discourse().catch((err) => {
       console.error(err, err.response?.body)
     })
   })
@@ -19,9 +19,10 @@ describe.only('debug', () => {
 async function discourse() {
   return await clients
     .discourse('https://boards.thebootroots.com')
+    .groupMembers('on-tapp-dairy-order-gall_1786305335854')
     // .runDataQuery(9, { username: 'jwilkey' }, { jsonKeys: [] })
     // .getTopic('154', { actingUsername: 'jwilkey', latestPosts: true })
-    .Posts.find(154, [183, 511, 512], 'jwilkey')
+    // .Posts.find(154, [183, 511, 512], 'jwilkey')
     // .getPrivateMessages('system', { page: 1 })
     // .privateMessage(
     //   'bootroots',
@@ -30,7 +31,7 @@ async function discourse() {
     //   'sent on ' + new Date().toISOString(),
     // )
     .then((res) => {
-      print(res.post_stream.posts)
+      print(res)
     })
 }
 

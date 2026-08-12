@@ -90,7 +90,7 @@ export default (host: string, configuration?: { apiKey?: string }) => {
       }>,
     groupMembers: (groupName: string) =>
       discourse(
-        `${host}/groups/${groupName}/members.json`,
+        `${host}/groups/${groupName}/members.json?limit=200`,
       ) as Promise<GroupMembers>,
     groupPrivateMessages: (username: string, groupName: string) =>
       discourse(
